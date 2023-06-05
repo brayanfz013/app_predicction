@@ -1,0 +1,6 @@
+{
+    "table":"posicion",
+    "columns":{"0":"Material","1":"Solicitante"},
+    "order":"index",
+    "where": "posicion > 1"
+}

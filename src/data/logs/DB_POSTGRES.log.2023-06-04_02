@@ -1,0 +1,56 @@
+2023-06-04 00:52:43,176 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:53:44,674 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:54:34,156 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:54:52,198 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:55:17,784 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:55:38,898 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:56:20,097 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:58:10,639 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:58:52,478 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 00:59:52,814 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:00:01,432 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:22:27,729 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:23:50,042 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:23:50,047 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - ERROR - features_postgres : 187 - syntax error at or near ")"
+LINE 1: ...Valor Neto" VARCHAR(10),     "Contador Ped" VARCHAR(3), );  
+                                                                   ^
+
+2023-06-04 01:23:50,047 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 191 - Finalizacion query
+2023-06-04 01:24:08,405 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:24:09,049 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 185 - Query enviada
+2023-06-04 01:24:09,050 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 191 - Finalizacion query
+2023-06-04 01:38:07,844 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:39:05,232 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:39:13,731 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:39:20,898 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:39:28,159 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:39:35,047 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:39:48,199 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:41:01,117 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:43:29,427 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:43:36,795 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 23 - Instancia libreria
+2023-06-04 01:51:39,739 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 01:52:01,834 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 01:56:17,277 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 01:56:27,858 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 01:56:47,574 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 01:58:18,193 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 01:58:18,253 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 189 - Query enviada
+2023-06-04 01:58:18,253 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 195 - Finalizacion query
+2023-06-04 01:58:29,109 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:00:46,465 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:00:46,565 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 189 - Query enviada
+2023-06-04 02:00:46,565 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 195 - Finalizacion query
+2023-06-04 02:00:52,404 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:01:14,388 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:01:14,465 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 189 - Query enviada
+2023-06-04 02:01:14,466 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 195 - Finalizacion query
+2023-06-04 02:01:20,076 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:02:21,612 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:02:21,717 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 189 - Query enviada
+2023-06-04 02:02:21,717 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 195 - Finalizacion query
+2023-06-04 02:02:33,180 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:04:24,040 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
+2023-06-04 02:04:24,136 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 189 - Query enviada
+2023-06-04 02:04:24,136 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 195 - Finalizacion query
+2023-06-04 02:04:26,112 - /home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/logs - DEBUG - features_postgres : 27 - Instancia libreria
