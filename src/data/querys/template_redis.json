@@ -1,6 +1,6 @@
 {
-    "table":"posicion",
-    "columns":{"0":"Material","1":"Solicitante"},
+    "table":"position",
+    "columns":{"0":"Fecha Creación","1":"Material (Cod)","2":"Peso neto (TON)","3":"Solicitate (Cod)","4":"Cant Pedido UMV","5":"Valor Neto"},
     "order":"index",
     "where": "posicion > 1"
 }

@@ -134,11 +134,13 @@ class HandleDBpsql(object):
         data_replace = {
             'table':tabla,
             'columns':', '.join(['"' + columna + '"' for columna in columnas]),
+            '_insert':', '.join(['%s' for _ in columnas]),
             'order':order,
             'where':where
             }
 
         return data_replace
+
 
     def query_data(self,connection, sql):
         """
@@ -276,6 +278,41 @@ class HandleDBpsql(object):
         except (Exception, psycopg2.DatabaseError) as error_insert_data_csv:
             self.log.error('Fallo de insercion de la query')
             self.log.error(error_insert_data_csv)
+        finally:
+            if conn is not None:
+                conn.close()
+
+    def insert_data_from_dataframe(self,connection_parameters:str,query:str,dataframe:pd.DataFrame):
+        '''insert_data_from_csv Funcion para insertar un archivos csv a un tabla 
+        especificada 
+
+        Args:
+            connection_parameters (str): Ruta del archivo con parametros de conexion
+            query (str): Query usada para insertar la informacion en la DB
+            data_path (str): Ruta del archivo de texto plano que se desea insertar en
+            postgres
+        '''
+        conn = None
+        try:
+            # read database configuration
+            params = self.get_config_file(connection_parameters)
+            # connect to the PostgreSQL database
+            conn = psycopg2.connect(**params)
+            # create a new cursor
+            cur = conn.cursor()
+
+            for data_row in dataframe.values:
+                # execute the INSERT statement
+                cur.execute(query, (data_row))
+
+            # commit the changes to the database
+            conn.commit()
+            # close communication with the database
+            cur.close()
+            self.log.info('Query de insercion de archivo csv finalizada')
+        except (Exception, psycopg2.DatabaseError) as error_insert_data_frame:
+            self.log.error('Fallo de insercion de la query')
+            self.log.error(error_insert_data_frame)
         finally:
             if conn is not None:
                 conn.close()

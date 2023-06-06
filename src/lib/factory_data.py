@@ -23,6 +23,8 @@ class DataSource(ABC):
         '''write Metodo de escritura base '''
 
 # Implementaciones concretas de la interfaz para cada tipo de fuente de datos
+
+
 class SQLPostgres(DataSource):
     '''Metodo para manipulacion de datos de postgres'''
 
@@ -32,24 +34,44 @@ class SQLPostgres(DataSource):
 
     def read(self):
         '''metodo base para hacer lectura de los datos'''
-        parameter_query = self.data_source.read_parameters_query(self.parametro.names_table_columns)
+        parameter_query = self.data_source.read_parameters_query(
+            self.parametro.names_table_columns)
         fix_dict_query = self.data_source.fix_dict_query(
-                        parameter_query['table'],
-                        parameter_query['columns'],
-                        parameter_query['order'],
-                        parameter_query['where']
-                        )
+            parameter_query['table'],
+            parameter_query['columns'],
+            parameter_query['order'],
+            parameter_query['where']
+        )
+
         query = self.data_source.prepare_query_replace_value(
-            sql_file=self.parametro.logger_file, data_replace=fix_dict_query)
-        
+            sql_file=self.parametro.query_read, data_replace=fix_dict_query)
+
         return self.data_source.get_table(
-            connection_parameters=self.parametro.connection_params, query=query)
+            connection_parameters=self.parametro.connection_params,
+            query=query
+        )
 
-    def write(self):
-
+    def write(self, data:tuple):
         '''metodo base para hacer escritura de los datos en postgres'''
-        # query = self.data_source.prepare_query_replace_value()
-        return "Datos escritos en la base de datos SQL"
+        parameter_query = self.data_source.read_parameters_query(
+            self.parametro.names_table_columns)
+        fix_dict_query = self.data_source.fix_dict_query(
+            parameter_query['table'],
+            parameter_query['columns'],
+            parameter_query['order'],
+            parameter_query['where']
+        )
+
+        query = self.data_source.prepare_query_replace_value(
+            sql_file=self.parametro.query_read,
+            data_replace=fix_dict_query
+            )
+
+        return self.data_source.insert_data(
+            connection_parameters=self.parametro.connection_params,
+            query=query,
+            data=data
+            )
 
 
 class NoSQLRedis(DataSource):
@@ -84,8 +106,11 @@ class AbstractDataSourceFactory(ABC):
 class SQLDataSourceFactory(AbstractDataSourceFactory):
     '''Fabricante de metodos SQL '''
 
+    def __init__(self, **parametros) -> None:
+        self.parametro = parametros
+
     def create_data_source(self) -> DataSource:
-        return SQLPostgres()
+        return SQLPostgres(**self.parametro)
 
 
 class NoSQLDataSourceFactory(AbstractDataSourceFactory):
@@ -102,13 +127,11 @@ class PlainTextFileDataSourceFactory(AbstractDataSourceFactory):
         return PlainTextFileDataSource()
 
 # Usando la fábrica
-
-
 def get_data(factory: AbstractDataSourceFactory) -> None:
     '''Metodo para hacer la lectura de la infomacion'''
     data_source = factory.create_data_source()
     print(data_source.read())
-    print(data_source.write("datos"))
+    # print(data_source.write("datos"))
 
 
 if __name__ == "__main__":
