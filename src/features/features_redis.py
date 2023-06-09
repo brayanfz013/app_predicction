@@ -21,8 +21,7 @@ except ImportError as error:
     path_folder = str(Path(path_folder).parents)
     omitir = ''
 
-
-    def search_subfolders(path:str):
+    def search_subfolders(path: str):
         '''Funcion para agregar rutas al path de ejecucion'''
         folder = []
         for root, dirs, _ in os.walk(path, topdown=False):
@@ -35,25 +34,22 @@ except ImportError as error:
 
     for i in search_subfolders(path_folder):
         sys.path.insert(0, i)
-    print('Insercion de carpetas al path')
     from data.logs import LOGS_DIR
-    
+
 
 class HandleRedis(object):
     """
     Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy    
     """
-    
-    def __init__(self, logfile = 'logging.conf'):
-        
+
+    def __init__(self, logfile='logging.conf'):
+
         # Constructor que permite inicializar los parametros
-        logging.config.fileConfig(os.path.join(LOGS_DIR,logfile))
+        logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
         self.log = logging.getLogger('REDIS')
         self.log.debug("Instancia libreria")
 
-            
-    def get_config_file(self, filename = 'database.ini', section = 'postgresql'):
-    
+    def get_config_file(self, filename='database.ini', section='postgresql'):
         """
         Lee el archivo de configuracion con los parametros a la base de datos
         se tiene que seleccion el motor de base de datos.
@@ -62,27 +58,29 @@ class HandleRedis(object):
         de conexion 
         """
 
-        #creacion de un "Parser" 
+        # creacion de un "Parser"
         parser = ConfigParser()
 
-        #lectura de archivo de configuracion
-        parser.read(filenames = filename)
+        # lectura de archivo de configuracion
+        parser.read(filenames=filename)
 
         data_parameters = {}
-        #Extracion de parametros del archivo , para convertilo en dict()
+        # Extracion de parametros del archivo , para convertilo en dict()
         if parser.has_section(section):
             params = parser.items(section)
             for param in params:
                 if param[1]:
                     data_parameters[param[0]] = param[1]
                 else:
-                    raise Exception(f'Error configuration file {filename} \n missing value for fiel: {param[0]}')
+                    raise Exception(
+                        f'Error configuration file {filename} \n missing value for fiel: {param[0]}')
         else:
-            raise Exception(f'Section {section} not found in the {filename} file')
-        
+            raise Exception(
+                f'Section {section} not found in the {filename} file')
+
         return data_parameters
-    
-    def create_data(self,data:dict,config:str):
+
+    def create_data(self, data: dict, config: str):
         '''create_data Funcion para crear y enviar datos a un servidor de redis
         usando un diccionario y verificando conectividad
 
@@ -91,20 +89,20 @@ class HandleRedis(object):
             config (str): Ruta del archivos de las configuraciones para la conexion con redis
         '''
         try:
-            parameters_connection = self.get_config_file(config,section='redis')
+            parameters_connection = self.get_config_file(
+                config, section='redis')
             with redis.Redis(**parameters_connection) as connection:
-                # self.log.debug("Conexion exitosa")            
+                # self.log.debug("Conexion exitosa")
                 with connection.pipeline() as pipe:
                     for h_id, hat in data.items():
                         pipe.hmset(h_id, hat)
                     pipe.execute()
             # self.log.debug("Datos enviados a redis")
-        except (redis.exceptions.DataError,redis.exceptions.AuthenticationError) as redis_error:
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
 
-
-    def get_alldata(self,file_name:str,config:str):
+    def get_alldata(self, file_name: str, config: str):
         '''get_posicition Funcion para traer toda la lista de datos de una collecion de redis
 
         Args:
@@ -115,18 +113,19 @@ class HandleRedis(object):
             _type_: _description_
         '''
         try:
-            parameters_connection = self.get_config_file(config, section = 'redis')
-            with redis.Redis(**parameters_connection) as connection :
+            parameters_connection = self.get_config_file(
+                config, section='redis')
+            with redis.Redis(**parameters_connection) as connection:
                 data = connection.hgetall(file_name)
-                unidict = dict((k.decode('utf8'), v.decode('utf8')) for k, v in data.items())
+                unidict = dict((k.decode('utf8'), v.decode('utf8'))
+                               for k, v in data.items())
                 # self.log.debug("Extracion de datos completa")
             return unidict
-        except (redis.exceptions.DataError,redis.exceptions.AuthenticationError) as redis_error:
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
 
-
-    def get_single_value(self,dict_key:str,file_name:str,config:str):
+    def get_single_value(self, dict_key: str, file_name: str, config: str):
         '''get_posicition Funcion para traer toda la lista de datos de una collecion de redis
 
         Args:
@@ -137,19 +136,18 @@ class HandleRedis(object):
             _type_: _description_
         '''
         try:
-            parameters_connection = self.get_config_file(config, section = 'redis')
-            with redis.Redis(**parameters_connection) as connection :
-                data = connection.hget(dict_key,file_name)
+            parameters_connection = self.get_config_file(
+                config, section='redis')
+            with redis.Redis(**parameters_connection) as connection:
+                data = connection.hget(dict_key, file_name)
                 data = int(data.decode('utf8'))
                 # self.log.debug("Extracion de datos completa")
             return data
-        except (redis.exceptions.DataError,redis.exceptions.AuthenticationError) as redis_error:
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
 
-
-
-    def set_single_value(self,dict_key:str,file_name:str,value:int,config:str,):
+    def set_single_value(self, dict_key: str, file_name: str, value: int, config: str,):
         '''get_posicition Funcion para traer toda la lista de datos de una collecion de redis
 
         Args:
@@ -160,16 +158,16 @@ class HandleRedis(object):
             _type_: _description_
         '''
         try:
-            parameters_connection = self.get_config_file(config, section = 'redis')
-            with redis.Redis(**parameters_connection) as connection :
-                connection.hset(dict_key,file_name,value)
+            parameters_connection = self.get_config_file(
+                config, section='redis')
+            with redis.Redis(**parameters_connection) as connection:
+                connection.hset(dict_key, file_name, value)
                 # self.log.debug("Extracion de datos completa")
-        except (redis.exceptions.DataError,redis.exceptions.AuthenticationError) as redis_error:
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
 
-
-    def set_dict_data(self, hash_name:str,dict_data:dict ,config:str):
+    def set_dict_data(self, hash_name: str, dict_data: dict, config: str):
         '''set_dict_data Metodo para enviar un diccionario de datos a redis 
 
         Args:
@@ -178,20 +176,22 @@ class HandleRedis(object):
             config (str): Ruta del archivos de las configuraciones para la conexion con redis
         '''
         try:
-            #Conversion de los indicadores de keys como strings
-            dict_data[hash_name] = {str(key): value for key, value in dict_data[hash_name].items()}
-            
-            parameters_connection = self.get_config_file(config, section = 'redis')
-            with redis.Redis(**parameters_connection) as connection :
-                for key_data,_val_data_line in dict_data[hash_name].items():
+            # Conversion de los indicadores de keys como strings
+            dict_data[hash_name] = {
+                str(key): value for key, value in dict_data[hash_name].items()}
+
+            parameters_connection = self.get_config_file(
+                config, section='redis')
+            with redis.Redis(**parameters_connection) as connection:
+                for key_data, _val_data_line in dict_data[hash_name].items():
                     serialize = json.dumps(_val_data_line)
-                    connection.hset(hash_name,key_data,serialize)
+                    connection.hset(hash_name, key_data, serialize)
                 # self.log.debug("Extracion de datos completa")
-        except (redis.exceptions.DataError,redis.exceptions.AuthenticationError) as redis_error:
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
 
-    def get_dict_data(self, hash_name:str,config:str):
+    def get_dict_data(self, hash_name: str, config: str):
         '''get_dict_data _summary_
 
         Args:
@@ -202,8 +202,9 @@ class HandleRedis(object):
 
         data = {hash_name: {}}
         try:
-            parameters_connection = self.get_config_file(config, section = 'redis')
-            with redis.Redis(**parameters_connection) as connection :
+            parameters_connection = self.get_config_file(
+                config, section='redis')
+            with redis.Redis(**parameters_connection) as connection:
                 for key in connection.hkeys(hash_name):
                     # Recuperar la cadena del hash de Redis
                     value_str = connection.hget(hash_name, key)
@@ -211,7 +212,7 @@ class HandleRedis(object):
                     data[hash_name][key] = json.loads(value_str)
 
                     # self.log.debug("Extracion de datos completa")
-        except (redis.exceptions.DataError,redis.exceptions.AuthenticationError) as redis_error:
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
 
@@ -221,7 +222,7 @@ class HandleRedis(object):
         '''Funcion para buscar la ip publica en una conexion'''
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as search:
             search.connect(("8.8.8.8", 80))
-            ip_publica  = search.getsockname()[0]
+            ip_publica = search.getsockname()[0]
         return ip_publica
 
 
@@ -238,17 +239,15 @@ class HandleRedis(object):
     #         bussy_index.append(index+1)
 
     # print(bussy_index)
-    #================================================================================================
+    # ================================================================================================
 
     # #Archivo de conexiones
     # CONECTION_FILE = '/home/smg/car/carrito/config/redis.ini'
     # #Archivo de esquema
     # INIT_SET_DATA = '/home/smg/car/carrito/data/initial_data.json'
 
-
     # redis_handler = HandleRedis()
     # loads = LoadFiles()
-
 
     # # Cargar datos para enviar
     # init_redis_data = loads.json_to_dict(INIT_SET_DATA)[0]
@@ -274,7 +273,7 @@ class HandleRedis(object):
     # else:
     #     print('libre')
     # print(data_sim)
-    #================================================================================================
+    # ================================================================================================
     # #Archivo de conexiones
     # CONECTION_FILE = '/home/smg/car/carrito/config/redis.ini'
     # #Archivo de esquema

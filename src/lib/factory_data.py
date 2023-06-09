@@ -2,13 +2,18 @@
 Codigo usado para extraer la informacion para la predicciones de la informacion
 '''
 
-from src.features.features_redis import HandleRedis
-from src.features.features_postgres import HandleDBpsql
-from src.models.args_data_model import ParamsPostgres
-
-from abc import ABC, abstractmethod
 
 # Esta es la interfaz abstracta para las operaciones
+try:
+    from src.features.features_redis import HandleRedis
+    from src.features.features_postgres import HandleDBpsql
+    from src.models.args_data_model import ParamsPostgres
+except ImportError as Error:
+    from features_redis import HandleRedis
+    from features_postgres import HandleDBpsql
+    from args_data_model import ParamsPostgres
+
+from abc import ABC, abstractmethod
 
 
 class DataSource(ABC):
@@ -51,7 +56,7 @@ class SQLPostgres(DataSource):
             query=query
         )
 
-    def write(self, data:tuple):
+    def write(self, data: tuple):
         '''metodo base para hacer escritura de los datos en postgres'''
         parameter_query = self.data_source.read_parameters_query(
             self.parametro.names_table_columns)
@@ -65,13 +70,13 @@ class SQLPostgres(DataSource):
         query = self.data_source.prepare_query_replace_value(
             sql_file=self.parametro.query_read,
             data_replace=fix_dict_query
-            )
+        )
 
         return self.data_source.insert_data(
             connection_parameters=self.parametro.connection_params,
             query=query,
             data=data
-            )
+        )
 
 
 class NoSQLRedis(DataSource):
@@ -127,10 +132,12 @@ class PlainTextFileDataSourceFactory(AbstractDataSourceFactory):
         return PlainTextFileDataSource()
 
 # Usando la fábrica
+
+
 def get_data(factory: AbstractDataSourceFactory) -> None:
     '''Metodo para hacer la lectura de la infomacion'''
     data_source = factory.create_data_source()
-    print(data_source.read())
+    return data_source.read()
     # print(data_source.write("datos"))
 
 

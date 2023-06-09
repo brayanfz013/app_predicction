@@ -1,0 +1,40 @@
+2023-06-06 03:54:49,887 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 03:54:49,888 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 
+2023-06-06 03:54:49,908 - POSTGRES - ERROR - features_postgres : 378 - syntax error at or near "["
+LINE 1: [loggers] keys=root  [logger_root] handlers=screen,file leve...
+        ^
+
+2023-06-06 03:56:11,927 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 03:56:11,927 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 
+2023-06-06 03:56:11,932 - POSTGRES - ERROR - features_postgres : 378 - syntax error at or near "["
+LINE 1: [loggers] keys=root  [logger_root] handlers=screen,file leve...
+        ^
+
+2023-06-06 03:56:32,417 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 03:56:32,417 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 
+2023-06-06 03:56:32,421 - POSTGRES - ERROR - features_postgres : 378 - syntax error at or near "["
+LINE 1: [loggers] keys=root  [logger_root] handlers=screen,file leve...
+        ^
+
+2023-06-06 03:58:25,175 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 03:58:25,175 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 
+2023-06-06 03:58:25,179 - POSTGRES - ERROR - features_postgres : 378 - syntax error at or near "["
+LINE 1: [loggers] keys=root  [logger_root] handlers=screen,file leve...
+        ^
+
+2023-06-06 03:59:38,915 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 03:59:38,915 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 
+2023-06-06 03:59:38,921 - POSTGRES - ERROR - features_postgres : 378 - syntax error at or near "["
+LINE 1: [loggers] keys=root  [logger_root] handlers=screen,file leve...
+        ^
+
+2023-06-06 04:00:08,094 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 04:00:08,095 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 
+2023-06-06 04:00:08,583 - POSTGRES - ERROR - features_postgres : 378 - relation "posicion" does not exist
+LINE 1: SELECT "Material", "Solicitante" FROM posicion 
+                                              ^
+
+2023-06-06 04:05:58,139 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 04:05:58,139 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 
+2023-06-06 04:09:51,635 - POSTGRES - DEBUG - features_postgres : 51 - Instancia libreria
+2023-06-06 04:12:57,261 - POSTGRES - DEBUG - features_postgres : 82 - Ejecutado lectura de parametros de conexion 

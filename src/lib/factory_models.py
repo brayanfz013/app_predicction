@@ -1,27 +1,44 @@
-from darts.models import RandomForest, LightGBMModel, LinearRegressionModel, CatBoostModel, XGBModel, BlockRNNModel, NBEATSModel, NHiTSModel, TCNModel, TransformerModel, TFTModel, DLinearModel, NLinearModel
+'''Metodo de diseno de modelos empleando el patron de diseno basado en Estrategia '''
+
 from abc import ABC, abstractmethod
+from darts.models import (
+    RNNModel,
+    TCNModel,
+    TransformerModel,
+    NBEATSModel,
+    BlockRNNModel,
+    TFTModel,
+    AutoARIMA,
+    Theta,
+    VARIMA,
+    FFT,
+    ExponentialSmoothing,
+    DLinearModel,
+    NLinearModel
+)
 
 Modelos = {
-    'RandomForest':RandomForest,
-    'LinearRegressionModel':LightGBMModel,
-    'LightGBMModel':LinearRegressionModel,
-    'CatBoostModel':CatBoostModel,
-    'XGBModel':XGBModel,
-    'BlockRNNModel':BlockRNNModel,
-    'NBeatsModel':NBEATSModel,
-    'NHiTSModel':NHiTSModel,
-    'TCNModel':TCNModel,
-    'TransformersModel':TransformerModel,
+    'RNNModel':RNNModel,
+    'BlockRNNModel': BlockRNNModel,
+    'NBeatsModel': NBEATSModel,
+    'TCNModel': TCNModel,
+    'TransformersModel': TransformerModel,
     'TFTModel': TFTModel,
-    'DLinealModel':DLinearModel,
-    'NLinearModel':NLinearModel
+    'DLinealModel': DLinearModel,
+    'NLinearModel': NLinearModel,
+    'ExponentialSmoothing':ExponentialSmoothing,
+    'AutoARIMA':AutoARIMA,
+    'Theta':Theta,
+    'VARIMA':VARIMA,
+    'FFT':FFT
+
 }
 
 class Model(ABC):
     @abstractmethod
     def train(self, data):
-        pass
-
+        '''Metodo base de entrenamiento de fabrica de modelo'''
+        
     @abstractmethod
     def predict(self, data):
         pass
@@ -35,19 +52,14 @@ class Model(ABC):
         pass
 
 
-class RandomForestModel(Model):
-    def train(self, data):
-        print("Entrenando RandomForestModel con los datos")
-
-    def predict(self, data):
-        print("Realizando predicciones con RandomForestModel")
-
-
 class ModelContext:
-    def __init__(self, model_name):
+    '''Metodo de abstraccion de modelos y sus metodos'''
+    def __init__(self, model_name,parameters):
+        self.parameters = parameters
         if model_name not in Modelos:
             raise ValueError(f"Modelo no soportado: {model_name}")
-
+        else:
+            print(f'Modelo importado {model_name}' )
         self._model = Modelos[model_name]()
 
     def train(self, data):
@@ -55,11 +67,11 @@ class ModelContext:
 
     def predict(self, data):
         return self._model.predict(data)
-    
 
-context = ModelContext('RandomForest')
-context.train('data')
-predictions = context.predict('data')
+
+# context = ModelContext(Modelos)
+# context.train('data')
+# predictions = context.predict('data')
 
 # class ModelContext:
 #     def __init__(self, model):
