@@ -15,6 +15,7 @@ class ColumnsNameHandler:
         self.dataframe = dataframe
 
     def apply_transformations(self, transformations:dict,functions_transform:dict):
+
         '''apply_transformations Metodo para aplicar transformacion a cada columna de un
         dataframe 
 
@@ -104,7 +105,6 @@ class ColumnsNameHandler:
         max_val: valor maximo de un dataframe.describe()
         dict_out: diccionario de salida usado para almacenar los valores los nuevo Dtypes
         key: key de salida usado para almacenar los valores los nuevo Dtypes
-
         """
 
         for ld_type  in list(dict_types.keys()):
@@ -237,7 +237,11 @@ class PrepareData(ColumnsNameHandler):
 
     def __init__(self,dataframe:pd.DataFrame) -> None:
         super().__init__(dataframe)
+        self.dataframe = dataframe
 
+    def set_index_col(self,column_index:str):
+        '''Metodo personalizado para colocar una columna como index del dataframe'''
+        self.dataframe.set_index(column_index,inplace=True)
         
     def approx_to_nearest_multiple(self,numero:float,mulitple:int)->int:
         '''approx_to_nearest_multiple Metodo para aproximas un valor a 
@@ -268,7 +272,7 @@ class PrepareData(ColumnsNameHandler):
         
         return data_frame
     
-    def get_expand_date(self,dataframe:pd.DataFrame,column_date:str):
+    def get_expand_date(self,column_date:str):
         '''get_expand_date metodo para expandir la fecha en multiples campos para el analisis
 
         Args:
@@ -278,12 +282,12 @@ class PrepareData(ColumnsNameHandler):
         Returns:
             _type_: Dataframe con la fecha expandida
         '''
-        dataframe['Dia'] = dataframe[column_date].dt.day
-        dataframe['Mes'] = dataframe[column_date].dt.month
-        dataframe['Año'] = dataframe[column_date].dt.year
-        dataframe['Semana'] = dataframe[column_date].dt.isocalendar().week
-        dataframe['DiaSemana'] = dataframe[column_date].dt.day_of_week
-        return dataframe
+        self.dataframe['Dia'] = self.dataframe[column_date].dt.day
+        self.dataframe['Mes'] = self.dataframe[column_date].dt.month
+        self.dataframe['Año'] = self.dataframe[column_date].dt.year
+        self.dataframe['Semana'] = self.dataframe[column_date].dt.isocalendar().week
+        self.dataframe['DiaSemana'] = self.dataframe[column_date].dt.day_of_week
+        return self.dataframe
 
     def scale_data(self,data:pd.DataFrame,date_col:str,columns_for_fill:list):
         '''Metodo para escalar la informacion'''
@@ -298,7 +302,7 @@ class PrepareData(ColumnsNameHandler):
             )
         ).astype(np.float32)
 
-    def group_by_time(self,dataframe:pd.DataFrame,col_group:str,frequency_group:str = 'W'):
+    def group_by_time(self,col_group:str,frequency_group:str = 'W'):
         '''group_by_time Metodo para agrupar las columnas de un dataframe dependiendo de la frecuencia
 
         Args:
@@ -306,9 +310,8 @@ class PrepareData(ColumnsNameHandler):
             col_group (str): nombre de columna para hacer la agrupacion
             frequency_group (str, optional): Periodo de agrupacion Defaults to 'W'.
         '''
-        data_group = dataframe.groupby([pd.Grouper(freq=frequency_group)])[col_group].sum()
-        data_group = pd.DataFrame(data_group)
-        return data_group
+        self.dataframe = self.dataframe.groupby([pd.Grouper(freq=frequency_group)])[col_group].sum()
+        self.dataframe = pd.DataFrame(self.dataframe)
 
 
     def save_scales(self):
