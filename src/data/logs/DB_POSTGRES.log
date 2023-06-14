@@ -1,10 +1,10 @@
-2023-06-12 19:32:29,783 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
-2023-06-12 19:32:29,784 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
-2023-06-12 20:02:56,714 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
-2023-06-12 20:02:56,714 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
-2023-06-12 20:11:03,514 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
-2023-06-12 20:11:03,515 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
-2023-06-12 20:21:03,755 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
-2023-06-12 20:21:03,756 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
-2023-06-12 20:38:49,878 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
-2023-06-12 20:38:49,878 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
+2023-06-14 16:17:29,276 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
+2023-06-14 16:17:29,277 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
+2023-06-14 17:02:53,641 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
+2023-06-14 17:02:53,641 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
+2023-06-14 17:05:46,905 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
+2023-06-14 17:05:46,905 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
+2023-06-14 17:06:56,247 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
+2023-06-14 17:06:56,248 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 
+2023-06-14 17:09:35,043 - POSTGRES - DEBUG - features_postgres : 45 - Instancia libreria
+2023-06-14 17:09:35,043 - POSTGRES - DEBUG - features_postgres : 76 - Ejecutado lectura de parametros de conexion 

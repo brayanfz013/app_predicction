@@ -5,9 +5,10 @@
 import json
 from scipy import stats
 import numpy as np
+import pandas as pd
 from src.lib.factory_data import get_data, SQLDataSourceFactory
 from src.lib.factory_models import ModelContext, Modelos
-from src.lib.factory_prepare_data import DataCleaner,MeanImputation
+from src.lib.factory_prepare_data import DataCleaner,MeanImputation,OutliersToIQRMean
 from src.models.args_data_model import (
     ModelRNN,
     ModelBlockRNN,
@@ -25,6 +26,8 @@ from src.models.args_data_model import (
 #             Cargar datos de la fuente de datos 
 #=================================================================
 CONFIG_FILE = "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/parameter/data_params_run.json"
+FILE_FILTER_DATA = "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/filter_data.json"
+
 
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = json.load(file)
@@ -35,35 +38,42 @@ data = get_data(SQLDataSourceFactory(**parameters))
 #=================================================================
 #             Limpieza de datos
 #=================================================================
+# Nuevos datos para reemplazar en las columnas
 new_types =[np.datetime64,int,int,'object',int,int]
 
-#Estrategias para imputar los datos faltantes de NA 
+
+#metodo para transformar los tipo de datos
 strategy = {
     int:np.mean,
     float:np.mean,
     object:stats.mode
 }
 
-#metodo para transformar los tipo de datos
+#Estrategias para imputar los datos faltantes de NA 
 replace = {
     int:lambda x: int(float(x.replace(',',''))),
     float:lambda x: float(x.replace(',',''))
 }
 
 
+
 imputation = MeanImputation(
                             replace_dtypes=new_types,
                             strategy_imputation=strategy,
-                            preprocess_function=replace
+                            preprocess_function=replace,
+                            **parameters
                             )
 
-cleaner = DataCleaner(imputation)
-data = cleaner.clean(data)
 
+outliners = OutliersToIQRMean(
+    **parameters
+)
 
+# cleaner = DataCleaner(imputation)
+# data_clean = cleaner.clean(data)
 
-
-
+# cleaner.strategy = outliners
+# cleaner.clean(data_clean)
 
 #=================================================================
 #            Preparacion de modelo

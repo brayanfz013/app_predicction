@@ -35,27 +35,35 @@ Modelos = {
 }
 
 class Model(ABC):
+    '''Extraccion de caracteristicas base de los modelos de predicciones'''
     @abstractmethod
     def train(self, data):
         '''Metodo base de entrenamiento de fabrica de modelo'''
         
     @abstractmethod
     def predict(self, data):
+        '''Metodo base para hacer predicciones'''
         pass
 
     @abstractmethod
     def error(self, data):
+        '''Metodo base para calcular error de las predicciones'''
         pass
 
     @abstractmethod
     def parameters(self, parameters):
+        '''Metodo base para cargar los parametros de los modelo'''
         pass
 
+    @abstractmethod
+    def save(self, parameters):
+        '''metodo base para guardar tanto el modelo generado '''
 
 class ModelContext:
     '''Metodo de abstraccion de modelos y sus metodos'''
-    def __init__(self, model_name,parameters):
+    def __init__(self, model_name:str,**parameters):
         self.parameters = parameters
+        
         if model_name not in Modelos:
             raise ValueError(f"Modelo no soportado: {model_name}")
         else:
@@ -63,15 +71,19 @@ class ModelContext:
         self._model = Modelos[model_name]()
 
     def train(self, data):
+        '''Ejecutar entrenamiento'''
         self._model.fit(data)
 
     def predict(self, data):
+        '''Ejecutar una prediccion'''
         return self._model.predict(data)
 
+    def save(self, parameter):
+        '''Guardar modelo en ruta'''
 
-# context = ModelContext(Modelos)
-# context.train('data')
-# predictions = context.predict('data')
+# context = ModelContext("Modelos")
+# context.train(data)
+# predictions = context.predict(data)
 
 # class ModelContext:
 #     def __init__(self, model):

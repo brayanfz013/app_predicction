@@ -42,7 +42,8 @@ class ParamsPostgres:
     query_write :Optional[Union[str, os.PathLike, PosixPath]]
     logger_file :Optional[Union[str, os.PathLike, PosixPath]]
     names_table_columns : Optional[Union[str, os.PathLike, PosixPath]]
-
+    filter_columns: Optional[Union[str, os.PathLike, PosixPath]]
+    
 @dataclass
 class ParamsRedis:
     '''Listado de parametro para se usado en redis'''

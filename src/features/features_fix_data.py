@@ -3,16 +3,25 @@ Clases y metodos para limpiar la informacion para hacer la prepracion de los dat
 '''
 import numpy as np
 import pandas as pd
+import json
 from darts import TimeSeries
 from darts.dataprocessing.transformers import MissingValuesFiller, Scaler
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, StandardScaler
-
+from matplotlib import pyplot as plt
+from darts.metrics import r2_score
 
 class ColumnsNameHandler:
     ''' Metodo para manipulas el nombre de las columnas de un dataframe de pandas    '''
 
-    def __init__(self,dataframe:pd.DataFrame) -> None:
-        self.dataframe = dataframe
+    def __init__(self,dataframe:pd.DataFrame,**parameters) -> None:
+
+        # self.dataframe =dataframe
+        if isinstance(dataframe,pd.DataFrame):
+            self.dataframe  = dataframe
+        else:
+            with open(parameters["names_table_columns"] , 'r', encoding='utf-8') as file:
+                names = json.load(file)
+            names['columns'] = list(names['columns'].values())
+            self.dataframe = pd.DataFrame(dataframe,columns=names['columns'])
 
     def apply_transformations(self, transformations:dict,functions_transform:dict):
 
@@ -235,9 +244,9 @@ class ColumnsNameHandler:
 class PrepareData(ColumnsNameHandler):
     '''Metodo para limpiar los datos de un data frame en funcionde una columna'''
 
-    def __init__(self,dataframe:pd.DataFrame) -> None:
-        super().__init__(dataframe)
-        self.dataframe = dataframe
+    def __init__(self,dataframe:pd.DataFrame,**parameters) -> None:
+        super().__init__(dataframe,**parameters)
+        # self.dataframe = dataframe
 
     def set_index_col(self,column_index:str):
         '''Metodo personalizado para colocar una columna como index del dataframe'''
@@ -289,22 +298,8 @@ class PrepareData(ColumnsNameHandler):
         self.dataframe['DiaSemana'] = self.dataframe[column_date].dt.day_of_week
         return self.dataframe
 
-    def scale_data(self,data:pd.DataFrame,date_col:str,columns_for_fill:list):
-        '''Metodo para escalar la informacion'''
-
-        filler = MissingValuesFiller()
-        scaler = Scaler()
-        return scaler.fit_transform(
-            filler.transform(
-                TimeSeries.from_dataframe(
-                    data, date_col, columns_for_fill
-                )
-            )
-        ).astype(np.float32)
-
     def group_by_time(self,col_group:str,frequency_group:str = 'W'):
         '''group_by_time Metodo para agrupar las columnas de un dataframe dependiendo de la frecuencia
-
         Args:
             dataframe (pd.DataFrame): Datos para hacer hacer la agrupacion
             col_group (str): nombre de columna para hacer la agrupacion
@@ -313,14 +308,109 @@ class PrepareData(ColumnsNameHandler):
         self.dataframe = self.dataframe.groupby([pd.Grouper(freq=frequency_group)])[col_group].sum()
         self.dataframe = pd.DataFrame(self.dataframe)
 
+    def fill_missing_values(self,data_convert:TimeSeries):
+        '''scale_data Metodo para escarlar datos transformados en el pipe line de Darts
 
-    def save_scales(self):
-        '''Metodo para guardar el escalador para hacer predicciones futuras'''
+        Args:
+            data_convert (TimeSeries): Listado de datos transformados por darts para ser escalados
 
+        Returns:
+            _type_: Serie de tiempo escalado para ser usados en las predicciones, junto con el escalador
+        '''
+        # Escalizacion de datos usando la libreria Darts
+        filler = MissingValuesFiller()
+        data_transform = filler.transform(data_convert)
+        return data_transform
 
-    def transforf_dataframe_dart(self,dataframe):
-        '''Metodo para transformar la informacion para usarce en Dars'''
+    def scale_data(self,data):
+        # '''Metodo para escalar datos usando darts'''
+        '''scale_data Metodo para escalar los datos usando darts, 
+        a lo cual se retorna los valores escalados y el escalador 
+
+        Args:
+            data (_type_): Datos de series de tiempo de darts
+
+        Returns:
+            _type_: Se retorna los datos transformados y el escalador
+        '''
+        transformer = Scaler()
+        train_transformed = transformer.fit_transform(data)
+        return train_transformed, transformer
+
+    def transforf_dataframe_dart(self,time_col:str,data_col:str):
+        '''transforf_dataframe_dart Metodo para transformar la informacion para usarce en Dars
+
+        Args:
+            time_col (str): Columna que tiene la serie de tiempo sobre la cual se predice
+            data_col (str): Columna que contiene informacion para las predicciones
+
+        Returns:
+            _type_: TimeSeries data convertida para usarla en modelos  de Darts
+        '''
+        data = self.dataframe.reset_index()
+        print(data)
+        data_for_model = TimeSeries.from_dataframe(
+            data, time_col, [data_col]
+        )
+        return data_for_model
         
+    def filter_column(self,column:str,feature:float,string_filter:bool=True):
+        '''filter_column Metodo basico para filtrar los datos de un dataframe
+
+        Args:
+            column (str): Columna sobre la cual se aplica el filtro
+            feature (typing.Optional): caracteristica sobre la cual se hace la busqueda 
+            booleana
+            string_filter (bool, optional): Bandera para filtrar entre caracteres numericos y caracteres
+            . Defaults to True.
+
+        Returns:
+            pd.Dataframe: Retorna un dataframe filtrado en base a los parametros de entradas
+        '''
+        if string_filter:
+            mask = self.dataframe[column].str.contains(str(feature))
+            self.dataframe = self.dataframe[mask]
+
+        else:
+            mask = self.dataframe[column] == float(feature)
+            self.dataframe = self.dataframe[mask]
+        
+
+    def split_data(self,data:TimeSeries,time_stamp:str):
+        '''split_data Metodo para hacer un split de tiempo en base una fecha
+
+        Args:
+            data (TimeSeries): Datos convertidos previamente en series de tiempo de 
+            darst
+            time_stamp (str): string del fecha para hacer la particion de los datso
+            '20230328'
+
+        Returns:
+            _type_: Datos 
+        '''
+        return data.split_after(pd.Timestamp(time_stamp))
+
+
+    def display_forecast(self,pred_series, ts_transformed, forecast_type:str, start_date:str=None):
+        '''display_forecast Metodo para hacer graficas y predicciones sobre datos a partir de 
+        de la transformaciones
+
+        Args:
+            pred_series (_type_): Listado de predicciones realizada para ser mostradas
+            ts_transformed (_type_): Serie de datos originales para hacer la comparativas
+            forecast_type (_type_): Nombre de la grafica que va a tener
+            start_date (_type_, optional):inicio de fecha para separar los datos para hacer el calculo de error
+            Defaults to None.
+        '''
+        plt.figure(figsize=(8, 5))
+        if start_date:
+            ts_transformed = ts_transformed.drop_before(start_date)
+        ts_transformed.univariate_component(0).plot(label="actual")
+        pred_series.plot(label=("historic " + forecast_type + " forecasts"))
+        plt.title(
+            "R2: {}".format(r2_score(ts_transformed.univariate_component(0), pred_series))
+        )
+        plt.legend()
 
 if __name__ == '__main__':
 

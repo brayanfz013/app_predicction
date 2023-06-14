@@ -2,4 +2,6 @@
  "query_read":"/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/get_table.sql", 
  "query_write":"/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/insert_data.sql", 
  "logger_file":"/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/logging.conf", 
- "names_table_columns":"/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/template_postgres_column.json"}
+ "names_table_columns":"/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/template_postgres_column.json",
+ "filter_columns":"/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/filter_data.json"
+}

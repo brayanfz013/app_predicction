@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 from typing import Union
 import numpy as np
+import pickle
+
 
 class LoadFiles(object):
     '''Clase recopilatoria de diferentes funciones para cargar archivos de carpetas y del sistema'''
@@ -150,8 +152,9 @@ class LoadFiles(object):
             file_name (str): Nombre del archivos
         '''
 
-        path_file = Path(os.path.join(path_to_save, file_name)
-                         ).with_suffix('.json')
+        path_file = Path(
+            os.path.join(path_to_save, file_name)
+        ).with_suffix('.json')
 
         with open(path_file, "w", encoding='utf-8') as file_save:
             json.dump(dict_data, file_save)
@@ -217,3 +220,14 @@ class LoadFiles(object):
         '''
         for item in os.listdir(path_dir):
             os.remove(os.path.join(path_dir, item))
+
+    def save_scaler(self, scaler, path):
+        '''Metodo para guardar el escalador para hacer predicciones futuras'''
+        with open(path, 'wb') as f:
+            pickle.dump(scaler, f)
+
+    def load_scaler(self, path):
+        '''Metodo para cargar los datos serializado del scaler'''
+        with open(path, 'rb') as f:
+            scaler = pickle.load(f)
+        return scaler
