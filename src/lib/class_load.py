@@ -231,3 +231,35 @@ class LoadFiles(object):
         with open(path, 'rb') as f:
             scaler = pickle.load(f)
         return scaler
+
+    
+    def save_strategy(self,pickle_strategy:str,pathfile:dict):
+        '''save_strategy Metodo para guardar diccionario de funciones en 
+        pytho en este caso un diccionario con metodo para depurar datos
+
+        Args:
+            pickle_strategy (str): Diccionario con valores que son funciones
+            replace = {
+                        int:lambda x: int(float(x.replace(',',''))),
+                        float:lambda x: float(x.replace(',',''))
+                    }
+
+            pathfile (dict): Ruta donde se guarda los datos del diccionario
+        '''
+        # Ahora los datos están guardados en 'strategy.pkl'
+        with open(pickle_strategy, 'wb') as file:
+            pickle.dump(pathfile, file)
+
+    def load_strategy(self,pickle_strategy):
+        '''load_strategy Metodo para cargar informacion de funciones de un diccionario
+
+        Args:
+            pickle_strategy (_type_): Rutan donde se encuentra guardada la informacion
+
+        Returns:
+            _type_: archivos cargados como diccionario
+        '''
+        # Podemos cargar los datos del archivo de esta manera
+        with open(pickle_strategy, 'rb') as file:
+            loaded_replace = pickle.load(file)
+        return loaded_replace
