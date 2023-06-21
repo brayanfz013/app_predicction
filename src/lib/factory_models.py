@@ -8,14 +8,41 @@ from darts.models import (
     NBEATSModel,
     BlockRNNModel,
     TFTModel,
-    AutoARIMA,
-    Theta,
-    VARIMA,
     FFT,
     ExponentialSmoothing,
     DLinearModel,
-    NLinearModel
-)
+    NLinearModel)
+
+try:
+    from src.features.features_fix_data import PrepareData
+    from src.lib.class_load import LoadFiles
+    from src.models.args_data_model import (
+        ModelBlockRNN,
+        ModelExponentialSmoothing,
+        ModelDLinearModel,
+        ModelNlinearModel,
+        ModelRNN,
+        ModelNBEATSModel,
+        ModelFFT,
+        ModelTCNModel,
+        ModelTFTModel,
+        ModelTransformerModel
+    )
+except ImportError:
+    from features_fix_data import PrepareData
+    from class_load import LoadFiles
+    from args_data_model import (
+        ModelBlockRNN,
+        ModelExponentialSmoothing,
+        ModelDLinearModel,
+        ModelNlinearModel,
+        ModelRNN,
+        ModelNBEATSModel,
+        ModelFFT,
+        ModelTCNModel,
+        ModelTFTModel,
+        ModelTransformerModel
+    )
 
 Modelos = {
     'RNNModel':RNNModel,
@@ -27,11 +54,23 @@ Modelos = {
     'DLinealModel': DLinearModel,
     'NLinearModel': NLinearModel,
     'ExponentialSmoothing':ExponentialSmoothing,
-    'AutoARIMA':AutoARIMA,
-    'Theta':Theta,
-    'VARIMA':VARIMA,
     'FFT':FFT
+}
 
+Parameters_model = {
+    'RNNModel':ModelRNN,
+    'BlockRNNModel': ModelBlockRNN,
+    'NBeatsModel': ModelNBEATSModel,
+    'TCNModel': ModelTCNModel,
+    'TransformersModel': ModelTransformerModel,
+    'TFTModel': ModelTFTModel,
+    'DLinealModel': ModelDLinearModel,
+    'NLinearModel': ModelNlinearModel,
+    'ExponentialSmoothing':ModelExponentialSmoothing,
+    # 'AutoARIMA':AutoARIMA,
+    # 'Theta':Theta,
+    # 'VARIMA':VARIMA,
+    'FFT':ModelFFT
 }
 
 class Model(ABC):
@@ -39,11 +78,10 @@ class Model(ABC):
     @abstractmethod
     def train(self, data):
         '''Metodo base de entrenamiento de fabrica de modelo'''
-        
+
     @abstractmethod
     def predict(self, data):
         '''Metodo base para hacer predicciones'''
-        pass
 
     # @abstractmethod
     # def error(self, data):
@@ -53,7 +91,6 @@ class Model(ABC):
     @abstractmethod
     def parameters(self, parameters):
         '''Metodo base para cargar los parametros de los modelo'''
-        pass
 
     @abstractmethod
     def save(self, parameters):
@@ -63,7 +100,7 @@ class ModelContext(Model):
     '''Metodo de abstraccion de modelos y sus metodos'''
     def __init__(self, model_name,parameters):
         self.parameters_model = parameters
-        
+
         if model_name not in Modelos:
             raise ValueError(f"Modelo no soportado: {model_name}")
         else:
@@ -76,7 +113,6 @@ class ModelContext(Model):
 
     def parameters(self,parameters):
         '''Metodo para cargar los parametros de entrenamiento'''
-        
 
     def predict(self, data):
         '''Ejecutar una prediccion'''
@@ -88,31 +124,3 @@ class ModelContext(Model):
 # context = ModelContext("Modelos")
 # context.train(data)
 # predictions = context.predict(data)
-
-# class ModelContext:
-#     def __init__(self, model):
-#         self._model = model
-
-#     @property
-#     def model(self):
-#         return self._model
-
-#     @model.setter
-#     def model(self, model):
-#         self._model = model
-
-#     def train(self, data):
-#         self._model.train(data)
-
-#     def predict(self, data):
-#         self._model.predict(data)
-
-
-# context = ModelContext(RandomForestModel())
-# context.train('data')
-# context.predict('data')
-
-
-# context.model = AnotherModel()  # Cambia a otro modelo en tiempo de ejecución
-# context.train('data')
-# context.predict('data')

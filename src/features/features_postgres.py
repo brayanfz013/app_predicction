@@ -1,5 +1,6 @@
 import logging
 import logging.config
+import yaml
 import os
 import sys
 from configparser import ConfigParser
@@ -12,7 +13,7 @@ try:
     from ..data.logs import LOGS_DIR
 except ImportError as error:
     path_folder = os.path.dirname(__file__)
-    path_folder = str(Path(path_folder).parents)
+    path_folder = Path(path_folder).parents[0]
     omitir = ''
 
     def search_subfolders(path: str):
@@ -36,23 +37,32 @@ class HandleDBpsql(object):
     Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy    
     """
 
-    def __init__(self, logfile='logging.conf'):
+    def __init__(self, logfile='data/config/logging.conf'):
+        path_folder = os.path.dirname(__file__)
+        path_folder = str(Path(path_folder).parents[0])
+        logs_file = str(Path(path_folder).joinpath(logfile))
 
         # Constructor que permite inicializar los parametros
-        logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
+        logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
         self.log = logging.getLogger('POSTGRES')
 
-        self.log.debug("Instancia libreria")
+        # self.log.debug("Instancia libreria")
 
-    def get_config_file(self, filename='database.ini', section='postgresql'):
-        """
-        Lee el archivo de configuracion con los parametros a la base de datos
-        se tiene que seleccion el motor de base de datos.
+    def file_ini_(self, filename: str = 'database', section: str = 'postgresql'):
+        '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
+        de parametros es ini
 
-        Retorna un diccionario con la lectura de los parametros dentro del archivo
-        de conexion 
-        """
+        Args:
+            filename (str, optional): Nombre de ruta con extencion .ini. Defaults to 'database'.
+            section (str, optional): Tipo de conexion con la base de datos. Defaults to 'postgresql'.
 
+        Raises:
+            Exception: Error de conexion por no encontrar parametros
+            Exception: Erroe de conexion por no encontrar el nombre de la conexion
+
+        Returns:
+            _type_: Diccionario con los parametros de conexion
+        '''
         # creacion de un "Parser"
         parser = ConfigParser()
 
@@ -73,8 +83,42 @@ class HandleDBpsql(object):
             raise Exception(
                 f'Section {section} not found in the {filename} file')
 
-        self.log.debug('Ejecutado lectura de parametros de conexion ')
         return data_parameters
+
+    def file_yaml(self, filename: str, section: str = 'postgresql'):
+        '''file_yaml Metodo rapido para cargar los archivos de la base detaso 
+        cuando se tiene un yaml usando la clave de connection_data_source
+
+        Args:
+            filename (str): Ruta del archivo de la fuente de datos
+
+        Returns:
+            _type_: Diccionario con los criterios de conexion 
+        '''
+        with open(filename, 'r', encoding='utf-8') as file:
+            load_yaml = yaml.safe_load(file)
+
+        return load_yaml['connection_data_source'][section]
+
+    def get_config_file(self, filename: str = 'database', section: str = 'postgresql'):
+        """
+        Lee el archivo de configuracion con los parametros a la base de datos
+        se tiene que seleccion el motor de base de datos.
+
+        Retorna un diccionario con la lectura de los parametros dentro del archivo
+        de conexion 
+
+        """
+        if Path(filename).suffix == '.ini':
+            parameters = self.file_ini_(filename=filename, section=section)
+
+        elif Path(filename).suffix == '.yaml':
+            parameters = self.file_yaml(filename=filename, section=section)
+        else:
+            raise ValueError(
+                f"Archivo no válido: {filename}. Sólo se permiten archivos .ini o .yaml.")
+
+        return parameters
 
     def check_connection(self, connection_parameters: str):
         """ Connect to the PostgreSQL database server """
@@ -123,6 +167,7 @@ class HandleDBpsql(object):
         '''fix_dict_query Funcion para prepara los parametros del diccionario busqueda 
         para la funcion prepare_query_replace_value, demanrea que se pueda hacer querys
         '''
+
         data_replace = {
             'table': tabla,
             'columns': ', '.join(['"' + columna + '"' for columna in columnas]),
@@ -342,7 +387,15 @@ class HandleDBpsql(object):
                 conn.close()
 
     def get_last_row(self, connection_parameters: str, query: str):
+        '''get_last_row Metodo para obtener el ultimo valor de una base de datos
 
+        Args:
+            connection_parameters (str): parametros de conexion
+            query (str): _description_
+
+        Returns:
+            _type_: _description_
+        '''
         conn = None
         try:
             # read database configuration

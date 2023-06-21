@@ -348,7 +348,6 @@ class PrepareData(ColumnsNameHandler):
             _type_: TimeSeries data convertida para usarla en modelos  de Darts
         '''
         data = self.dataframe.reset_index()
-        print(data)
         data_for_model = TimeSeries.from_dataframe(
             data, time_col, [data_col]
         )
@@ -374,7 +373,6 @@ class PrepareData(ColumnsNameHandler):
         else:
             mask = self.dataframe[column] == float(feature)
             self.dataframe = self.dataframe[mask]
-        
 
     def split_data(self,data:TimeSeries,time_stamp:str):
         '''split_data Metodo para hacer un split de tiempo en base una fecha

@@ -6,6 +6,7 @@ import json
 import logging
 import logging.config
 import os
+import yaml
 import socket
 import sys
 from configparser import ConfigParser
@@ -49,15 +50,21 @@ class HandleRedis(object):
         self.log = logging.getLogger('REDIS')
         self.log.debug("Instancia libreria")
 
-    def get_config_file(self, filename='database.ini', section='postgresql'):
-        """
-        Lee el archivo de configuracion con los parametros a la base de datos
-        se tiene que seleccion el motor de base de datos.
+    def file_ini_(self, filename:str='database', section:str='postgresql'):
+        '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
+        de parametros es ini
 
-        Retorna un diccionario con la lectura de los parametros dentro del archivo
-        de conexion 
-        """
+        Args:
+            filename (str, optional): Nombre de ruta con extencion .ini. Defaults to 'database'.
+            section (str, optional): Tipo de conexion con la base de datos. Defaults to 'postgresql'.
 
+        Raises:
+            Exception: Error de conexion por no encontrar parametros
+            Exception: Erroe de conexion por no encontrar el nombre de la conexion
+
+        Returns:
+            _type_: Diccionario con los parametros de conexion
+        '''
         # creacion de un "Parser"
         parser = ConfigParser()
 
@@ -79,6 +86,37 @@ class HandleRedis(object):
                 f'Section {section} not found in the {filename} file')
 
         return data_parameters
+
+    def file_yaml(self,filename:str,section:str='postgresql'):
+        '''file_yaml Metodo rapido para cargar los archivos de la base detaso 
+        cuando se tiene un yaml usando la clave de connection_data_source
+
+        Args:
+            filename (str): Ruta del archivo de la fuente de datos
+
+        Returns:
+            _type_: Diccionario con los criterios de conexion 
+        '''
+        with open(filename,'r',encoding='utf-8') as file:
+            load_yaml = yaml.safe_load(file)
+
+        return load_yaml['connection_data_source'][section]
+
+    def get_config_file(self, filename:str='database', section:str='postgresql'):
+        """
+        Lee el archivo de configuracion con los parametros a la base de datos
+        se tiene que seleccion el motor de base de datos.
+
+        Retorna un diccionario con la lectura de los parametros dentro del archivo
+        de conexion 
+
+        """
+        filename_extencion = Path(filename).suffix
+        extencion_files = {
+            'ini':self.file_ini_(filename=filename,section=section),
+            'yaml':self.file_yaml(filename=filename,section=section)
+        }
+        return extencion_files[filename_extencion]
 
     def create_data(self, data: dict, config: str):
         '''create_data Funcion para crear y enviar datos a un servidor de redis

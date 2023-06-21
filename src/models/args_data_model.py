@@ -13,7 +13,7 @@ from darts.utils.likelihood_models import QuantileRegression
 def default_field(obj):
     '''Metodo base para tener un dciccionario como metodo dataclass inicial'''
     return field(default_factory=lambda: copy.copy(obj))
-    
+
 quantiles = [
     0.01,
     0.05,
@@ -147,7 +147,33 @@ class ModelNBEATSModel:
     layer_widths:int=512
     n_epochs:int=100
     nr_epochs_val_period:int=1
-    batch_size:int=800
+    batch_size:int=800,
+    pl_trainer_kwargs:dict=default_field({
+        "enable_progress_bar": True,
+        "accelerator": "gpu",
+        # "gpus": -1,
+        # "auto_select_gpus": True,
+    })
+
+@dataclass
+class ModelTFTModel:
+    '''Parametros iniciales para modelo TFT '''
+    model_name:Optional[str]
+    input_chunk_length:int=36
+    output_chunk_length:int=7
+    hidden_size:int=64
+    lstm_layers:int=1
+    num_attention_heads:int=4
+    dropout:int=0.1
+    batch_size:int=16
+    n_epochs:int=300
+    add_relative_index:bool=False
+    add_encoders:bool=None
+    likelihood:int=QuantileRegression(
+        quantiles=quantiles
+    ),  # QuantileRegression is set per default
+    # loss_fn:int=MSELoss(),
+    random_state:int=42
 
 
 @dataclass
@@ -182,22 +208,3 @@ class ModelNlinearModel:
     save_checkpoints:bool
     random_state:int
 
-@dataclass
-class ModelTFTModel:
-    '''Parametros iniciales para modelo TFT '''
-    model_name:Optional[str]
-    input_chunk_length:int=36
-    output_chunk_length:int=7
-    hidden_size:int=64
-    lstm_layers:int=1
-    num_attention_heads:int=4
-    dropout:int=0.1
-    batch_size:int=16
-    n_epochs:int=300
-    add_relative_index:bool=False
-    add_encoders:bool=None
-    likelihood:int=QuantileRegression(
-        quantiles=quantiles
-    ),  # QuantileRegression is set per default
-    # loss_fn:int=MSELoss(),
-    random_state:int=42

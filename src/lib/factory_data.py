@@ -28,14 +28,12 @@ class DataSource(ABC):
         '''write Metodo de escritura base '''
 
 # Implementaciones concretas de la interfaz para cada tipo de fuente de datos
-
-
 class SQLPostgres(DataSource):
     '''Metodo para manipulacion de datos de postgres'''
 
     def __init__(self, **parametros) -> None:
         self.parametro = ParamsPostgres(**parametros)
-        self.data_source = HandleDBpsql(parametros['logger_file'])
+        self.data_source = HandleDBpsql()
 
     def read(self):
         '''metodo base para hacer lectura de los datos'''

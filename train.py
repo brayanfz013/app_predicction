@@ -4,8 +4,10 @@
 # from app_prediction.src.lib.factory_data import client_code, SQLDataSourceFactory, NoSQLDataSourceFactory,PlainTextFileDataSourceFactory
 import json
 from scipy import stats
+# import hydra
 import numpy as np
 import pandas as pd
+from src.lib.class_load import LoadFiles
 from src.lib.factory_data import get_data, SQLDataSourceFactory
 from src.lib.factory_models import ModelContext, Modelos
 from src.lib.factory_prepare_data import DataCleaner,MeanImputation,OutliersToIQRMean,DataModel
@@ -79,6 +81,9 @@ data_filled = cleaner.clean(data_imputation.dataframe)
 cleaner.strategy = data_for_model
 data_ready,scaler_data = cleaner.clean(data_filled)
 
+handler_load = LoadFiles()
+
+# handler_load.save_scaler()
 
 #=================================================================
 #            Preparacion de modelo
@@ -98,19 +103,31 @@ parameters_train = {
     "force_reset":True,
     "save_checkpoints":True
 }
-print(ModelRNN.__dict__)
+
+print(data_ready)
+# print(ModelRNN.__dict__)
 
 
-parameter_model = ModelRNN(**parameters_train)
+# parameter_model = ModelRNN(**parameters_train)
 
-print(ModelContext(
-    model_name='RNNModel',
-    parameters=parameter_model
-    )
-    )
-print('metodo finalizado')
+# modelo = ModelContext(
+#     model_name='RNNModel',
+#     parameters=parameter_model
+#     )
+# print('metodo finalizado')
 
 
 #=================================================================
 #             Guardado de informacion
 #=================================================================
+
+
+# if __name__ == '__main__':
+#     import os
+#     from pathlib import Path
+#     path_folder = os.path.dirname(__file__)
+#     print(path_folder)
+#     print(Path(path_folder).parents[0])
+
+#     # path_folder = str(Path(path_folder).parents)
+#     # print(path_folder)
