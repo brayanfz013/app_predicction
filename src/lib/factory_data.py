@@ -1,17 +1,15 @@
 '''
 Codigo usado para extraer la informacion para la predicciones de la informacion
 '''
-
-
 # Esta es la interfaz abstracta para las operaciones
 try:
     from src.features.features_redis import HandleRedis
     from src.features.features_postgres import HandleDBpsql
-    from src.models.args_data_model import ParamsPostgres
+    from src.models.args_data_model import ParamsPostgres,Parameters
 except ImportError as Error:
     from features_redis import HandleRedis
     from features_postgres import HandleDBpsql
-    from args_data_model import ParamsPostgres
+    from args_data_model import Parameters
 
 from abc import ABC, abstractmethod
 
@@ -32,25 +30,23 @@ class SQLPostgres(DataSource):
     '''Metodo para manipulacion de datos de postgres'''
 
     def __init__(self, **parametros) -> None:
-        self.parametro = ParamsPostgres(**parametros)
+        self.parametro = Parameters(**parametros)
         self.data_source = HandleDBpsql()
 
     def read(self):
         '''metodo base para hacer lectura de los datos'''
-        parameter_query = self.data_source.read_parameters_query(
-            self.parametro.names_table_columns)
-        fix_dict_query = self.data_source.fix_dict_query(
-            parameter_query['table'],
-            parameter_query['columns'],
-            parameter_query['order'],
-            parameter_query['where']
-        )
+        fix_dict_query =  self.data_source.fix_dict_query(
+            self.parametro.query_template['table'],
+            list(self.parametro.query_template['columns'].values()),
+            self.parametro.query_template['order'],
+            self.parametro.query_template['where']
+            )
 
         query = self.data_source.prepare_query_replace_value(
-            sql_file=self.parametro.query_read, data_replace=fix_dict_query)
+            sql_file=self.parametro.query['query_read'], data_replace=fix_dict_query)
 
         return self.data_source.get_table(
-            connection_parameters=self.parametro.connection_params,
+            connection_parameters=self.parametro.connection_data_source,
             query=query
         )
 
@@ -71,7 +67,7 @@ class SQLPostgres(DataSource):
         )
 
         return self.data_source.insert_data(
-            connection_parameters=self.parametro.connection_params,
+            connection_parameters=self.parametro.connection_data_source,
             query=query,
             data=data
         )

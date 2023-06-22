@@ -42,3 +42,4 @@ query_template:
   order: index
   where: posicion > 1
 
+scale: False

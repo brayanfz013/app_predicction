@@ -100,7 +100,7 @@ class HandleDBpsql(object):
 
         return load_yaml['connection_data_source'][section]
 
-    def get_config_file(self, filename: str = 'database', section: str = 'postgresql'):
+    def get_config_file(self, filename:dict | str = 'database', section: str = 'postgresql'):
         """
         Lee el archivo de configuracion con los parametros a la base de datos
         se tiene que seleccion el motor de base de datos.
@@ -109,14 +109,18 @@ class HandleDBpsql(object):
         de conexion 
 
         """
-        if Path(filename).suffix == '.ini':
-            parameters = self.file_ini_(filename=filename, section=section)
+        if isinstance(filename,str):
+            if Path(filename).suffix == '.ini':
+                parameters = self.file_ini_(filename=filename, section=section)
 
-        elif Path(filename).suffix == '.yaml':
-            parameters = self.file_yaml(filename=filename, section=section)
-        else:
-            raise ValueError(
-                f"Archivo no válido: {filename}. Sólo se permiten archivos .ini o .yaml.")
+            elif Path(filename).suffix == '.yaml':
+                parameters = self.file_yaml(filename=filename, section=section)
+
+                raise ValueError(
+                    f"Archivo no válido: {filename}. Sólo se permiten archivos .ini o .yaml.")
+
+        elif isinstance(filename,dict):
+            parameters = filename[section]
 
         return parameters
 
@@ -422,6 +426,7 @@ class HandleDBpsql(object):
                 conn.close()
 
     def get_table(self, connection_parameters: str, query: str):
+    # def get_table(self, params, query: str):
         '''get_table Funcion para extraer la tabla completa de una base de datos
         usando una query
 
@@ -433,6 +438,7 @@ class HandleDBpsql(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
+            
             # connect to the PostgreSQL database
             conn = psycopg2.connect(**params)
             # create a new cursor

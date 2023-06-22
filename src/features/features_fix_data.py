@@ -18,10 +18,11 @@ class ColumnsNameHandler:
         if isinstance(dataframe,pd.DataFrame):
             self.dataframe  = dataframe
         else:
-            with open(parameters["names_table_columns"] , 'r', encoding='utf-8') as file:
-                names = json.load(file)
-            names['columns'] = list(names['columns'].values())
-            self.dataframe = pd.DataFrame(dataframe,columns=names['columns'])
+            # with open(parameters["names_table_columns"] , 'r', encoding='utf-8') as file:
+            #     names = json.load(file)
+
+            names_columns = list(parameters['columns'].values())
+            self.dataframe = pd.DataFrame(dataframe,columns=names_columns)
 
     def apply_transformations(self, transformations:dict,functions_transform:dict):
 
@@ -48,7 +49,6 @@ class ColumnsNameHandler:
                 float:lambda x: float(x.replace(',',''))
                 # object:pass
             }
-
         '''
         for col, dtype_data in transformations.items():
             try:

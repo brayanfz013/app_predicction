@@ -45,6 +45,15 @@ class ParamsPostgres:
     filter_columns: Optional[Union[str, os.PathLike, PosixPath]]
     
 @dataclass
+class Parameters:
+    '''Modelo de dato para datos importados con el yaml'''
+    query:dict
+    logs_file:str
+    connection_data_source:dict
+    filter_data:dict
+    query_template:dict
+
+@dataclass
 class ParamsRedis:
     '''Listado de parametro para se usado en redis'''
     connection_params:  Optional[Union[str, os.PathLike, PosixPath]]

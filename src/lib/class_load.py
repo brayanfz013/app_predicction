@@ -123,7 +123,6 @@ class LoadFiles(object):
                             names_file.append(found_file.name.split('.')[0])
                         sample[key].append(names_file)
                         sample[key].append(file_path)
-
         else:
             print('[INFO], la ruta no existe, favor revisar el directorio')
 

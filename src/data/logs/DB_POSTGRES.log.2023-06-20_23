@@ -1,0 +1,8 @@
+2023-06-20 22:52:47,236 - POSTGRES - DEBUG - features_postgres : 46 - Instancia libreria
+2023-06-20 22:52:47,237 - POSTGRES - ERROR - features_postgres : 438 - ('cannot represent an object', <_io.TextIOWrapper name='/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/database_postgrest.ini' mode='r' encoding='utf-8'>)
+2023-06-20 22:53:34,668 - POSTGRES - DEBUG - features_postgres : 46 - Instancia libreria
+2023-06-20 22:53:34,668 - POSTGRES - ERROR - features_postgres : 438 - ('cannot represent an object', <_io.TextIOWrapper name='/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/database_postgrest.ini' mode='r' encoding='utf-8'>)
+2023-06-20 23:00:45,329 - POSTGRES - DEBUG - features_postgres : 46 - Instancia libreria
+2023-06-20 23:00:45,330 - POSTGRES - ERROR - features_postgres : 438 - ('cannot represent an object', <_io.TextIOWrapper name='/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/database_postgrest.ini' mode='r' encoding='utf-8'>)
+2023-06-20 23:11:05,981 - POSTGRES - DEBUG - features_postgres : 48 - Instancia libreria
+2023-06-20 23:11:05,982 - POSTGRES - ERROR - features_postgres : 440 - ('cannot represent an object', <_io.TextIOWrapper name='/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/database_postgrest.ini' mode='r' encoding='utf-8'>)
