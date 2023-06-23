@@ -19,6 +19,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+darts_logs/
 parts/
 sdist/
 var/
