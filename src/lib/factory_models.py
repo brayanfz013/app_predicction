@@ -11,67 +11,14 @@ from darts.models import (
     FFT,
     ExponentialSmoothing,
     DLinearModel,
-    NLinearModel)
+    NLinearModel
+    )
 
 try:
-    from src.features.features_fix_data import PrepareData
-    from src.lib.class_load import LoadFiles
-    from src.models.args_data_model import (
-        ModelBlockRNN,
-        ModelExponentialSmoothing,
-        ModelDLinearModel,
-        ModelNlinearModel,
-        ModelRNN,
-        ModelNBEATSModel,
-        ModelFFT,
-        ModelTCNModel,
-        ModelTFTModel,
-        ModelTransformerModel
-    )
+    from src.models.DP_model import ModelHyperparameters, Modelos
+
 except ImportError:
-    from features_fix_data import PrepareData
-    from class_load import LoadFiles
-    from args_data_model import (
-        ModelBlockRNN,
-        ModelExponentialSmoothing,
-        ModelDLinearModel,
-        ModelNlinearModel,
-        ModelRNN,
-        ModelNBEATSModel,
-        ModelFFT,
-        ModelTCNModel,
-        ModelTFTModel,
-        ModelTransformerModel
-    )
-
-Modelos = {
-    'RNNModel':RNNModel,
-    'BlockRNNModel': BlockRNNModel,
-    'NBeatsModel': NBEATSModel,
-    'TCNModel': TCNModel,
-    'TransformersModel': TransformerModel,
-    'TFTModel': TFTModel,
-    'DLinealModel': DLinearModel,
-    'NLinearModel': NLinearModel,
-    'ExponentialSmoothing':ExponentialSmoothing,
-    'FFT':FFT
-}
-
-Parameters_model = {
-    'RNNModel':ModelRNN,
-    'BlockRNNModel': ModelBlockRNN,
-    'NBeatsModel': ModelNBEATSModel,
-    'TCNModel': ModelTCNModel,
-    'TransformersModel': ModelTransformerModel,
-    'TFTModel': ModelTFTModel,
-    'DLinealModel': ModelDLinearModel,
-    'NLinearModel': ModelNlinearModel,
-    'ExponentialSmoothing':ModelExponentialSmoothing,
-    # 'AutoARIMA':AutoARIMA,
-    # 'Theta':Theta,
-    # 'VARIMA':VARIMA,
-    'FFT':ModelFFT
-}
+    from DP_model import ModelHyperparameters, Modelos
 
 class Model(ABC):
     '''Extraccion de caracteristicas base de los modelos de predicciones'''
@@ -93,22 +40,27 @@ class Model(ABC):
         '''Metodo base para cargar los parametros de los modelo'''
 
     @abstractmethod
-    def save(self, parameters):
+    def save(self):
         '''metodo base para guardar tanto el modelo generado '''
 
 class ModelContext(Model):
     '''Metodo de abstraccion de modelos y sus metodos'''
-    def __init__(self, model_name,parameters):
-        self.parameters_model = parameters
+    def __init__(self, model_name,data,split):
+        # use_models = Modelos
+        # parametros_modelos = Parameters_model
+        # self.parameters_model = parameters
 
-        if model_name not in Modelos:
+        if model_name not in list(Modelos.keys()):
             raise ValueError(f"Modelo no soportado: {model_name}")
         else:
             print(f'Modelo importado {model_name}' )
-        self._model = Modelos[model_name]
+        # self._model = use_models[model_name]
+
+        self._model = ModelHyperparameters(model_name,data,split)
 
     def train(self, data):
         '''Ejecutar entrenamiento'''
+
         self._model.fit(data)
 
     def parameters(self,parameters):
@@ -118,7 +70,7 @@ class ModelContext(Model):
         '''Ejecutar una prediccion'''
         return self._model.predict(data)
 
-    def save(self, parameters):
+    def save(self):
         '''Guardar modelo en ruta'''
 
 # context = ModelContext("Modelos")

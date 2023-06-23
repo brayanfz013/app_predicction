@@ -1,291 +1,224 @@
-# #==============================================================================
-# model_futcov = RNNModel(
-#     model="LSTM",
-#     hidden_dim=20,
-#     batch_size=8,
-#     n_epochs=100,
-#     random_state=0,
-#     training_length=36,
-#     input_chunk_length=24,
-#     force_reset=True,
-# )
+import torch
+from darts.metrics import smape
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+import optuna
+import tqdm
+from optuna.integration import PyTorchLightningPruningCallback
+import numpy as np
+import pandas as pd
 
-# model_futcov.fit(
-#     series=[train_air, train_milk],
-#     future_covariates=[air_train_covariates, milk_train_covariates],
-#     verbose=False,
-# )
+from darts.models import (
+    RNNModel,
+    TCNModel,
+    TransformerModel,
+    NBEATSModel,
+    BlockRNNModel,
+    TFTModel,
+    FFT,
+    ExponentialSmoothing,
+    DLinearModel,
+    NLinearModel
+)
 
-
-# my_model = RNNModel(
-#     model="LSTM",
-#     hidden_dim=20,
-#     dropout=0,
-#     batch_size=16,
-#     n_epochs=300,
-#     optimizer_kwargs={"lr": 1e-3},
-#     model_name="Air_RNN",
-#     log_tensorboard=True,
-#     random_state=42,
-#     training_length=20,
-#     input_chunk_length=14,
-#     force_reset=True,
-#     save_checkpoints=True,
-# )
-
-# my_model.fit(
-#     train_transformed,
-#     future_covariates=covariates,
-#     val_series=val_transformed,
-#     val_future_covariates=covariates,
-#     verbose=True,
-# )
-
-# model_en = RNNModel(
-#     model="LSTM",
-#     hidden_dim=20,
-#     n_rnn_layers=2,
-#     dropout=0.2,
-#     batch_size=16,
-#     n_epochs=10,
-#     optimizer_kwargs={"lr": 1e-3},
-#     random_state=0,
-#     training_length=300,
-#     input_chunk_length=300,
-#     likelihood=GaussianLikelihood(),
-# )
-# #==============================================================================
-# model_pastcov = BlockRNNModel(
-#     model="LSTM",
-#     input_chunk_length=24,
-#     output_chunk_length=12,
-#     n_epochs=100,
-#     random_state=0,
-# )
-
-# model_pastcov.fit(
-#     series=[train_air, train_milk],
-#     past_covariates=[air_train_covariates, milk_train_covariates],
-#     verbose=False,
-# )
-
-# my_model_sun = BlockRNNModel(
-#     model="GRU",
-#     input_chunk_length=125,
-#     output_chunk_length=36,
-#     hidden_dim=10,
-#     n_rnn_layers=1,
-#     batch_size=32,
-#     n_epochs=100,
-#     dropout=0.1,
-#     model_name="sun_GRU",
-#     nr_epochs_val_period=1,
-#     optimizer_kwargs={"lr": 1e-3},
-#     log_tensorboard=True,
-#     random_state=42,
-#     force_reset=True,
-# )
-
-# #==============================================================================
-# model = FFT(required_matches=set(), nr_freqs_to_keep=None)
-# model.fit(train)
-# pred_val = model.predict(len(val))
+try:
+    from src.features.features_fix_data import PrepareData
+    from src.lib.class_load import LoadFiles
+    from src.models.args_data_model import (
+        ModelBlockRNN,
+        ModelExponentialSmoothing,
+        ModelDLinearModel,
+        ModelNlinearModel,
+        ModelRNN,
+        ModelNBEATSModel,
+        ModelFFT,
+        ModelTCNModel,
+        ModelTFTModel,
+        ModelTransformerModel
+    )
+except ImportError:
+    from features_fix_data import PrepareData
+    from class_load import LoadFiles
+    from args_data_model import (
+        ModelBlockRNN,
+        ModelExponentialSmoothing,
+        ModelDLinearModel,
+        ModelNlinearModel,
+        ModelRNN,
+        ModelNBEATSModel,
+        ModelFFT,
+        ModelTCNModel,
+        ModelTFTModel,
+        ModelTransformerModel
+    )
 
 
+Modelos = {
+    'RNNModel': RNNModel,
+    'BlockRNNModel': BlockRNNModel,  # Complejo
+    'NBeatsModel': NBEATSModel,
+    'TCNModel': TCNModel,  # Muchos datos detalles
+    'TransformerModel': TransformerModel,
+    'TFTModel': TFTModel,  # Correciones
+    'DLinealModel': DLinearModel,
+    'NLinearModel': NLinearModel,
+    'ExponentialSmoothing': ExponentialSmoothing,  # Malo
+    'FFT': FFT  # Malo
+}
 
-# model = FFT(nr_freqs_to_keep=None)
-# model.fit(train)
-# pred_val = model.predict(len(val))
-
-# model = FFT(nr_freqs_to_keep=20)
-# model.fit(train)
-# pred_val = model.predict(len(val))
-
-
-# model = FFT(trend="poly")
-# model.fit(train)
-# pred_val = model.predict(len(val))
-
-# #==============================================================================
-
-
-
-# pred_series_ets = ExponentialSmoothing(seasonal_periods=120).historical_forecasts(
-#     series_sp_transformed,
-#     start=pd.Timestamp("19401001"),
-#     forecast_horizon=36,
-#     stride=10,
-#     retrain=True,
-#     last_points_only=True,
-#     verbose=True,
-# )
-
-# #==============================================================================
+Parameters_model = {
+    'RNNModel': ModelRNN,
+    'BlockRNNModel': ModelBlockRNN,
+    'NBeatsModel': ModelNBEATSModel,
+    'TCNModel': ModelTCNModel,
+    'TransformerModel': ModelTransformerModel,
+    'TFTModel': ModelTFTModel,
+    'DLinealModel': ModelDLinearModel,
+    'NLinearModel': ModelNlinearModel,
+    # 'ExponentialSmoothing':ModelExponentialSmoothing,
+    # 'FFT':ModelFFT
+}
 
 
-# model_air = TCNModel(
-#     input_chunk_length=13,
-#     output_chunk_length=12,
-#     n_epochs=500,
-#     dropout=0.1,
-#     dilation_base=2,
-#     weight_norm=True,
-#     kernel_size=5,
-#     num_filters=3,
-#     random_state=0,
-# )
+NR_DAYS = 80
+DAY_DURATION = 24 * 4  # 15 minutes frequency
 
-# model_sun = TCNModel(
-#     input_chunk_length=250,
-#     output_chunk_length=36,
-#     n_epochs=100,
-#     dropout=0,
-#     dilation_base=2,
-#     weight_norm=True,
-#     kernel_size=3,
-#     num_filters=6,
-#     nr_epochs_val_period=1,
-#     random_state=0,
-# )
-
-# model_air.fit(
-#     series=train,
-#     past_covariates=train_month,
-#     val_series=val,
-#     val_past_covariates=val_month,
-#     verbose=True,
-# )
-
-# deeptcn = TCNModel(
-#     input_chunk_length=30,
-#     output_chunk_length=20,
-#     kernel_size=2,
-#     num_filters=4,
-#     dilation_base=2,
-#     dropout=0,
-#     random_state=0,
-#     likelihood=GaussianLikelihood(),
-# )
-
-
-# #==============================================================================
-
-# my_model = TransformerModel(
-#     input_chunk_length=12,
-#     output_chunk_length=1,
-#     batch_size=32,
-#     n_epochs=200,
-#     model_name="air_transformer",
-#     nr_epochs_val_period=10,
-#     d_model=16,
-#     nhead=8,
-#     num_encoder_layers=2,
-#     num_decoder_layers=2,
-#     dim_feedforward=128,
-#     dropout=0.1,
-#     activation="relu",
-#     random_state=42,
-#     save_checkpoints=True,
-#     force_reset=True,
-# )
-
-# my_model.fit(series=train_scaled, val_series=val_scaled, verbose=True)
-
-# #==============================================================================
-
-# model_nbeats = NBEATSModel(
-#     input_chunk_length=30,
-#     output_chunk_length=7,
-#     generic_architecture=True,
-#     num_stacks=10,
-#     num_blocks=1,
-#     num_layers=4,
-#     layer_widths=512,
-#     n_epochs=100,
-#     nr_epochs_val_period=1,
-#     batch_size=800,
-#     model_name="nbeats_run",
-# )
-
-# model_nbeats.fit(train, val_series=val, verbose=True)
-
-# model_nbeats = NBEATSModel(
-#     input_chunk_length=30,
-#     output_chunk_length=7,
-#     generic_architecture=False,
-#     num_blocks=3,
-#     num_layers=4,
-#     layer_widths=512,
-#     n_epochs=100,
-#     nr_epochs_val_period=1,
-#     batch_size=800,
-#     model_name="nbeats_interpretable_run",
-# )
-
-# #==============================================================================
-
-# # default quantiles for QuantileRegression
-# quantiles = [
-#     0.01,
-#     0.05,
-#     0.1,
-#     0.15,
-#     0.2,
-#     0.25,
-#     0.3,
-#     0.4,
-#     0.5,
-#     0.6,
-#     0.7,
-#     0.75,
-#     0.8,
-#     0.85,
-#     0.9,
-#     0.95,
-#     0.99,
+# all_series_fp32 = [
+#     s[-(NR_DAYS * DAY_DURATION) :].astype(np.float32) for s in tqdm(all_series)
 # ]
-# input_chunk_length = 24
-# forecast_horizon = 12
-# my_model = TFTModel(
-#     input_chunk_length=input_chunk_length,
-#     output_chunk_length=forecast_horizon,
-#     hidden_size=64,
-#     lstm_layers=1,
-#     num_attention_heads=4,
-#     dropout=0.1,
-#     batch_size=16,
-#     n_epochs=300,
-#     add_relative_index=False,
-#     add_encoders=None,
-#     likelihood=QuantileRegression(
-#         quantiles=quantiles
-#     ),  # QuantileRegression is set per default
-#     # loss_fn=MSELoss(),
-#     random_state=42,
-# )
-
-# my_model.fit(train_transformed, future_covariates=covariates_transformed, verbose=True)
 
 
+class ModelHyperparameters:
+    '''
+    Metodo para hiperparametrizar modelos y buscar sus parametros
+    '''
 
-# input_chunk_length_ice = 36
+    def __init__(self, model_name, data, split) -> None:
+        # Nombre del modelo
+        self.model_name = model_name
 
-# # use `add_encoders` as we don't have future covariates
-# my_model_ice = TFTModel(
-#     input_chunk_length=input_chunk_length_ice,
-#     output_chunk_length=forecast_horizon_ice,
-#     hidden_size=32,
-#     lstm_layers=1,
-#     batch_size=16,
-#     n_epochs=300,
-#     dropout=0.1,
-#     add_encoders={"cyclic": {"future": ["month"]}},
-#     add_relative_index=False,
-#     optimizer_kwargs={"lr": 1e-3},
-#     random_state=42,
-# )
+        # Datos del modelo
+        self.data = data
+        temp_df  = data.pd_dataframe().reset_index()
+        # Separacion de datos para entrenamiento
+        percent_split = int(temp_df.shape[0] * split/100)
+        self.split_value =temp_df.iloc[percent_split].values[0]
 
-# # fit the model with past covariates
-# my_model_ice.fit(
-#     train_ice_transformed, past_covariates=covariates_heat_transformed, verbose=True
-# )
+        self.train, self.val = self.data.split_after(
+            pd.Timestamp(self.split_value.strftime('%Y%m%d')))
+
+        # Cargar los parametros del modelo seleccionado
+        model_dict = Parameters_model[self.model_name]
+        self.model_used_parameters = model_dict().__dict__
+
+    def build_fit_model(self, likelihood=None, callbacks=None):
+        '''Metodo para entrenar y prepara datos de los modelos'''
+
+        torch.manual_seed(42)
+
+        # throughout training we'll monitor the validation loss for early stopping
+        early_stopper = EarlyStopping(
+            "val_loss", min_delta=0.001, patience=3, verbose=True)
+        if callbacks is None:
+            callbacks = [early_stopper]
+        else:
+            callbacks = [early_stopper] + callbacks
+
+        # detect if a GPU is available
+        if torch.cuda.is_available():
+            pl_trainer_kwargs = {
+                "accelerator": "gpu",
+                # "gpus": -1,
+                # "auto_select_gpus": True,
+                'enable_progress_bar': True,
+                # "callbacks": callbacks,
+            }
+            num_workers = 4
+        else:
+            pl_trainer_kwargs = {"callbacks": callbacks}
+            num_workers = 0
+
+        # add_encoders={
+        # 'cyclic': {'past': ['month']},
+        # # 'datetime_attribute': {'future': ['hour', 'dayofweek']},
+        # # 'position': {'past': ['relative'], 'future': ['relative']}
+        # }
+
+        # optionally also add the day of the week (cyclically encoded) as a past covariate
+        # encoders = {"cyclic": {"past": ["dayofweek"]}} if include_dayofweek else None
+
+        if self.model_name != 'FFT':
+            self.model_used_parameters['pl_trainer_kwargs'] = pl_trainer_kwargs
+            # self.model_used_parameters['add_encoders'] = add_encoders
+
+        inst_model = Modelos[self.model_name]
+        model_prepare = inst_model(**self.model_used_parameters)
+
+        # when validating during training, we can use a slightly longer validation
+        # set which also contains the first input_chunk_length time steps
+        # model_val_set = scaler.transform(
+        #     [s[-((2 * self.val_len) + in_len) : -self.val_len] for s in all_series_fp32]
+        # )
+
+        # train the model
+        MAX_SAMPLES_PER_TS = 10
+        model_prepare.fit(
+            series=self.train,
+            val_series=self.val,
+            max_samples_per_ts=MAX_SAMPLES_PER_TS,
+            num_loader_workers=num_workers,
+            verbose=True
+        )
+        # reload best model over course of training
+        model_prepare = inst_model.load_from_checkpoint(
+            self.model_used_parameters['model_name'])
+
+        return model_prepare
+
+    def objective(self, trial):
+        '''Metodo encargado de cargar la busqueda de los parametros'''
+        callback = [PyTorchLightningPruningCallback(trial, monitor="val_loss")]
+
+        self.model_used_parameters['pl_trainer_kwargs']['callbacks'] = callback
+
+        days_in = 30
+        self.model_used_parameters['input_chunk_length'] = trial.suggest_int(
+            "input_chunk_length", 5, 10)
+        self.model_used_parameters['output_chunk_length'] = trial.suggest_int(
+            "output_chunk_length", 1, 5)
+        self.model_used_parameters['num_blocks'] = trial.suggest_int(
+            "num_blocks", 1, 5)
+        # self.model_used_parameters['num_layers']  = trial.suggest_int("num_layers", 1, 5) #CUIDADO CON ESTE PARAMETROS
+        self.model_used_parameters['num_stacks'] = trial.suggest_int(
+            "num_stacks", 1, 10)
+        # self.model_used_parameters['kernel_size']  = trial.suggest_int("kernel_size", 5, 25)
+        # self.model_used_parameters['num_filters'] = trial.suggest_int("num_filters", 5, 25)
+        # self.model_used_parameters['weight_norm'] = trial.suggest_categorical("weight_norm", [False, True])
+        # self.model_used_parameters['dilation_base'] = trial.suggest_int("dilation_base", 2, 4)
+        self.model_used_parameters['generic_architecture'] = trial.suggest_categorical(
+            "generic_architecture", [False, True])
+        self.model_used_parameters['dropout'] = trial.suggest_float(
+            "dropout", 0.0, 0.4)
+        self.model_used_parameters['optimizer_kwargs']['lr'] = trial.suggest_float(
+            "lr", 5e-5, 1e-3, log=True)
+        # self.model_used_parameters['include_dayofweek'] = trial.suggest_categorical("dayofweek", [False, True])
+        model = self.build_fit_model(self.model_name)
+
+        # Evaluate how good it is on the validation set
+        preds = model.predict(series=self.train, n=len(self.val))
+        smapes = smape(self.val, preds, n_jobs=-1, verbose=True)
+        smape_val = np.mean(smapes)
+
+        return smape_val if smape_val != np.nan else float("inf")
+
+    def print_callback(study, trial):
+            print(f"Current value: {trial.value}, Current params: {trial.params}")
+            print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
+
+        study = optuna.create_study(direction="minimize")
+        study.optimize(hyperparametrizacion.objective, timeout=7200, callbacks=[print_callback])
+
+        # We could also have used a command as follows to limit the number of trials instead:
+        # study.optimize(objective, n_trials=100, callbacks=[print_callback])
+
+        # Finally, print the best value and best hyperparameters:
+        print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")

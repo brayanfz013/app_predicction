@@ -43,7 +43,7 @@ class ParamsPostgres:
     logger_file :Optional[Union[str, os.PathLike, PosixPath]]
     names_table_columns : Optional[Union[str, os.PathLike, PosixPath]]
     filter_columns: Optional[Union[str, os.PathLike, PosixPath]]
-    
+
 @dataclass
 class Parameters:
     '''Modelo de dato para datos importados con el yaml'''
@@ -52,6 +52,7 @@ class Parameters:
     connection_data_source:dict
     filter_data:dict
     query_template:dict
+    scale :bool
 
 @dataclass
 class ParamsRedis:
@@ -66,7 +67,7 @@ class ParamPlainText:
 @dataclass
 class ModelRNN:
     '''parametros iniciales para el modelo RNN '''
-    model_name:Optional[str]
+    model_name:Optional[str] = 'model_version_ModelRNN'
     model:str = "LSTM"
     hidden_dim:int = 20
     dropout:float = 0
@@ -79,11 +80,12 @@ class ModelRNN:
     input_chunk_length:int=14
     force_reset:bool=True
     save_checkpoints:bool=True
+    
 
 @dataclass
 class ModelBlockRNN:
     '''Parametro de modelo BlockRNN'''
-    model_name:Optional[str]
+    model_name:Optional[str] = 'model_version_ModelBlockRNN'
     model:str="GRU"
     input_chunk_length:int=125
     output_chunk_length:int=36
@@ -97,6 +99,7 @@ class ModelBlockRNN:
     log_tensorboard:bool=True
     random_state:int=42
     force_reset:bool=True
+    save_checkpoints:bool=True
 
 @dataclass
 class ModelExponentialSmoothing:
@@ -106,9 +109,10 @@ class ModelExponentialSmoothing:
 @dataclass
 class ModelTCNModel:
     '''Parametros iniciales para el modelo TCNModel'''
-    model_name:Optional[str]
+    model_name:Optional[str]   = 'model_version_ModelTCNModel'
     input_chunk_length:int=250
     output_chunk_length:int=36
+    optimizer_kwargs:dict =default_field({"lr": 1e-3})
     n_epochs:int=100
     dropout:int=0
     dilation_base:int=2
@@ -117,6 +121,8 @@ class ModelTCNModel:
     num_filters:int=6
     nr_epochs_val_period:int=1
     random_state:int=0
+    force_reset:bool= True
+    save_checkpoints:bool=True
 
 @dataclass
 class ModelFFT:
@@ -127,9 +133,10 @@ class ModelFFT:
 @dataclass
 class ModelTransformerModel:
     '''Parametros iniciales para el modelo Transformer'''
-    model_name:Optional[str]
+    model_name:Optional[str] = 'model_version_ModelTransformerModel'
     input_chunk_length:int=12
     output_chunk_length:int=1
+    optimizer_kwargs:dict =default_field({"lr": 1e-3})
     batch_size:int=32
     n_epochs:int=200
     nr_epochs_val_period:int=10
@@ -141,35 +148,35 @@ class ModelTransformerModel:
     dropout:float=0.1
     activation:str="relu"
     random_state:int=42
-    save_checkpoints:bool=True
     force_reset:bool=True
+    save_checkpoints:bool=True
 
 @dataclass
 class ModelNBEATSModel:
     '''Parametros para el modelo NBeats'''
-    model_name:Optional[str]
-    input_chunk_length:int=30
-    output_chunk_length:int=7
-    generic_architecture:bool=False
-    num_blocks:int=3
-    num_layers:int=4
-    layer_widths:int=512
-    n_epochs:int=100
-    nr_epochs_val_period:int=1
-    batch_size:int=800,
-    pl_trainer_kwargs:dict=default_field({
-        "enable_progress_bar": True,
-        "accelerator": "gpu",
-        # "gpus": -1,
-        # "auto_select_gpus": True,
-    })
+    model_name:Optional[str] = 'model_version_ModelNBEATSModel'
+    input_chunk_length:int=10
+    output_chunk_length:int=4
+    generic_architecture:bool=True
+    optimizer_kwargs:dict =default_field({"lr": 1e-3})
+    num_stacks:int= 10
+    num_blocks:int=2
+    num_layers:int=3
+    layer_widths:int=256
+    n_epochs:int=300
+    nr_epochs_val_period:int=10
+    batch_size:int=1024
+    force_reset:bool= True
+    save_checkpoints:bool=True
+
 
 @dataclass
 class ModelTFTModel:
     '''Parametros iniciales para modelo TFT '''
-    model_name:Optional[str]
+    model_name:Optional[str] = 'model_version_ModelTFTModel'
     input_chunk_length:int=36
     output_chunk_length:int=7
+    optimizer_kwargs:dict =default_field({"lr": 1e-3})
     hidden_size:int=64
     lstm_layers:int=1
     num_attention_heads:int=4
@@ -183,37 +190,41 @@ class ModelTFTModel:
     ),  # QuantileRegression is set per default
     # loss_fn:int=MSELoss(),
     random_state:int=42
+    force_reset:bool= True
+    save_checkpoints:bool=True
 
 
 @dataclass
 class ModelDLinearModel:
     '''Parametros iniciales para modelo Dlinear'''
-    model_name:Optional[str]
-    input_chunk_length:int
-    output_chunk_length:int
-    shared_weights:bool
-    kernel_size:int
-    const_init:bool
-    use_static_covariates:bool
-    batch_size:int
-    n_epochs:int
-    force_reset:bool
-    save_checkpoints:bool
-    random_state:int
+    model_name:Optional[str] = 'model_version_ModelDLinearModel'
+    input_chunk_length:int = 30
+    output_chunk_length:int = 7
+    shared_weights:bool = True
+    optimizer_kwargs:dict =default_field({"lr": 1e-3})
+    # kernel_size:int= 7
+    const_init:bool= True
+    use_static_covariates:bool= True
+    batch_size:int= 16
+    n_epochs:int= 300
+    force_reset:bool= True
+    save_checkpoints:bool= True
+    random_state:int = 42
 
 @dataclass
 class ModelNlinearModel:
     '''Parametros iniciales para model Nlinear'''
-    model_name:Optional[str]
-    input_chunk_length:int
-    output_chunk_length:int
-    shared_weights:bool
-    kernel_size:int
-    const_init:bool
-    use_static_covariates:bool
-    batch_size:int
-    n_epochs:int
-    force_reset:bool
-    save_checkpoints:bool
-    random_state:int
+    model_name:Optional[str]  = 'model_version_ModelNLinearModel'
+    input_chunk_length:int = 30
+    output_chunk_length:int = 7
+    shared_weights:bool = True
+    optimizer_kwargs:dict =default_field({"lr": 1e-3})
+    # kernel_size:int = 7
+    const_init:bool = True
+    use_static_covariates:bool = True
+    batch_size:int = 16
+    n_epochs:int = 300
+    force_reset:bool = True
+    save_checkpoints:bool = True
+    random_state:int = 42
 
