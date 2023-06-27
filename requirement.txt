@@ -4,4 +4,4 @@ scikit-learn
 darts
 torch
 redis
-psycopg2
+psycopg2-binary

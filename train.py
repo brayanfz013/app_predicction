@@ -34,78 +34,77 @@ with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = yaml.safe_load(file)
 
 print("Probando el estacion de datos de sql")
-data = get_data(SQLDataSourceFactory(**parameters))
+# data = get_data(SQLDataSourceFactory(**parameters))
 
-#=================================================================
-#             Limpieza de datos
-#=================================================================
-# Nuevos datos para reemplazar en las columnas
-new_types =[np.datetime64,int,int,'object',int,int]
+# #=================================================================
+# #             Limpieza de datos
+# #=================================================================
+# # Nuevos datos para reemplazar en las columnas
+# new_types =[np.datetime64,int,int,'object',int,int]
 
-#metodo para transformar los tipo de datos
-strategy = {
-    int:np.mean,
-    float:np.mean,
-    object:stats.mode
-}
+# #metodo para transformar los tipo de datos
+# strategy = {
+#     int:np.mean,
+#     float:np.mean,
+#     object:stats.mode
+# }
 
-#Estrategias para imputar los datos faltantes de NA 
-replace = {
-    int:lambda x: int(float(x.replace(',',''))),
-    float:lambda x: float(x.replace(',',''))
-}
-
-
-#Imputacion de los datos
-imputation = MeanImputation(
-                            replace_dtypes=new_types,
-                            strategy_imputation=strategy,
-                            preprocess_function=replace,
-                            **parameters
-                            )
-#Remocion de outliners y seleccion de columnas
-outliners = OutliersToIQRMean(**parameters)
-
-#Preparacion de los dato para el modelos escalizado y filtrado
-data_for_model = DataModel(**parameters)
-
-#Patron de diseno de seleecion de estrategia
-cleaner = DataCleaner(imputation)
-data_imputation = cleaner.clean(data)
-
-#Cambio de estrategia para remover outliners
-cleaner.strategy = outliners
-data_filled = cleaner.clean(data_imputation.dataframe)
-
-#Cambio de estrategia para preparar los datos para modelo
-cleaner.strategy = data_for_model
-data_ready,scaler_data = cleaner.clean(data_filled)
-
-if not parameters['scale']:
-    data_ready = scaler_data.inverse_transform(data_ready)
+# #Estrategias para imputar los datos faltantes de NA 
+# replace = {
+#     int:lambda x: int(float(x.replace(',',''))),
+#     float:lambda x: float(x.replace(',',''))
+# }
 
 
+# #Imputacion de los datos
+# imputation = MeanImputation(
+#                             replace_dtypes=new_types,
+#                             strategy_imputation=strategy,
+#                             preprocess_function=replace,
+#                             **parameters
+#                             )
+# #Remocion de outliners y seleccion de columnas
+# outliners = OutliersToIQRMean(**parameters)
 
-# handler_load.save_scaler()
+# #Preparacion de los dato para el modelos escalizado y filtrado
+# data_for_model = DataModel(**parameters)
 
-#=================================================================
-#            Preparacion de modelo
-#=================================================================
-model_names = list(Modelos.keys())
+# #Patron de diseno de seleecion de estrategia
+# cleaner = DataCleaner(imputation)
+# data_imputation = cleaner.clean(data)
 
-for name in model_names:
-    print(name)
+# #Cambio de estrategia para remover outliners
+# cleaner.strategy = outliners
+# data_filled = cleaner.clean(data_imputation.dataframe)
 
-MODE_USED = 'RNNModel'
+# #Cambio de estrategia para preparar los datos para modelo
+# cleaner.strategy = data_for_model
+# data_ready,scaler_data = cleaner.clean(data_filled)
 
-split_date = 20230107
+# if not parameters['scale']:
+#     data_ready = scaler_data.inverse_transform(data_ready)
 
 
-modelo = ModelContext(model_name = MODE_USED,
-                      data=data_ready,
-                      split=split_date)
-print('metodo finalizado')
 
+# # handler_load.save_scaler()
+
+# #=================================================================
+# #            Preparacion de modelo
+# #=================================================================
+# model_names = list(Modelos.keys())
+
+# for name in model_names:
+#     print(name)
+
+# MODE_USED = 'RNNModel'
+
+# split_date = 20230107
+
+
+# modelo = ModelContext(model_name = MODE_USED,
+#                       data=data_ready,
+#                       split=split_date)
+# print('metodo finalizado')
 
 #=================================================================
 #             Guardado de informacion

@@ -51,7 +51,6 @@ except ImportError:
         ModelTransformerModel
     )
 
-
 Modelos = {
     'RNNModel': RNNModel,
     'BlockRNNModel': BlockRNNModel,  # Complejo
@@ -214,11 +213,12 @@ class ModelHyperparameters:
             print(f"Current value: {trial.value}, Current params: {trial.params}")
             print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
 
-        study = optuna.create_study(direction="minimize")
-        study.optimize(hyperparametrizacion.objective, timeout=7200, callbacks=[print_callback])
+    # def 
+    #     study = optuna.create_study(direction="minimize")
+    #     study.optimize(hyperparametrizacion.objective, timeout=7200, callbacks=[print_callback])
 
-        # We could also have used a command as follows to limit the number of trials instead:
-        # study.optimize(objective, n_trials=100, callbacks=[print_callback])
+    #     # We could also have used a command as follows to limit the number of trials instead:
+    #     # study.optimize(objective, n_trials=100, callbacks=[print_callback])
 
-        # Finally, print the best value and best hyperparameters:
-        print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
+    #     # Finally, print the best value and best hyperparameters:
+    #     print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
