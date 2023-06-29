@@ -2,6 +2,7 @@
 
 
 # from app_prediction.src.lib.factory_data import client_code, SQLDataSourceFactory, NoSQLDataSourceFactory,PlainTextFileDataSourceFactory
+import os 
 import json
 from scipy import stats
 import yaml
@@ -26,10 +27,13 @@ from src.models.args_data_model import (
 )
 handler_load = LoadFiles()
 
+ruta_actual = os.path.dirname(__file__)
+print(ruta_actual)
 #=================================================================
 #             Cargar datos de la fuente de datos 
 #=================================================================
-CONFIG_FILE = "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/config.yaml"
+
+CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = yaml.safe_load(file)
 
