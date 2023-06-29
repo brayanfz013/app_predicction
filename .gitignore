@@ -19,6 +19,7 @@ eggs/
 .eggs/
 lib64/
 darts_logs/
+save_models/
 parts/
 sdist/
 var/
