@@ -21,6 +21,12 @@ connection_data_source:
     port: 6379
     # password: 0913
 
+  sqlserver:
+    server: 127.0.0.1
+    database: master
+    username: sa
+    password: 0913PASSword!
+
 filter_data:
   date_column: Fecha Creación
   predict_column: Cant Pedido UMV
@@ -43,3 +49,5 @@ query_template:
   where: posicion > 1
 
 scale: False
+
+model_parameters: ""
