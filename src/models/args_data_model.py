@@ -53,7 +53,10 @@ class Parameters:
     filter_data:dict
     query_template:dict
     scale :bool
-    model_parameters: Optional[Union[str, os.PathLike, PosixPath]]
+    first_train:True
+    optimize:True
+    type_data:dict
+    # model_parameters: Optional[Union[str, os.PathLike, PosixPath]]
 
 @dataclass
 class ParamsRedis:

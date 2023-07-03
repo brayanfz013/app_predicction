@@ -36,6 +36,7 @@ filter_data:
   filter_2_feature: 4177452
   group_frequecy: D
 
+
 query_template:
   table: position
   columns:
@@ -48,6 +49,15 @@ query_template:
   order: index
   where: posicion > 1
 
-scale: False
+type_data:
+  column1: date
+  column2: integer
+  column3: integer
+  column4: string
+  column5: integer
+  column6: integer
+  # column7: float
 
-model_parameters: ""
+scale: False
+first_train: True
+optimize: False

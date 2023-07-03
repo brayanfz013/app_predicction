@@ -3,6 +3,7 @@ import optuna
 import pandas as pd
 import torch
 import tqdm
+from pathlib import Path
 from darts.metrics import mape, mase, mse, r2_score, rho_risk, rmse, smape
 from darts.models import (FFT, BlockRNNModel, DLinearModel,
                           ExponentialSmoothing, NBEATSModel, NLinearModel,
@@ -13,6 +14,7 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 try:
     from src.features.features_fix_data import PrepareData
     from src.lib.class_load import LoadFiles
+    from src.data.save_models import SAVE_DIR
     from src.models.args_data_model import (ModelBlockRNN, ModelDLinearModel,
                                             ModelExponentialSmoothing,
                                             ModelFFT, ModelNBEATSModel,
@@ -27,6 +29,7 @@ except ImportError:
                                  ModelTransformerModel)
     from class_load import LoadFiles
     from features_fix_data import PrepareData
+    from save_models import SAVE_DIR
 
 Modelos = {
     'RNNModel': RNNModel,
@@ -115,8 +118,8 @@ class ModelHyperparameters:
 
         if self.model_name != 'FFT':
             self.model_used_parameters['pl_trainer_kwargs'] = pl_trainer_kwargs
-            if enable_encoder:
-                self.model_used_parameters['add_encoders'] = add_encoders
+            # if enable_encoder:
+                # self.model_used_parameters['add_encoders'] = add_encoders
 
         inst_model = Modelos[self.model_name]
         model_prepare = inst_model(**self.model_used_parameters)
@@ -132,6 +135,9 @@ class ModelHyperparameters:
         )
         # save_parameters
         # model_prepare = inst_model.load_from_checkpoint(self.model_used_parameters['model_name'])
+
+        # save_dir = Path(SAVE_DIR).joinpath('model').with_suffix('.pk')
+        # model_prepare.save(save_dir)
 
         return model_prepare
 
@@ -174,7 +180,7 @@ class ModelHyperparameters:
         r2_scores = r2_score(actual_series=self.val, pred_series=preds)
 
         return r2_scores if r2_scores != np.nan else float("inf")
-
+ 
     def print_callback(self, study, trial):
         '''Metodo para mostrar los valores de entrenamiento'''
         print(f"Current value: {trial.value}, Current params: {trial.params}")

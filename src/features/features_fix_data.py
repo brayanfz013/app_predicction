@@ -13,19 +13,17 @@ class ColumnsNameHandler:
     ''' Metodo para manipulas el nombre de las columnas de un dataframe de pandas    '''
 
     def __init__(self,dataframe:pd.DataFrame,**parameters) -> None:
-
+        
         # self.dataframe =dataframe
         if isinstance(dataframe,pd.DataFrame):
             self.dataframe  = dataframe
         else:
             # with open(parameters["names_table_columns"] , 'r', encoding='utf-8') as file:
             #     names = json.load(file)
-
             names_columns = list(parameters['columns'].values())
             self.dataframe = pd.DataFrame(dataframe,columns=names_columns)
 
     def apply_transformations(self, transformations:dict,functions_transform:dict):
-
         '''apply_transformations Metodo para aplicar transformacion a cada columna de un
         dataframe 
 

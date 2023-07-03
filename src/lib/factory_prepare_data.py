@@ -71,7 +71,7 @@ class OutliersToIQRMean(DataCleaningStrategy):
         # handle_loader = LoadFiles()
         # self.parameters_filter = handle_loader.json_to_dict(self.parameters["filter_columns"])[0]
         self.parameters_filter = parameters['filter_data']
-
+        
     def clean(self, data):
         '''Metodo para remover los outlines'''
 
@@ -87,10 +87,10 @@ class OutliersToIQRMean(DataCleaningStrategy):
             self.parameters_filter['filter_2_feature'],
             string_filter=True
         )
-
         handle_data.get_expand_date(self.parameters_filter['date_column'])
         handle_data.set_index_col(self.parameters_filter['date_column'])
-        handle_data.group_by_time(self.parameters_filter['predict_column'],frequency_group='D')
+        handle_data.group_by_time(self.parameters_filter['predict_column'],
+                                  frequency_group=self.parameters_filter['group_frequecy'])
 
         Q1 = handle_data.dataframe.quantile(0.25)
         Q3 = handle_data.dataframe.quantile(0.75)
@@ -107,8 +107,6 @@ class DataModel(DataCleaningStrategy):
         # super().__init__()
         self.parameters = parameters
         self.parameters_filter = parameters['filter_data']
-        # handle_loader = LoadFiles()
-        # self.parameters_filter = handle_loader.json_to_dict(self.parameters["filter_columns"])[0]
 
     def clean(self, data: pd.DataFrame) -> pd.DataFrame:
         '''Metodo para transformar y scalar los datos de los modelos'''

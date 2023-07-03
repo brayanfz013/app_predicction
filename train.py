@@ -15,11 +15,11 @@ from src.lib.factory_data import SQLDataSourceFactory, get_data
 from src.lib.factory_models import ModelContext  # , Modelos, Parameters_model
 from src.lib.factory_prepare_data import (DataCleaner, DataModel,
                                           MeanImputation, OutliersToIQRMean)
-from src.models.args_data_model import (ModelBlockRNN, ModelDLinearModel,
-                                        ModelExponentialSmoothing, ModelFFT,
-                                        ModelNBEATSModel, ModelNlinearModel,
-                                        ModelRNN, ModelTCNModel, ModelTFTModel,
-                                        ModelTransformerModel)
+# from src.models.args_data_model import (ModelBlockRNN, ModelDLinearModel,
+#                                         ModelExponentialSmoothing, ModelFFT,
+#                                         ModelNBEATSModel, ModelNlinearModel,
+#                                         ModelRNN, ModelTCNModel, ModelTFTModel,
+#                                         ModelTransformerModel)
 from src.models.DP_model import Modelos
 
 handler_load = LoadFiles()
@@ -41,7 +41,17 @@ data = get_data(SQLDataSourceFactory(**parameters))
 #             Limpieza de datos
 #=================================================================
 # Nuevos datos para reemplazar en las columnas
-new_types =[np.datetime64,int,int,'object',int,int]
+new_types = []
+base = {
+    'date':np.datetime64,
+    'integer': int,
+    'float': float,
+    'string': 'object',
+}
+
+for dtypo in parameters['type_data'].values():
+    # print(dtypo)
+    new_types.append(base[dtypo])
 
 #metodo para transformar los tipo de datos
 strategy = {
@@ -85,9 +95,6 @@ data_ready,scaler_data = cleaner.clean(data_filled)
 if not parameters['scale']:
     data_ready = scaler_data.inverse_transform(data_ready)
 
-
-# handler_load.save_scaler()
-
 #=================================================================
 #            Preparacion de modelo
 #=================================================================
@@ -96,12 +103,22 @@ model_names = list(Modelos.keys())
 # for name in model_names:
 #     print(name)
 
-MODE_USED = 'RNNModel'
+# MODE_USED = 'RNNModel'
+MODE_USED = 'NBeatsModel'
 modelo = ModelContext(model_name = MODE_USED,
                       data=data_ready,
                       split=83,
                       **parameters)
 
+#Entrenar el modelo
+model_trained = modelo.train()
+
+#Optimizar los parametros del modelo
+if parameters['optimize']:
+    model_trained = modelo.optimize()
+
+#Guargar los modelos entrenados 
+modelo.save(model_trained,scaler=scaler_data)
 
 print('metodo finalizado')
 

@@ -135,7 +135,12 @@ class ModelContext(Model):
         )
 
         # Guardar el modelo
-        model.save(str(self.save_path.joinpath('model').with_suffix('.pkl')))
+        model.save(str(self.save_path.joinpath('model').with_suffix('.pt')))
+
+    def load_dirmodel(self):
+        '''Cargar el listado de datos de archivos generados en el entrenamiento'''
+        return [child.as_posix() for child in self.save_path.iterdir()]
+
 
     def load(self):
         '''Cargar los parametros del modelo'''
