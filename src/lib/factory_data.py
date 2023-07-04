@@ -2,6 +2,7 @@
 Codigo usado para extraer la informacion para la predicciones de la informacion
 '''
 # Esta es la interfaz abstracta para las operaciones
+import pandas as pd
 try:
     from src.features.features_redis import HandleRedis
     from src.features.features_postgres import HandleDBpsql
@@ -24,6 +25,10 @@ class DataSource(ABC):
     @abstractmethod
     def write(self, data):
         '''write Metodo de escritura base '''
+
+    @abstractmethod
+    def create(self):
+        '''Metodo para crear tablas en base de datos'''
 
 # Implementaciones concretas de la interfaz para cada tipo de fuente de datos
 class SQLPostgres(DataSource):
@@ -50,28 +55,69 @@ class SQLPostgres(DataSource):
             query=query
         )
 
-    def write(self, data: tuple):
+    def write(self, data: pd.DataFrame):
         '''metodo base para hacer escritura de los datos en postgres'''
-        parameter_query = self.data_source.read_parameters_query(
-            self.parametro.names_table_columns)
         fix_dict_query = self.data_source.fix_dict_query(
-            parameter_query['table'],
-            parameter_query['columns'],
-            parameter_query['order'],
-            parameter_query['where']
+            self.parametro.query_template_write['table'],
+            list(self.parametro.query_template_write['columns'].values()),
+            self.parametro.query_template_write['order'],
+            self.parametro.query_template_write['where']
         )
 
         query = self.data_source.prepare_query_replace_value(
-            sql_file=self.parametro.query_read,
-            data_replace=fix_dict_query
-        )
+            sql_file=self.parametro.query['query_write'],
+            data_replace=fix_dict_query)
 
-        return self.data_source.insert_data(
+        self.data_source.insert_data_from_dataframe(
             connection_parameters=self.parametro.connection_data_source,
-            query=query,
-            data=data
+            dataframe=data,
+            query=query
         )
 
+    def create(self):
+        '''Metodo para crear tablas '''
+
+        conver_postgrest = {
+            'date': 'DATE',
+            'integer': 'NUMERIC(15,3)',
+            'float': 'DECIMAL(12,3)',
+            'string': 'VARCHAR(50)',
+        }
+        # print(self.parametro)
+        convert_value = {}
+
+        for key_,val_ in self.parametro.type_data_out.items():
+            convert_value[key_] = conver_postgrest[val_]
+
+        # Aquí es donde construirás las declaraciones para las columnas.
+        column_declarations = []
+
+        # Obtén los nombres de las columnas y los tipos de datos del yaml.
+        column_names = self.parametro.query_template_write['columns']
+        data_types = self.parametro.type_data_out
+        
+        # Ahora, crea las declaraciones para las columnas usando los nombres y los tipos de datos.
+        for i in range(len(column_names)):
+            column_name = column_names[str(i)]
+            data_type = data_types['column' + str(i)]
+            postgrest_type = conver_postgrest[data_type]
+            column_declarations.append(f'"{column_name}" {postgrest_type}')
+
+        fix_data_dict = self.parametro.query_template_write.copy()
+        fix_data_dict['columns'] = ",\n".join(column_declarations)
+
+        # self.parametro.query_template_write['columns'] = ",\n".join(column_declarations)
+        # self.parametro.query_template_write['table'] = str(self.parametro.filter_data['filter_1_feature'])
+        
+        query = self.data_source.prepare_query_replace_value(
+            sql_file=self.parametro.query['query_create'],
+            data_replace=fix_data_dict
+        )
+        
+        self.data_source.send_query(
+            connection_parameters=self.parametro.connection_data_source,
+            query=query
+        )
 
 class NoSQLRedis(DataSource):
     '''Metodo para manipulacion de datos de redis'''
@@ -81,6 +127,9 @@ class NoSQLRedis(DataSource):
 
     def write(self, data):
         return "Datos escritos en la base de datos NoSQL"
+
+    def create(self):
+        return "Fuente de datos en la base de datos NoSQL"
 
 
 class PlainTextFileDataSource(DataSource):
@@ -100,7 +149,6 @@ class AbstractDataSourceFactory(ABC):
     def create_data_source(self):
         '''Creacion de la fuente de datos seleccionada'''
 
-
 # Implementaciones concretas de la fábrica para cada tipo de fuente de datos
 class SQLDataSourceFactory(AbstractDataSourceFactory):
     '''Fabricante de metodos SQL '''
@@ -111,7 +159,6 @@ class SQLDataSourceFactory(AbstractDataSourceFactory):
     def create_data_source(self) -> DataSource:
         return SQLPostgres(**self.parametro)
 
-
 class NoSQLDataSourceFactory(AbstractDataSourceFactory):
     '''Fabricante de metodos NoSQL '''
 
@@ -119,20 +166,28 @@ class NoSQLDataSourceFactory(AbstractDataSourceFactory):
         return NoSQLRedis()
 
 
-class PlainTextFileDataSourceFactory(AbstractDataSourceFactory):
-    '''Fabricante de metodos de texto plano '''
+# class PlainTextFileDataSourceFactory(AbstractDataSourceFactory):
+#     '''Fabricante de metodos de texto plano '''
 
-    def create_data_source(self) -> DataSource:
-        return PlainTextFileDataSource()
+#     def create_data_source(self) -> DataSource:
+#         return PlainTextFileDataSource()
+
 
 # Usando la fábrica
-
-
 def get_data(factory: AbstractDataSourceFactory) -> None:
     '''Metodo para hacer la lectura de la infomacion'''
     data_source = factory.create_data_source()
     return data_source.read()
-    # print(data_source.write("datos"))
+
+def set_data(factotory: AbstractDataSourceFactory,data)->None:
+    '''Metodo para hacer la escritura en la base de datos'''
+    data_source = factotory.create_data_source()
+    return data_source.write(data)
+
+def create_table(factory: AbstractDataSourceFactory) -> None:
+    '''Metodo para hacer la lectura de la infomacion'''
+    data_source = factory.create_data_source()
+    return data_source.create()
 
 
 if __name__ == "__main__":
@@ -142,5 +197,5 @@ if __name__ == "__main__":
     print("\nProbando el código con la base de datos NoSQL:")
     get_data(NoSQLDataSourceFactory())
 
-    print("\nProbando el código con el archivo de texto plano:")
-    get_data(PlainTextFileDataSourceFactory())
+    # print("\nProbando el código con el archivo de texto plano:")
+    # get_data(PlainTextFileDataSourceFactory())

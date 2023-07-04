@@ -82,10 +82,10 @@ class ModelContext(Model):
             self.save_path.joinpath('previus').with_suffix('.json'))[0]
 
         # Parter los datos en funcion de la ultima fecha de prediccion
-        data_forecast = data.split_after(
+        past, _ = data.split_after(
             split_point=pd.Timestamp(last_train['last_date_pred'])
         )
-        pred_series = model.predict(series=data_forecast, n=horizont)
+        pred_series = model.predict(series=past, n=horizont)
 
         # Toma la ultima posicion para hacer predicciones
         filter_data = pred_series.pd_dataframe().reset_index(
@@ -99,7 +99,7 @@ class ModelContext(Model):
             last_train, self.save_path, 'previus')
 
         return pred_series
-
+    
     def optimize(self):
         '''Metodo para generar optimizacion de datos'''
         optimizer = self.tunne_parameter.optimize()

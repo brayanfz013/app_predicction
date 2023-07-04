@@ -46,7 +46,6 @@ class HandleDBpsql(object):
         logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
         self.log = logging.getLogger('POSTGRES')
 
-        # self.log.debug("Instancia libreria")
 
     def file_ini_(self, filename: str = 'database', section: str = 'postgresql'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
@@ -156,6 +155,7 @@ class HandleDBpsql(object):
                 conn.close()
                 print('Database connection closed.')
 
+
     def read_parameters_query(self, file_parametro: str):
         '''Funcion para leer un json y convertirlo en un diccionario
         para ser usado posteriormente en el metodo fix_dict_query'''
@@ -166,7 +166,8 @@ class HandleDBpsql(object):
         data['columns'] = list(data['columns'].values())
 
         return data
-
+    
+   
     def fix_dict_query(self, tabla: str, columnas: list, order: str, where: str):
         '''fix_dict_query Funcion para prepara los parametros del diccionario busqueda 
         para la funcion prepare_query_replace_value, demanrea que se pueda hacer querys
@@ -179,7 +180,6 @@ class HandleDBpsql(object):
             'order': order,
             'where': where
         }
-
         return data_replace
 
     def query_data(self, connection, sql):
@@ -247,9 +247,7 @@ class HandleDBpsql(object):
                     sql_statements += lin
                 sql_statements = sql_statements.replace('\n', ' ')
                 sql_statements = sql_statements.replace('\t', ' ')
-
             return sql_statements
-
         except Exception as error_prepare_query:
             self.log.error('Fallo de preparacion de la query')
             self.log.error(error_prepare_query)
@@ -342,7 +340,7 @@ class HandleDBpsql(object):
             for data_row in dataframe.values:
                 # execute the INSERT statement
                 cur.execute(query, (data_row))
-
+                print('insertando')
             # commit the changes to the database
             conn.commit()
             # close communication with the database
@@ -354,6 +352,7 @@ class HandleDBpsql(object):
         finally:
             if conn is not None:
                 conn.close()
+
 
     def insert_data(self, connection_parameters: str, query: str, data: tuple):
         '''insert_data Insertar un unico valor segun los una query

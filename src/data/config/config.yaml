@@ -1,6 +1,7 @@
 query:
   query_read : "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/get_table.sql"
   query_write : "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/insert_data.sql"
+  query_create : "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/new_table.sql"
 
 logs_file: "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/logging.conf"
 
@@ -49,15 +50,34 @@ query_template:
   order: index
   where: posicion > 1
 
+query_template_write:
+  table: prediction
+  columns: 
+    "0": Fecha
+    "1": predicion
+    "2": varianza
+    "3": Material (Cod)
+    "4": Solicitate (Cod)
+  order: index
+  where: posicion > 1
+
 type_data:
-  column1: date
+  column0: date
+  column1: integer
   column2: integer
-  column3: integer
-  column4: string
+  column3: string
+  column4: integer
   column5: integer
-  column6: integer
   # column7: float
+
+type_data_out:
+  column0: date
+  column1: float
+  column2: float
+  column3: string
+  column4: string
 
 scale: False
 first_train: True
 optimize: False
+forecast_val: 15

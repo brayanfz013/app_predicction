@@ -46,7 +46,6 @@ class HandleDBsqlserver(object):
         logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
         self.log = logging.getLogger('POSTGRES')
 
-        # self.log.debug("Instancia libreria")
 
     def file_ini_(self, filename: str = 'database', section: str = 'postgresql'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
@@ -462,37 +461,37 @@ class HandleDBsqlserver(object):
 
 
 
-# import pyodbc
+import pyodbc
 
-# class SQLServerDB:
-#     def __init__(self, server, database, username, password):
-#         self.connection = pyodbc.connect(
-#             'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' +
-#             server+';DATABASE='+database+';UID='+username+';PWD='+ password
-#         )
-#         self.cursor = self.connection.cursor()
+class SQLServerDB:
+    def __init__(self, server, database, username, password):
+        self.connection = pyodbc.connect(
+            'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' +
+            server+';DATABASE='+database+';UID='+username+';PWD='+ password
+        )
+        self.cursor = self.connection.cursor()
 
-#     def create(self, table, data):
-#         placeholders = ', '.join(['?'] * len(data))
-#         columns = ', '.join(data.keys())
-#         sql = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
-#         self.cursor.execute(sql, list(data.values()))
-#         self.connection.commit()
+    def create(self, table, data):
+        placeholders = ', '.join(['?'] * len(data))
+        columns = ', '.join(data.keys())
+        sql = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
+        self.cursor.execute(sql, list(data.values()))
+        self.connection.commit()
 
-#     def read(self, table, where=None):
-#         sql = f"SELECT * FROM {table}"
-#         if where:
-#             sql += f" WHERE {where}"
-#         self.cursor.execute(sql)
-#         return self.cursor.fetchall()
+    def read(self, table, where=None):
+        sql = f"SELECT * FROM {table}"
+        if where:
+            sql += f" WHERE {where}"
+        self.cursor.execute(sql)
+        return self.cursor.fetchall()
 
-#     def update(self, table, data, where):
-#         set_values = ', '.join([f"{column} = ?" for column in data.keys()])
-#         sql = f"UPDATE {table} SET {set_values} WHERE {where}"
-#         self.cursor.execute(sql, list(data.values()))
-#         self.connection.commit()
+    def update(self, table, data, where):
+        set_values = ', '.join([f"{column} = ?" for column in data.keys()])
+        sql = f"UPDATE {table} SET {set_values} WHERE {where}"
+        self.cursor.execute(sql, list(data.values()))
+        self.connection.commit()
 
-#     def delete(self, table, where):
-#         sql = f"DELETE FROM {table} WHERE {where}"
-#         self.cursor.execute(sql)
-#         self.connection.commit()
+    def delete(self, table, where):
+        sql = f"DELETE FROM {table} WHERE {where}"
+        self.cursor.execute(sql)
+        self.connection.commit()

@@ -12,4 +12,3 @@ CREATE TABLE position (
     "Valor Neto" VARCHAR(15),
     "Contador Ped" VARCHAR(3)
 );
-

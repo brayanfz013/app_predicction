@@ -52,10 +52,13 @@ class Parameters:
     connection_data_source:dict
     filter_data:dict
     query_template:dict
+    query_template_write: dict
+    type_data:dict
+    type_data_out: dict
     scale :bool
     first_train:True
     optimize:True
-    type_data:dict
+    forecast_val: int
     # model_parameters: Optional[Union[str, os.PathLike, PosixPath]]
 
 @dataclass
