@@ -12,15 +12,11 @@ from scipy import stats
 
 from src.lib.class_load import LoadFiles
 from src.lib.factory_data import SQLDataSourceFactory, get_data
-from src.lib.factory_models import ModelContext  # , Modelos, Parameters_model
+from src.lib.factory_models import ModelContext
 from src.lib.factory_prepare_data import (DataCleaner, DataModel,
                                           MeanImputation, OutliersToIQRMean)
-# from src.models.args_data_model import (ModelBlockRNN, ModelDLinearModel,
-#                                         ModelExponentialSmoothing, ModelFFT,
-#                                         ModelNBEATSModel, ModelNlinearModel,
-#                                         ModelRNN, ModelTCNModel, ModelTFTModel,
-#                                         ModelTransformerModel)
-from src.models.DP_model import Modelos
+
+# from src.models.DP_model import Modelos
 
 handler_load = LoadFiles()
 
@@ -88,17 +84,18 @@ data_imputation = cleaner.clean(data)
 cleaner.strategy = outliners
 data_filled = cleaner.clean(data_imputation.dataframe)
 
-#Cambio de estrategia para preparar los datos para modelo
+# Cambio de estrategia para preparar los datos para modelo
 cleaner.strategy = data_for_model
 data_ready,scaler_data = cleaner.clean(data_filled)
 
 if not parameters['scale']:
     data_ready = scaler_data.inverse_transform(data_ready)
 
+print(data_ready)
 #=================================================================
 #            Preparacion de modelo
 #=================================================================
-model_names = list(Modelos.keys())
+# model_names = list(Modelos.keys())
 
 # for name in model_names:
 #     print(name)
@@ -125,13 +122,25 @@ print('metodo finalizado')
 # =================================================================
 #             Guardado de informacion
 # =================================================================
+# import requests
+# import pprint
+# import pandas as pd
 
-# if __name__ == '__main__':
-#     import os
-#     from pathlib import Path
-#     path_folder = os.path.dirname(__file__)
-#     print(path_folder)
-#     print(Path(path_folder).parents[0])
+# url  = 'http://192.168.115.99:3333/getinvoices'
 
-#     # path_folder = str(Path(path_folder).parents)
-#     # print(path_folder)
+# response = requests.get(url)
+
+# if response.status_code == 200:
+#     invoices  = response.json()
+#     # pprint.pprint(invoices)
+# else: 
+#     print(response.status_code)
+
+
+# data = pd.DataFrame(invoices).head()
+# print(data)
+
+# """
+# ITEMNMBR : codigo item
+# QUANTITY : valor a predecir
+# """

@@ -452,7 +452,7 @@ class HandleDBpsql(object):
             # close communication with the database
             cur.close()
 
-            return list(ultima_fila)
+            return pd.DataFrame(list(ultima_fila))
         except (Exception, psycopg2.DatabaseError) as error_get_table:
             self.log.error(error_get_table)
         finally:

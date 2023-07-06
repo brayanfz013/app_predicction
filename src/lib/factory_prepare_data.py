@@ -75,7 +75,7 @@ class OutliersToIQRMean(DataCleaningStrategy):
     def clean(self, data):
         '''Metodo para remover los outlines'''
 
-        handle_data = PrepareData(data,**self.parameters)
+        handle_data = PrepareData(data,**self.parameters['query_template'])
 
         handle_data.filter_column(
             self.parameters_filter['filter_1_column'],
@@ -110,8 +110,8 @@ class DataModel(DataCleaningStrategy):
 
     def clean(self, data: pd.DataFrame) -> pd.DataFrame:
         '''Metodo para transformar y scalar los datos de los modelos'''
-        handler_data = PrepareData(data,**self.parameters)
-        
+        handler_data = PrepareData(data,**self.parameters['query_template'])
+        print(handler_data.dataframe)
 
         time_series = handler_data.transforf_dataframe_dart(
             self.parameters_filter['date_column'],
@@ -146,79 +146,3 @@ class DataCleaner:
 
     # cleaner.strategy = OutliersToIQRMean()
     # clean_data = cleaner.clean('raw_data')
-
-
-# from abc import ABC, abstractmethod
-# import pandas as pd
-# import numpy as np
-# from scipy import stats
-
-# # Definir la interfaz de la estrategia
-# class DataCleaningStrategy(ABC):
-
-#     @abstractmethod
-#     def clean(self, data: pd.DataFrame) -> pd.DataFrame:
-#         pass
-
-
-# # Estrategia de limpieza básica: rellena los valores faltantes con la media
-# class MeanImputation(DataCleaningStrategy):
-
-#     def clean(self, data):
-#         return data.fillna(data.mean())
-
-
-# # Estrategia de limpieza para outliers: reemplaza los outliers con el valor promedio del rango intercuartil
-# class OutliersToIQRMean(DataCleaningStrategy):
-
-#     def clean(self, data):
-#         Q1 = data.quantile(0.25)
-#         Q3 = data.quantile(0.75)
-#         IQR = Q3 - Q1
-#         mean_IQR = (Q1 + Q3) / 2
-#         data_out = data[~((data < (Q1 - 1.5 * IQR)) |(data > (Q3 + 1.5 * IQR)))]
-#         return data_out.fillna(mean_IQR)
-
-
-# # Interfaz para la Fábrica Abstracta
-# class AbstractFactory(ABC):
-
-#     @abstractmethod
-#     def create_data_cleaning_strategy(self) -> DataCleaningStrategy:
-#         pass
-
-
-# # Fábrica Concreta 1
-# class MeanImputationFactory(AbstractFactory):
-
-#     def __init_subclass__(cls,MethodImputation) -> None:
-
-#         return super().__init_subclass__()
-
-#     def create_data_cleaning_strategy(self):
-#         return MeanImputation()
-
-
-# # Fábrica Concreta 2
-# class OutliersToIQRMeanFactory(AbstractFactory):
-
-#     def create_data_cleaning_strategy(self):
-#         return OutliersToIQRMean()
-
-
-# # Ahora puedes crear una clase de "contexto" que puede utilizar cualquiera de estas estrategias
-# class DataCleaner:
-
-#     def __init__(self, factory: AbstractFactory):
-#         self._strategy = factory.create_data_cleaning_strategy()
-
-#     def clean(self, data):
-#         return self._strategy.clean(data)
-
-# if __name__ == '__main__':
-
-#     cleaner = DataCleaner(MeanImputationFactory())
-#     clean_data = cleaner.clean('raw_data')
-
-#     cleaner = DataCleaner(OutliersToIQRMeanFactory())
-#     clean_data = cleaner.clean('raw_data')

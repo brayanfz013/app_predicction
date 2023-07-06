@@ -1,8 +1,6 @@
-2023-06-21 13:26:47,053 - POSTGRES - ERROR - features_postgres : 457 - syntax error at or near "/"
-LINE 1: /home/bdebian/Documents/Projects/Stoke_prediccition/app_pred...
-        ^
-
-2023-06-21 13:28:14,196 - POSTGRES - ERROR - features_postgres : 458 - syntax error at or near "/"
-LINE 1: /home/bdebian/Documents/Projects/Stoke_prediccition/app_pred...
-        ^
-
+2023-07-05 17:30:18,453 - matplotlib - DEBUG - __init__ : 307 - matplotlib data path: /home/bdebian/.virtualenvs/app_prediction/lib/python3.10/site-packages/matplotlib/mpl-data
+2023-07-05 17:30:18,457 - matplotlib - DEBUG - __init__ : 307 - CONFIGDIR=/home/bdebian/.config/matplotlib
+2023-07-05 17:30:18,458 - matplotlib - DEBUG - __init__ : 1475 - interactive is False
+2023-07-05 17:30:18,458 - matplotlib - DEBUG - __init__ : 1476 - platform is linux
+2023-07-05 17:30:18,487 - matplotlib - DEBUG - __init__ : 307 - CACHEDIR=/home/bdebian/.cache/matplotlib
+2023-07-05 17:30:18,488 - matplotlib.font_manager - DEBUG - font_manager : 1540 - Using fontManager instance from /home/bdebian/.cache/matplotlib/fontlist-v330.json

@@ -16,10 +16,18 @@ class ColumnsNameHandler:
         
         # self.dataframe =dataframe
         if isinstance(dataframe,pd.DataFrame):
-            self.dataframe  = dataframe
+            old = list(dataframe.columns)
+            new = list(parameters['columns'].values())
+
+            if new  != old and len(new) == len(old):
+                rename_cols = {x:y for x,y in zip(old,new)}  
+                self.dataframe = dataframe.rename(columns=rename_cols)
+            else:
+                self.dataframe = dataframe
         else:
             # with open(parameters["names_table_columns"] , 'r', encoding='utf-8') as file:
-            #     names = json.load(file)
+            #     names = json.load(file);
+            
             names_columns = list(parameters['columns'].values())
             self.dataframe = pd.DataFrame(dataframe,columns=names_columns)
 
@@ -244,7 +252,6 @@ class PrepareData(ColumnsNameHandler):
 
     def __init__(self,dataframe:pd.DataFrame,**parameters) -> None:
         super().__init__(dataframe,**parameters)
-        # self.dataframe = dataframe
 
     def set_index_col(self,column_index:str):
         '''Metodo personalizado para colocar una columna como index del dataframe'''

@@ -1,3 +1,4 @@
+import pyodbc
 import logging
 import logging.config
 import yaml
@@ -7,7 +8,7 @@ from configparser import ConfigParser
 from pathlib import Path
 import json
 import pandas as pd
-import psycopg2
+import pyodbc
 
 try:
     from ..data.logs import LOGS_DIR
@@ -44,16 +45,15 @@ class HandleDBsqlserver(object):
 
         # Constructor que permite inicializar los parametros
         logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
-        self.log = logging.getLogger('POSTGRES')
+        self.log = logging.getLogger('SQLSERVER')
 
-
-    def file_ini_(self, filename: str = 'database', section: str = 'postgresql'):
+    def file_ini_(self, filename: str = 'database', section: str = 'sqlserver'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
         de parametros es ini
 
         Args:
             filename (str, optional): Nombre de ruta con extencion .ini. Defaults to 'database'.
-            section (str, optional): Tipo de conexion con la base de datos. Defaults to 'postgresql'.
+            section (str, optional): Tipo de conexion con la base de datos. Defaults to 'sqlserver'.
 
         Raises:
             Exception: Error de conexion por no encontrar parametros
@@ -84,7 +84,7 @@ class HandleDBsqlserver(object):
 
         return data_parameters
 
-    def file_yaml(self, filename: str, section: str = 'postgresql'):
+    def file_yaml(self, filename: str, section: str = 'sqlserver'):
         '''file_yaml Metodo rapido para cargar los archivos de la base detaso 
         cuando se tiene un yaml usando la clave de connection_data_source
 
@@ -99,7 +99,7 @@ class HandleDBsqlserver(object):
 
         return load_yaml['connection_data_source'][section]
 
-    def get_config_file(self, filename:dict | str = 'database', section: str = 'postgresql'):
+    def get_config_file(self, filename: dict | str = 'database', section: str = 'sqlserver'):
         """
         Lee el archivo de configuracion con los parametros a la base de datos
         se tiene que seleccion el motor de base de datos.
@@ -108,7 +108,7 @@ class HandleDBsqlserver(object):
         de conexion 
 
         """
-        if isinstance(filename,str):
+        if isinstance(filename, str):
             if Path(filename).suffix == '.ini':
                 parameters = self.file_ini_(filename=filename, section=section)
 
@@ -118,53 +118,13 @@ class HandleDBsqlserver(object):
                 raise ValueError(
                     f"Archivo no válido: {filename}. Sólo se permiten archivos .ini o .yaml.")
 
-        elif isinstance(filename,dict):
+        elif isinstance(filename, dict):
             parameters = filename[section]
 
+        parameters = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + \
+            parameters['server']+';DATABASE='+parameters['database'] + \
+            ';UID='+parameters['username']+';PWD=' + parameters['password']
         return parameters
-
-    def check_connection(self, connection_parameters: str):
-        """ Connect to the PostgreSQL database server """
-        conn = None
-        try:
-            # read connection parameters
-            params = self.get_config_file(connection_parameters)
-
-            # connect to the PostgreSQL server
-            print('Connecting to the PostgreSQL database...')
-            conn = psycopg2.connect(**params)
-
-            # create a cursor
-            cur = conn.cursor()
-
-        # execute a statement
-            print('PostgreSQL database version:')
-            cur.execute('SELECT version()')
-
-            # display the PostgreSQL database server version
-            db_version = cur.fetchone()
-            print(db_version)
-
-        # close the communication with the PostgreSQL
-            cur.close()
-            self.log.info('Query de verificacion de conexion de base de datos')
-        except (Exception, psycopg2.DatabaseError) as error_check:
-            self.log.info(error_check)
-        finally:
-            if conn is not None:
-                conn.close()
-                print('Database connection closed.')
-
-    def read_parameters_query(self, file_parametro: str):
-        '''Funcion para leer un json y convertirlo en un diccionario
-        para ser usado posteriormente en el metodo fix_dict_query'''
-
-        with open(file_parametro, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-
-        data['columns'] = list(data['columns'].values())
-
-        return data
 
     def fix_dict_query(self, tabla: str, columnas: list, order: str, where: str):
         '''fix_dict_query Funcion para prepara los parametros del diccionario busqueda 
@@ -193,7 +153,7 @@ class HandleDBsqlserver(object):
                 # cursor.commit()
                 self.log.info('[INFO] Ejecucion de consulta realizada')
                 return 1
-        except psycopg2.DatabaseError as error_quey_data:
+        except pyodbc.DatabaseError as error_quey_data:
             self.log.info('[ERROR] Fallo de ejecucion del query')
             self.log.info(error_quey_data)
             return 0
@@ -265,17 +225,17 @@ class HandleDBsqlserver(object):
         try:
             # read the connection parameters
             params = self.get_config_file(connection_parameters)
-            # connect to the PostgreSQL server
-            conn = psycopg2.connect(**params)
+            # connect to the sqlserver server
+            conn = pyodbc.connect(**params)
             cur = conn.cursor()
             # create table one by one
             cur.execute(query)
-            # close communication with the PostgreSQL database server
+            # close communication with the sqlserver database server
             cur.close()
             # commit the changes
             conn.commit()
             self.log.debug("Query enviada")
-        except (Exception, psycopg2.DatabaseError) as error_send:
+        except (Exception, pyodbc.DatabaseError) as error_send:
             self.log.error(error_send)
         finally:
             if conn is not None:
@@ -296,8 +256,8 @@ class HandleDBsqlserver(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
-            # connect to the PostgreSQL database
-            conn = psycopg2.connect(**params)
+            # connect to the sqlserver database
+            conn = pyodbc.connect(**params)
             # create a new cursor
             cur = conn.cursor()
 
@@ -312,7 +272,7 @@ class HandleDBsqlserver(object):
             # close communication with the database
             cur.close()
             self.log.info('Query de insercion de archivo csv finalizada')
-        except (Exception, psycopg2.DatabaseError) as error_insert_data_csv:
+        except (Exception, pyodbc.DatabaseError) as error_insert_data_csv:
             self.log.error('Fallo de insercion de la query')
             self.log.error(error_insert_data_csv)
         finally:
@@ -333,8 +293,8 @@ class HandleDBsqlserver(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
-            # connect to the PostgreSQL database
-            conn = psycopg2.connect(**params)
+            # connect to the sqlserver database
+            conn = pyodbc.connect(**params)
             # create a new cursor
             cur = conn.cursor()
 
@@ -347,7 +307,7 @@ class HandleDBsqlserver(object):
             # close communication with the database
             cur.close()
             self.log.info('Query de insercion de archivo csv finalizada')
-        except (Exception, psycopg2.DatabaseError) as error_insert_data_frame:
+        except (Exception, pyodbc.DatabaseError) as error_insert_data_frame:
             self.log.error('Fallo de insercion de la query')
             self.log.error(error_insert_data_frame)
         finally:
@@ -370,8 +330,8 @@ class HandleDBsqlserver(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
-            # connect to the PostgreSQL database
-            conn = psycopg2.connect(**params)
+            # connect to the sqlserver database
+            conn = pyodbc.connect(**params)
             # create a new cursor
             cur = conn.cursor()
             # execute the INSERT statement
@@ -382,7 +342,7 @@ class HandleDBsqlserver(object):
             # close communication with the database
             cur.close()
             self.log.info('Query de insercion unica finalizada')
-        except (Exception, psycopg2.DatabaseError) as error_insert_data:
+        except (Exception, pyodbc.DatabaseError) as error_insert_data:
             self.log.error('Fallo de insercion de la query')
             self.log.error(error_insert_data)
         finally:
@@ -403,8 +363,8 @@ class HandleDBsqlserver(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
-            # connect to the PostgreSQL database
-            conn = psycopg2.connect(**params)
+            # connect to the sqlserver database
+            conn = pyodbc.connect(**params)
             # create a new cursor
             cur = conn.cursor()
             # execute the INSERT statement
@@ -418,14 +378,14 @@ class HandleDBsqlserver(object):
             cur.close()
 
             return list(ultima_fila)
-        except (Exception, psycopg2.DatabaseError) as error_get_last:
+        except (Exception, pyodbc.DatabaseError) as error_get_last:
             self.log.error(error_get_last)
         finally:
             if conn is not None:
                 conn.close()
 
     def get_table(self, connection_parameters: str, query: str):
-    # def get_table(self, params, query: str):
+        # def get_table(self, params, query: str):
         '''get_table Funcion para extraer la tabla completa de una base de datos
         usando una query
 
@@ -437,61 +397,13 @@ class HandleDBsqlserver(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
-            
-            # connect to the PostgreSQL database
-            conn = psycopg2.connect(**params)
-            # create a new cursor
-            cur = conn.cursor()
-            # execute the INSERT statement
-            cur.execute(query)
-
-            ultima_fila = cur.fetchall()
-
-            # commit the changes to the database
-            conn.commit()
-            # close communication with the database
-            cur.close()
-
-            return list(ultima_fila)
-        except (Exception, psycopg2.DatabaseError) as error_get_table:
+            connection = pyodbc.connect(params)
+            cursor = connection.cursor()
+            cursor.execute(query)
+            readed_data = cursor.fetchall()
+            return pd.DataFrame((tuple(t) for t in readed_data))
+        except (Exception, pyodbc.DatabaseError) as error_get_table:
             self.log.error(error_get_table)
         finally:
             if conn is not None:
                 conn.close()
-
-
-
-import pyodbc
-
-class SQLServerDB:
-    def __init__(self, server, database, username, password):
-        self.connection = pyodbc.connect(
-            'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' +
-            server+';DATABASE='+database+';UID='+username+';PWD='+ password
-        )
-        self.cursor = self.connection.cursor()
-
-    def create(self, table, data):
-        placeholders = ', '.join(['?'] * len(data))
-        columns = ', '.join(data.keys())
-        sql = f"INSERT INTO {table} ({columns}) VALUES ({placeholders})"
-        self.cursor.execute(sql, list(data.values()))
-        self.connection.commit()
-
-    def read(self, table, where=None):
-        sql = f"SELECT * FROM {table}"
-        if where:
-            sql += f" WHERE {where}"
-        self.cursor.execute(sql)
-        return self.cursor.fetchall()
-
-    def update(self, table, data, where):
-        set_values = ', '.join([f"{column} = ?" for column in data.keys()])
-        sql = f"UPDATE {table} SET {set_values} WHERE {where}"
-        self.cursor.execute(sql, list(data.values()))
-        self.connection.commit()
-
-    def delete(self, table, where):
-        sql = f"DELETE FROM {table} WHERE {where}"
-        self.cursor.execute(sql)
-        self.connection.commit()

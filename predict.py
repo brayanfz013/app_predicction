@@ -113,8 +113,12 @@ pred_series = modelo.predict(
     horizont=parameters['forecast_val']
 )
 
-# Invertir predicciones
+# Invertir predicciones escaler de entrenamietno
 pred_scale = scaler.inverse_transform(pred_series)
+
+## Invertir Predicciones escaler de transformacion de los datos
+# pred_scale = scaler_data.inverse_transform(pred_series)
+
 
 data_frame_predicciones = pred_scale.pd_dataframe()
 data_frame_predicciones['Varianza'] = data_frame_predicciones['Cant Pedido UMV'].pct_change() * 100
