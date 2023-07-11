@@ -22,7 +22,6 @@ eggs/
 .eggs/
 lib64/
 darts_logs/
-save_models/
 parts/
 sdist/
 var/
@@ -86,6 +85,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+notebooks/
 
 # IPython
 profile_default/
@@ -146,7 +146,7 @@ venv.bak/
 
 # mkdocs documentation
 /site
-
+/save_models
 # mypy
 .mypy_cache/
 .dmypy.json

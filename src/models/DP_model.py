@@ -191,7 +191,7 @@ class ModelHyperparameters:
         '''metodo para reentrenar un modelo'''
 
         study = optuna.create_study(direction="maximize")
-        study.optimize(self.optimize, timeout=300,
+        study.optimize(self.optimize, timeout=6000,
                        callbacks=[self.print_callback])
 
         # We could also have used a command as follows to limit the number of trials instead:

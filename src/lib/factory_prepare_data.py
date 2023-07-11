@@ -80,12 +80,12 @@ class OutliersToIQRMean(DataCleaningStrategy):
         handle_data.filter_column(
             self.parameters_filter['filter_1_column'],
             self.parameters_filter['filter_1_feature'],
-            string_filter=False
+            string_filter=isinstance(handle_data.dataframe[self.parameters_filter['filter_1_column']].dtype,object)
         )
         handle_data.filter_column(
             self.parameters_filter['filter_2_column'],
             self.parameters_filter['filter_2_feature'],
-            string_filter=True
+            string_filter=isinstance(handle_data.dataframe[self.parameters_filter['filter_2_column']].dtype,object)
         )
         handle_data.get_expand_date(self.parameters_filter['date_column'])
         handle_data.set_index_col(self.parameters_filter['date_column'])

@@ -1,8 +1,0 @@
-{   "date_column":"Fecha Creación",
-    "predict_column":"Cant Pedido UMV",
-    "filter_1_column":"Material (Cod)",
-    "filter_1_feature":"10011308",
-    "filter_2_column":"Solicitate (Cod)",
-    "filter_2_feature":"4177452",
-    "group_frequecy":"D"
-}

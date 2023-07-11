@@ -54,7 +54,9 @@ strategy = {
 # Estrategias para imputar los datos faltantes de NA
 replace = {
     int: lambda x: int(float(x.replace(',', ''))),
-    float: lambda x: float(x.replace(',', ''))
+    float: lambda x: float(x.replace(',', '')),
+    object:lambda x: x.strip()
+    
 }
 
 
@@ -121,7 +123,8 @@ pred_scale = scaler.inverse_transform(pred_series)
 
 
 data_frame_predicciones = pred_scale.pd_dataframe()
-data_frame_predicciones['Varianza'] = data_frame_predicciones['Cant Pedido UMV'].pct_change() * 100
+column_field = list(data_frame_predicciones.columns)
+data_frame_predicciones['Varianza'] = data_frame_predicciones[column_field].pct_change() * 100
 data_frame_predicciones.reset_index(inplace=True)
 
 filter = []

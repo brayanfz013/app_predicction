@@ -2,7 +2,6 @@
 
 
 import json
-# from app_prediction.src.lib.factory_data import client_code, SQLDataSourceFactory, NoSQLDataSourceFactory,PlainTextFileDataSourceFactory
 import os
 
 import numpy as np
@@ -30,6 +29,20 @@ CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = yaml.safe_load(file)
 
+# #Peticion de la API
+# url  = 'http://192.168.115.99:3333/getinvoices'
+# response = requests.get(url)
+
+# if response.status_code == 200:
+#     invoices  = response.json()
+# else: 
+#     print(response.status_code)
+
+# data = pd.DataFrame(invoices)
+# filter_cols = list(parameters['query_template']['columns'].values())
+# data = data[filter_cols]
+
+
 print("Probando el estacion de datos de sql")
 data = get_data(SQLDataSourceFactory(**parameters))
 
@@ -42,7 +55,7 @@ base = {
     'date':np.datetime64,
     'integer': int,
     'float': float,
-    'string': 'object',
+    'string': object,
 }
 
 for dtypo in parameters['type_data'].values():
@@ -59,9 +72,10 @@ strategy = {
 #Estrategias para imputar los datos faltantes de NA
 replace = {
     int:lambda x: int(float(x.replace(',',''))),
-    float:lambda x: float(x.replace(',',''))
+    float:lambda x: float(x.replace(',','')),
+    object:lambda x: x.strip()
 }
-
+print(data)
 
 #Imputacion de los datos
 imputation = MeanImputation(
@@ -91,16 +105,16 @@ data_ready,scaler_data = cleaner.clean(data_filled)
 if not parameters['scale']:
     data_ready = scaler_data.inverse_transform(data_ready)
 
-print(data_ready)
-#=================================================================
+
+# =================================================================
 #            Preparacion de modelo
-#=================================================================
+# =================================================================
 # model_names = list(Modelos.keys())
 
 # for name in model_names:
 #     print(name)
 
-# MODE_USED = 'RNNModel'
+#MODE_USED = 'RNNModel'
 MODE_USED = 'NBeatsModel'
 modelo = ModelContext(model_name = MODE_USED,
                       data=data_ready,

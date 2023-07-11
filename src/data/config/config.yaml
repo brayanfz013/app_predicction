@@ -5,7 +5,15 @@ query:
 
 logs_file: "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/logging.conf"
 
+data_souce:
+  input: API 
+  output: postgres
+
+
 connection_data_source:
+  API:
+    endpoint: http://192.168.115.99:3333/getinvoices
+
   postgresql:
     host: localhost
     database: predicciones
@@ -28,6 +36,7 @@ connection_data_source:
     username: sa
     password: 0913PASSword!
 
+
 query_template:
   table: position
   columns:
@@ -41,16 +50,6 @@ query_template:
   where: posicion > 1
 
 
-# query_template:
-#   table: Employees
-#   columns:
-#     "0": DateUsed
-#     "1": Serial
-#     "2": FirstName
-#     "3": LastName
-#     "4": Position
-#   order: index
-#   where: posicion > 1
 
 type_data:
   column0: date
@@ -61,13 +60,6 @@ type_data:
   column5: integer
   # column7: float
 
-# type_data:
-#   column0: date
-#   column1: integer
-#   column2: string
-#   column3: string
-#   column4: string
-#   # column7: float
 
 query_template_write:
   table: prediction
@@ -87,14 +79,6 @@ type_data_out:
   column3: string
   column4: string
 
-# filter_data:
-#   date_column: DateUsed
-#   predict_column: Serial
-#   filter_1_column: FirstName
-#   filter_1_feature: John Doe
-#   # filter_2_column: Solicitate (Cod)
-#   # filter_2_feature: 4177452
-#   group_frequecy: D
 
 filter_data:
   date_column: Fecha Creación
