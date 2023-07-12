@@ -371,6 +371,7 @@ class PrepareData(ColumnsNameHandler):
         Returns:
             pd.Dataframe: Retorna un dataframe filtrado en base a los parametros de entradas
         '''
+
         if string_filter:
             mask = self.dataframe[column].str.contains(str(feature))
             self.dataframe = self.dataframe[mask]

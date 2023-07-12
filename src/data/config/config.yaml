@@ -5,14 +5,14 @@ query:
 
 logs_file: "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/logging.conf"
 
-data_souce:
-  input: API 
-  output: postgres
+# data_souce:
+#   input: API 
+#   output: postgres
 
 
 connection_data_source:
-  API:
-    endpoint: http://192.168.115.99:3333/getinvoices
+  # API:
+  #   endpoint: http://192.168.115.99:3333/getinvoices
 
   postgresql:
     host: localhost

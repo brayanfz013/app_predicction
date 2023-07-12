@@ -75,7 +75,6 @@ replace = {
     float:lambda x: float(x.replace(',','')),
     object:lambda x: x.strip()
 }
-print(data)
 
 #Imputacion de los datos
 imputation = MeanImputation(
@@ -104,8 +103,6 @@ data_ready,scaler_data = cleaner.clean(data_filled)
 
 if not parameters['scale']:
     data_ready = scaler_data.inverse_transform(data_ready)
-
-
 # =================================================================
 #            Preparacion de modelo
 # =================================================================
@@ -133,28 +130,4 @@ modelo.save(model_trained,scaler=scaler_data)
 
 print('metodo finalizado')
 
-# =================================================================
-#             Guardado de informacion
-# =================================================================
-# import requests
-# import pprint
-# import pandas as pd
 
-# url  = 'http://192.168.115.99:3333/getinvoices'
-
-# response = requests.get(url)
-
-# if response.status_code == 200:
-#     invoices  = response.json()
-#     # pprint.pprint(invoices)
-# else: 
-#     print(response.status_code)
-
-
-# data = pd.DataFrame(invoices).head()
-# print(data)
-
-# """
-# ITEMNMBR : codigo item
-# QUANTITY : valor a predecir
-# """

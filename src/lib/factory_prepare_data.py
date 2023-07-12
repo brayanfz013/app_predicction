@@ -77,16 +77,23 @@ class OutliersToIQRMean(DataCleaningStrategy):
 
         handle_data = PrepareData(data,**self.parameters['query_template'])
 
+        column_check_1 = handle_data.dataframe[self.parameters_filter['filter_1_column']]
+        column_check_2 = handle_data.dataframe[self.parameters_filter['filter_2_column']]
+
         handle_data.filter_column(
             self.parameters_filter['filter_1_column'],
             self.parameters_filter['filter_1_feature'],
-            string_filter=isinstance(handle_data.dataframe[self.parameters_filter['filter_1_column']].dtype,object)
+            string_filter=all(isinstance(item, str) for item in column_check_1)
+            # isinstance(handle_data.dataframe[self.parameters_filter['filter_1_column']].dtype,str)
         )
+
         handle_data.filter_column(
             self.parameters_filter['filter_2_column'],
             self.parameters_filter['filter_2_feature'],
-            string_filter=isinstance(handle_data.dataframe[self.parameters_filter['filter_2_column']].dtype,object)
+            string_filter=all(isinstance(item, str) for item in column_check_2)
+            # isinstance(handle_data.dataframe[self.parameters_filter['filter_2_column']].dtype,str)
         )
+        
         handle_data.get_expand_date(self.parameters_filter['date_column'])
         handle_data.set_index_col(self.parameters_filter['date_column'])
         handle_data.group_by_time(self.parameters_filter['predict_column'],
