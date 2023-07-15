@@ -128,9 +128,7 @@ class ColumnsNameHandler:
             down = dict_types[ld_type][0]
 
             if down <= min_val < up  and down < max_val <= up:
-
                 dict_out[key] = str(ld_type)
-
                 break
 
         return dict_out

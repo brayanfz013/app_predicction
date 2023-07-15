@@ -2,11 +2,13 @@
 Codigo usado para extraer la informacion para la predicciones de la informacion
 '''
 # Esta es la interfaz abstracta para las operaciones
+import os
+from pathlib import Path
 import pandas as pd
 try:
     from src.features.features_redis import HandleRedis
     from src.features.features_postgres import HandleDBpsql
-    from src.models.args_data_model import ParamsPostgres,Parameters
+    from src.models.args_data_model import ParamsPostgres, Parameters
 except ImportError as Error:
     from features_redis import HandleRedis
     from features_postgres import HandleDBpsql
@@ -31,24 +33,34 @@ class DataSource(ABC):
         '''Metodo para crear tablas en base de datos'''
 
 # Implementaciones concretas de la interfaz para cada tipo de fuente de datos
+
+
 class SQLPostgres(DataSource):
     '''Metodo para manipulacion de datos de postgres'''
 
     def __init__(self, **parametros) -> None:
+        _file_path = Path(__file__).parents[2]
         self.parametro = Parameters(**parametros)
         self.data_source = HandleDBpsql()
+        self.query_read = _file_path.joinpath(
+            'src/data/querys/get_table.sql').as_posix()
+        self.query_write = _file_path.joinpath(
+            'src/data/querys/get_table.sql').as_posix()
+        self.query_create = _file_path.joinpath(
+            'src/data/querys/new_table.sql').as_posix()
 
     def read(self):
         '''metodo base para hacer lectura de los datos'''
-        fix_dict_query =  self.data_source.fix_dict_query(
+        fix_dict_query = self.data_source.fix_dict_query(
             self.parametro.query_template['table'],
             list(self.parametro.query_template['columns'].values()),
             self.parametro.query_template['order'],
             self.parametro.query_template['where']
-            )
+        )
 
         query = self.data_source.prepare_query_replace_value(
-            sql_file=self.parametro.query['query_read'], data_replace=fix_dict_query)
+            sql_file=self.query_read,
+            data_replace=fix_dict_query)
 
         return self.data_source.get_table(
             connection_parameters=self.parametro.connection_data_source,
@@ -65,7 +77,7 @@ class SQLPostgres(DataSource):
         )
 
         query = self.data_source.prepare_query_replace_value(
-            sql_file=self.parametro.query['query_write'],
+            sql_file=self.query_write,
             data_replace=fix_dict_query)
 
         self.data_source.insert_data_from_dataframe(
@@ -86,7 +98,7 @@ class SQLPostgres(DataSource):
         # print(self.parametro)
         convert_value = {}
 
-        for key_,val_ in self.parametro.type_data_out.items():
+        for key_, val_ in self.parametro.type_data_out.items():
             convert_value[key_] = conver_postgrest[val_]
 
         # Aquí es donde construirás las declaraciones para las columnas.
@@ -95,7 +107,7 @@ class SQLPostgres(DataSource):
         # Obtén los nombres de las columnas y los tipos de datos del yaml.
         column_names = self.parametro.query_template_write['columns']
         data_types = self.parametro.type_data_out
-        
+
         # Ahora, crea las declaraciones para las columnas usando los nombres y los tipos de datos.
         for i in range(len(column_names)):
             column_name = column_names[str(i)]
@@ -108,16 +120,33 @@ class SQLPostgres(DataSource):
 
         # self.parametro.query_template_write['columns'] = ",\n".join(column_declarations)
         # self.parametro.query_template_write['table'] = str(self.parametro.filter_data['filter_1_feature'])
-        
+
         query = self.data_source.prepare_query_replace_value(
-            sql_file=self.parametro.query['query_create'],
+            sql_file=self.query_write,
             data_replace=fix_data_dict
         )
-        
+
         self.data_source.send_query(
             connection_parameters=self.parametro.connection_data_source,
             query=query
         )
+
+
+class SQLserver(DataSource):
+    '''Metodo de manipulacion de datos de sql server'''
+    def __init__(self) -> None:
+        super().__init__()
+
+    def read(self):
+
+
+        return super().read()
+    
+    def write(self, data):
+        return super().write(data)
+    
+    def create(self):
+        return super().create()
 
 class NoSQLRedis(DataSource):
     '''Metodo para manipulacion de datos de redis'''
@@ -150,6 +179,8 @@ class AbstractDataSourceFactory(ABC):
         '''Creacion de la fuente de datos seleccionada'''
 
 # Implementaciones concretas de la fábrica para cada tipo de fuente de datos
+
+
 class SQLDataSourceFactory(AbstractDataSourceFactory):
     '''Fabricante de metodos SQL '''
 
@@ -158,6 +189,7 @@ class SQLDataSourceFactory(AbstractDataSourceFactory):
 
     def create_data_source(self) -> DataSource:
         return SQLPostgres(**self.parametro)
+
 
 class NoSQLDataSourceFactory(AbstractDataSourceFactory):
     '''Fabricante de metodos NoSQL '''
@@ -172,17 +204,18 @@ class NoSQLDataSourceFactory(AbstractDataSourceFactory):
 #     def create_data_source(self) -> DataSource:
 #         return PlainTextFileDataSource()
 
-
 # Usando la fábrica
 def get_data(factory: AbstractDataSourceFactory) -> None:
     '''Metodo para hacer la lectura de la infomacion'''
     data_source = factory.create_data_source()
     return data_source.read()
 
-def set_data(factotory: AbstractDataSourceFactory,data)->None:
+
+def set_data(factotory: AbstractDataSourceFactory, data) -> None:
     '''Metodo para hacer la escritura en la base de datos'''
     data_source = factotory.create_data_source()
     return data_source.write(data)
+
 
 def create_table(factory: AbstractDataSourceFactory) -> None:
     '''Metodo para hacer la lectura de la infomacion'''

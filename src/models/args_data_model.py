@@ -47,7 +47,7 @@ class ParamsPostgres:
 @dataclass
 class Parameters:
     '''Modelo de dato para datos importados con el yaml'''
-    query:dict
+    data_source:dict
     logs_file:str
     connection_data_source:dict
     filter_data:dict

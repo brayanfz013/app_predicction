@@ -11,7 +11,7 @@ import socket
 import sys
 from configparser import ConfigParser
 from pathlib import Path
-
+import pickle
 import redis
 
 try:
@@ -43,20 +43,22 @@ class HandleRedis(object):
     Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy    
     """
 
-    def __init__(self, logfile='logging.conf'):
+    def __init__(self, logfile='data/config/logging.conf'):
+        path_folder = os.path.dirname(__file__)
+        path_folder = str(Path(path_folder).parents[0])
+        logs_file = str(Path(path_folder).joinpath(logfile))
 
         # Constructor que permite inicializar los parametros
-        logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
+        logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
         self.log = logging.getLogger('REDIS')
-        self.log.debug("Instancia libreria")
 
-    def file_ini_(self, filename:str='database', section:str='postgresql'):
+    def file_ini_(self, filename:str='database', section:str='redis'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
         de parametros es ini
 
         Args:
             filename (str, optional): Nombre de ruta con extencion .ini. Defaults to 'database'.
-            section (str, optional): Tipo de conexion con la base de datos. Defaults to 'postgresql'.
+            section (str, optional): Tipo de conexion con la base de datos. Defaults to 'redis'.
 
         Raises:
             Exception: Error de conexion por no encontrar parametros
@@ -87,7 +89,7 @@ class HandleRedis(object):
 
         return data_parameters
 
-    def file_yaml(self,filename:str,section:str='postgresql'):
+    def file_yaml(self,filename:str,section:str='redis'):
         '''file_yaml Metodo rapido para cargar los archivos de la base detaso 
         cuando se tiene un yaml usando la clave de connection_data_source
 
@@ -102,7 +104,7 @@ class HandleRedis(object):
 
         return load_yaml['connection_data_source'][section]
 
-    def get_config_file(self, filename:str='database', section:str='postgresql'):
+    def get_config_file(self, filename:str='database', section:str='redis'):
         """
         Lee el archivo de configuracion con los parametros a la base de datos
         se tiene que seleccion el motor de base de datos.
@@ -111,12 +113,20 @@ class HandleRedis(object):
         de conexion 
 
         """
-        filename_extencion = Path(filename).suffix
-        extencion_files = {
-            'ini':self.file_ini_(filename=filename,section=section),
-            'yaml':self.file_yaml(filename=filename,section=section)
-        }
-        return extencion_files[filename_extencion]
+        if isinstance(filename,str):
+            if Path(filename).suffix == '.ini':
+                parameters = self.file_ini_(filename=filename, section=section)
+
+            elif Path(filename).suffix == '.yaml':
+                parameters = self.file_yaml(filename=filename, section=section)
+
+                raise ValueError(
+                    f"Archivo no válido: {filename}. Sólo se permiten archivos .ini o .yaml.")
+
+        elif isinstance(filename,dict):
+            parameters = filename[section]
+
+        return parameters
 
     def create_data(self, data: dict, config: str):
         '''create_data Funcion para crear y enviar datos a un servidor de redis
@@ -255,6 +265,65 @@ class HandleRedis(object):
             # print(redis_error)
 
         return data
+
+    def check_connection(self,config:str):
+        '''Metodo basico para verificar la conexion a la base de datos de redis
+            Args:
+            config (str): Ruta del archivos de las configuraciones para la conexion con redis
+        '''
+        try:
+            parameters_connection = self.get_config_file(
+                config, section='redis')
+            with redis.Redis(**parameters_connection) as connection:
+                return connection.ping()
+
+                # self.log.debug("Extracion de datos completa")
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
+            self.log.error(redis_error)
+            # print(redis_error)
+
+
+    def set_cache_data(self, hash_name: str, dict_data: dict, config: str):
+        '''set_cache_data Metodo para
+
+        Args:
+            config (str): _description_
+        '''
+        try:
+            parameters_connection = self.get_config_file(
+                config, section='redis')
+            with redis.Redis(**parameters_connection) as connection:
+
+                # Recupera los bytes del DataFrame antiguo desde Redis
+                old_df_bytes = r.get(hash_name)
+
+                # Si existe un DataFrame antiguo, deserialízalo
+                if old_df_bytes is not None:
+                    old_df = pickle.loads(old_df_bytes)
+                else:
+                    # Si no existe un DataFrame antiguo, crea uno vacío con las mismas columnas
+                    old_df = pd.DataFrame(columns=['A', 'B'])
+
+                # Crea un nuevo DataFrame de pandas
+                new_df = pd.DataFrame({
+                    'A': [11, 22, 33],
+                    'B': [14, 15, 46],
+                })
+
+                # Combina el DataFrame antiguo con el nuevo
+                df = pd.concat([old_df, new_df], ignore_index=True)
+
+                # Serializa el DataFrame a bytes usando pickle
+                df_bytes = pickle.dumps(df)
+
+                # Guarda los bytes en Redis
+                r.set(hash_name, df_bytes)
+                
+                # self.log.debug("Extracion de datos completa")
+        except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
+            self.log.error(redis_error)
+            # print(redis_error)
+        
 
     def search_public_ip(self):
         '''Funcion para buscar la ip publica en una conexion'''

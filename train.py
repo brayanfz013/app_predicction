@@ -1,6 +1,5 @@
 '''Codigo para la ejecucion  y llamando para hacer predicciones en los modelos'''
 
-
 import json
 import os
 
@@ -14,13 +13,10 @@ from src.lib.factory_data import SQLDataSourceFactory, get_data
 from src.lib.factory_models import ModelContext
 from src.lib.factory_prepare_data import (DataCleaner, DataModel,
                                           MeanImputation, OutliersToIQRMean)
-
 # from src.models.DP_model import Modelos
 
 handler_load = LoadFiles()
-
 ruta_actual = os.path.dirname(__file__)
-print(ruta_actual)
 #=================================================================
 #             Cargar datos de la fuente de datos 
 #=================================================================
@@ -28,6 +24,7 @@ print(ruta_actual)
 CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = yaml.safe_load(file)
+
 
 # #Peticion de la API
 # url  = 'http://192.168.115.99:3333/getinvoices'
@@ -42,8 +39,6 @@ with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
 # filter_cols = list(parameters['query_template']['columns'].values())
 # data = data[filter_cols]
 
-
-print("Probando el estacion de datos de sql")
 data = get_data(SQLDataSourceFactory(**parameters))
 
 #=================================================================
@@ -89,7 +84,7 @@ outliners = OutliersToIQRMean(**parameters)
 #Preparacion de los dato para el modelos escalizado y filtrado
 data_for_model = DataModel(**parameters)
 
-#Patron de diseno de seleecion de estrategia
+#Patron de diseno de seleecio=n de estrategia
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
 
@@ -111,23 +106,23 @@ if not parameters['scale']:
 # for name in model_names:
 #     print(name)
 
-#MODE_USED = 'RNNModel'
-MODE_USED = 'NBeatsModel'
-modelo = ModelContext(model_name = MODE_USED,
-                      data=data_ready,
-                      split=83,
-                      **parameters)
+# #MODE_USED = 'RNNModel'
+# MODE_USED = 'NBeatsModel'
+# modelo = ModelContext(model_name = MODE_USED,
+#                       data=data_ready,
+#                       split=83,
+#                       **parameters)
 
-#Entrenar el modelo
-model_trained = modelo.train()
+# #Entrenar el modelo
+# model_trained = modelo.train()
 
-#Optimizar los parametros del modelo
-if parameters['optimize']:
-    model_trained = modelo.optimize()
+# #Optimizar los parametros del modelo
+# if parameters['optimize']:
+#     model_trained = modelo.optimize()
 
-#Guargar los modelos entrenados 
-modelo.save(model_trained,scaler=scaler_data)
+# #Guargar los modelos entrenados 
+# modelo.save(model_trained,scaler=scaler_data)
 
-print('metodo finalizado')
+# print('metodo finalizado')
 
 

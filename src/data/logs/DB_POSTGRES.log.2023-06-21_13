@@ -1,8 +1,0 @@
-2023-06-21 13:26:47,053 - POSTGRES - ERROR - features_postgres : 457 - syntax error at or near "/"
-LINE 1: /home/bdebian/Documents/Projects/Stoke_prediccition/app_pred...
-        ^
-
-2023-06-21 13:28:14,196 - POSTGRES - ERROR - features_postgres : 458 - syntax error at or near "/"
-LINE 1: /home/bdebian/Documents/Projects/Stoke_prediccition/app_pred...
-        ^
-

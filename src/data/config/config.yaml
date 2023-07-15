@@ -1,32 +1,22 @@
-query:
-  query_read : "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/get_table.sql"
-  query_write : "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/insert_data.sql"
-  query_create : "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/querys/new_table.sql"
+logs_file: "/home/temp_user/app_predicction/src/data/config/logging.conf"
 
-logs_file: "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/logging.conf"
-
-# data_souce:
-#   input: API 
-#   output: postgres
-
+data_source:
+  input: API 
+  cache: redis
+  output: postgres
 
 connection_data_source:
-  # API:
-  #   endpoint: http://192.168.115.99:3333/getinvoices
-
   postgresql:
     host: localhost
     database: predicciones
     user: bdebian
     password: 0913..
     port: 5432
-    # engine: psycopg2
+  # engine: psycopg2
 
   redis:
-    # host: 192.168.25.52
     host: 127.0.0.1
     db: 1
-    # user: master
     port: 6379
     # password: 0913
 
@@ -36,39 +26,30 @@ connection_data_source:
     username: sa
     password: 0913PASSword!
 
-
 query_template:
-  table: position
+  table: custom_invoices
   columns:
-    "0": Fecha Creación
-    "1": Material (Cod)
-    "2": Peso neto (TON)
-    "3": Solicitate (Cod)
-    "4": Cant Pedido UMV
-    "5": Valor Neto
+    "0": CREATDDT
+    "1": ITEMNMBR
+    "2": QUANTITY
+    "3": CUSTNMBR
   order: index
   where: posicion > 1
 
-
-
 type_data:
   column0: date
-  column1: integer
+  column1: string
   column2: integer
   column3: string
-  column4: integer
-  column5: integer
-  # column7: float
-
 
 query_template_write:
-  table: prediction
+  table: ModeloPredicciones
   columns: 
     "0": Fecha
     "1": predicion
     "2": varianza
-    "3": Material (Cod)
-    "4": Solicitate (Cod)
+    "3": ITEMNMBR
+    "4": CUSTNMBR
   order: index
   where: posicion > 1
 
@@ -79,16 +60,14 @@ type_data_out:
   column3: string
   column4: string
 
-
 filter_data:
-  date_column: Fecha Creación
-  predict_column: Cant Pedido UMV
-  filter_1_column: Material (Cod)
-  filter_1_feature: 10011308
-  filter_2_column: Solicitate (Cod)
-  filter_2_feature: 4177452
-  group_frequecy: D
-
+  date_column: CREATDDT
+  predict_column: QUANTITY
+  filter_1_column: CUSTNMBR
+  filter_1_feature: F00575
+  filter_2_column: ITEMNMBR
+  filter_2_feature: SME4-90
+  group_frequecy: W
 
 scale: True
 first_train: True

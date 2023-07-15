@@ -1,0 +1,90 @@
+logs_file: "/home/bdebian/Documents/Projects/Stoke_prediccition/app_prediction/src/data/config/logging.conf"
+
+data_source:
+  input: API 
+  output: postgres
+
+connection_data_source:
+  # API:
+  #   endpoint: http://192.168.115.99:3333/getinvoices
+
+  postgresql:
+    host: localhost
+    database: predicciones
+    user: bdebian
+    password: 0913..
+    port: 5432
+    # engine: psycopg2
+
+  redis:
+    # host: 192.168.25.52
+    host: 127.0.0.1
+    db: 1
+    # user: master
+    port: 6379
+    # password: 0913
+
+  sqlserver:
+    server: 127.0.0.1
+    database: master
+    username: sa
+    password: 0913PASSword!
+
+
+query_template:
+  table: position
+  columns:
+    "0": Fecha Creación
+    "1": Material (Cod)
+    "2": Peso neto (TON)
+    "3": Solicitate (Cod)
+    "4": Cant Pedido UMV
+    "5": Valor Neto
+  order: index
+  where: posicion > 1
+
+
+
+type_data:
+  column0: date
+  column1: integer
+  column2: integer
+  column3: string
+  column4: integer
+  column5: integer
+  # column7: float
+
+
+query_template_write:
+  table: prediction
+  columns: 
+    "0": Fecha
+    "1": predicion
+    "2": varianza
+    "3": Material (Cod)
+    "4": Solicitate (Cod)
+  order: index
+  where: posicion > 1
+
+type_data_out:
+  column0: date
+  column1: float
+  column2: float
+  column3: string
+  column4: string
+
+
+filter_data:
+  date_column: Fecha Creación
+  predict_column: Cant Pedido UMV
+  filter_1_column: Material (Cod)
+  filter_1_feature: 10011308
+  filter_2_column: Solicitate (Cod)
+  filter_2_feature: 4177452
+  group_frequecy: D
+
+
+scale: True
+first_train: True
+optimize: False
+forecast_val: 15

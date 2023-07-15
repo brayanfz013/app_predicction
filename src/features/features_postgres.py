@@ -31,7 +31,6 @@ except ImportError as error:
         sys.path.insert(0, i)
     from data.logs import LOGS_DIR
 
-
 class HandleDBpsql(object):
     """
     Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy    
@@ -301,7 +300,8 @@ class HandleDBpsql(object):
             cur = conn.cursor()
 
             data_to_send = pd.read_csv(data_path)
-
+        
+            print(query)
             for data_row in data_to_send.values:
                 # execute the INSERT statement
                 cur.execute(query, (data_row))
