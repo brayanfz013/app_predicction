@@ -59,6 +59,7 @@ class Parameters:
     first_train:True
     optimize:True
     forecast_val: int
+    exp_time_cache: int
     # model_parameters: Optional[Union[str, os.PathLike, PosixPath]]
 
 @dataclass

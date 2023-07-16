@@ -138,8 +138,6 @@ class SQLserver(DataSource):
         super().__init__()
 
     def read(self):
-
-
         return super().read()
     
     def write(self, data):

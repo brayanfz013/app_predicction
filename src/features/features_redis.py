@@ -13,7 +13,7 @@ from configparser import ConfigParser
 from pathlib import Path
 import pickle
 import redis
-
+import pandas as pd
 try:
     from ..data.logs import LOGS_DIR
 except ImportError as error:
@@ -52,7 +52,7 @@ class HandleRedis(object):
         logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
         self.log = logging.getLogger('REDIS')
 
-    def file_ini_(self, filename:str='database', section:str='redis'):
+    def file_ini_(self, filename: str = 'database', section: str = 'redis'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
         de parametros es ini
 
@@ -81,15 +81,15 @@ class HandleRedis(object):
                 if param[1]:
                     data_parameters[param[0]] = param[1]
                 else:
-                    raise Exception(
+                    raise ValueError(
                         f'Error configuration file {filename} \n missing value for fiel: {param[0]}')
         else:
-            raise Exception(
+            raise ValueError(
                 f'Section {section} not found in the {filename} file')
 
         return data_parameters
 
-    def file_yaml(self,filename:str,section:str='redis'):
+    def file_yaml(self, filename: str, section: str = 'redis'):
         '''file_yaml Metodo rapido para cargar los archivos de la base detaso 
         cuando se tiene un yaml usando la clave de connection_data_source
 
@@ -99,12 +99,12 @@ class HandleRedis(object):
         Returns:
             _type_: Diccionario con los criterios de conexion 
         '''
-        with open(filename,'r',encoding='utf-8') as file:
+        with open(filename, 'r', encoding='utf-8') as file:
             load_yaml = yaml.safe_load(file)
 
         return load_yaml['connection_data_source'][section]
 
-    def get_config_file(self, filename:str='database', section:str='redis'):
+    def get_config_file(self, filename: str = 'database', section: str = 'redis'):
         """
         Lee el archivo de configuracion con los parametros a la base de datos
         se tiene que seleccion el motor de base de datos.
@@ -113,7 +113,7 @@ class HandleRedis(object):
         de conexion 
 
         """
-        if isinstance(filename,str):
+        if isinstance(filename, str):
             if Path(filename).suffix == '.ini':
                 parameters = self.file_ini_(filename=filename, section=section)
 
@@ -123,7 +123,7 @@ class HandleRedis(object):
                 raise ValueError(
                     f"Archivo no válido: {filename}. Sólo se permiten archivos .ini o .yaml.")
 
-        elif isinstance(filename,dict):
+        elif isinstance(filename, dict):
             parameters = filename[section]
 
         return parameters
@@ -266,7 +266,7 @@ class HandleRedis(object):
 
         return data
 
-    def check_connection(self,config:str):
+    def check_connection(self, config: str):
         '''Metodo basico para verificar la conexion a la base de datos de redis
             Args:
             config (str): Ruta del archivos de las configuraciones para la conexion con redis
@@ -275,56 +275,61 @@ class HandleRedis(object):
             parameters_connection = self.get_config_file(
                 config, section='redis')
             with redis.Redis(**parameters_connection) as connection:
-                return connection.ping()
+                print(connection.ping())
 
-                # self.log.debug("Extracion de datos completa")
         except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
             self.log.error(redis_error)
-            # print(redis_error)
+            
 
-
-    def set_cache_data(self, hash_name: str, dict_data: dict, config: str):
-        '''set_cache_data Metodo para
+    def set_cache_data(self, hash_name: str, old_dataframe: pd.DataFrame, new_dataframe: pd.DataFrame, exp_time: int, config: str):
+        '''set_cache_data Metodo para hacer un cache en redis de la base de datos usadas
 
         Args:
-            config (str): _description_
+            hash_name (str): Nombre del hash/key que se usa para almacenar la informacion 
+            old_dataframe (DataFrame): Diccionarion con data anterior
+            new_dataframe (DataFrame): Diccionario con data nueva
+            config (str): Parametros de conexion a redis
         '''
         try:
             parameters_connection = self.get_config_file(
                 config, section='redis')
-            with redis.Redis(**parameters_connection) as connection:
 
-                # Recupera los bytes del DataFrame antiguo desde Redis
-                old_df_bytes = r.get(hash_name)
+            with redis.Redis(**parameters_connection) as connection:
+                old_df_bytes = connection.get(hash_name)
 
                 # Si existe un DataFrame antiguo, deserialízalo
                 if old_df_bytes is not None:
+                    # print('Recuperando data existente')
                     old_df = pickle.loads(old_df_bytes)
-                else:
+                elif old_dataframe is not None:
                     # Si no existe un DataFrame antiguo, crea uno vacío con las mismas columnas
-                    old_df = pd.DataFrame(columns=['A', 'B'])
+                    # print('Insertando nueva data')
+                    old_df = old_dataframe.copy()
+                    connection.set(hash_name, pickle.dumps(
+                        old_dataframe), ex=exp_time)
+                else:
+                    old_df =None
 
-                # Crea un nuevo DataFrame de pandas
-                new_df = pd.DataFrame({
-                    'A': [11, 22, 33],
-                    'B': [14, 15, 46],
-                })
-
+            # Verficar si existe nueva informacion por rellenar
+            if new_dataframe is not None and isinstance(old_df,pd.DataFrame):
                 # Combina el DataFrame antiguo con el nuevo
-                df = pd.concat([old_df, new_df], ignore_index=True)
+                update_frame = old_df.append(new_dataframe, ignore_index=True).drop_duplicates()
 
                 # Serializa el DataFrame a bytes usando pickle
-                df_bytes = pickle.dumps(df)
-
                 # Guarda los bytes en Redis
-                r.set(hash_name, df_bytes)
-                
+                connection.set(hash_name, pickle.dumps(update_frame), ex=exp_time)
+            elif isinstance(old_df,pd.DataFrame):
+                update_frame = old_df.copy()
+            else:
+                update_frame = None
+
                 # self.log.debug("Extracion de datos completa")
         except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
-        
 
+        return update_frame
+    
     def search_public_ip(self):
         '''Funcion para buscar la ip publica en una conexion'''
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as search:

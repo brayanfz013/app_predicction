@@ -77,21 +77,22 @@ class OutliersToIQRMean(DataCleaningStrategy):
 
         handle_data = PrepareData(data,**self.parameters['query_template'])
 
+        # for filtro_eval in self.parameters_filter:
+
         column_check_1 = handle_data.dataframe[self.parameters_filter['filter_1_column']]
-        column_check_2 = handle_data.dataframe[self.parameters_filter['filter_2_column']]
+        
 
         handle_data.filter_column(
             self.parameters_filter['filter_1_column'],
             self.parameters_filter['filter_1_feature'],
             string_filter=all(isinstance(item, str) for item in column_check_1)
-            # isinstance(handle_data.dataframe[self.parameters_filter['filter_1_column']].dtype,str)
         )
-
+        
+        column_check_2 = handle_data.dataframe[self.parameters_filter['filter_2_column']]
         handle_data.filter_column(
             self.parameters_filter['filter_2_column'],
             self.parameters_filter['filter_2_feature'],
             string_filter=all(isinstance(item, str) for item in column_check_2)
-            # isinstance(handle_data.dataframe[self.parameters_filter['filter_2_column']].dtype,str)
         )
         
         handle_data.get_expand_date(self.parameters_filter['date_column'])
@@ -118,8 +119,7 @@ class DataModel(DataCleaningStrategy):
     def clean(self, data: pd.DataFrame) -> pd.DataFrame:
         '''Metodo para transformar y scalar los datos de los modelos'''
         handler_data = PrepareData(data,**self.parameters['query_template'])
-        print(handler_data.dataframe)
-
+    
         time_series = handler_data.transforf_dataframe_dart(
             self.parameters_filter['date_column'],
             self.parameters_filter['predict_column']

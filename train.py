@@ -101,28 +101,23 @@ if not parameters['scale']:
 # =================================================================
 #            Preparacion de modelo
 # =================================================================
-# model_names = list(Modelos.keys())
 
-# for name in model_names:
-#     print(name)
+MODE_USED = 'NBeatsModel'
+modelo = ModelContext(model_name = MODE_USED,
+                      data=data_ready,
+                      split=83,
+                      **parameters)
 
-# #MODE_USED = 'RNNModel'
-# MODE_USED = 'NBeatsModel'
-# modelo = ModelContext(model_name = MODE_USED,
-#                       data=data_ready,
-#                       split=83,
-#                       **parameters)
+#Entrenar el modelo
+model_trained = modelo.train()
 
-# #Entrenar el modelo
-# model_trained = modelo.train()
+#Optimizar los parametros del modelo
+if parameters['optimize']:
+    model_trained = modelo.optimize()
 
-# #Optimizar los parametros del modelo
-# if parameters['optimize']:
-#     model_trained = modelo.optimize()
+#Guargar los modelos entrenados 
+modelo.save(model_trained,scaler=scaler_data)
 
-# #Guargar los modelos entrenados 
-# modelo.save(model_trained,scaler=scaler_data)
-
-# print('metodo finalizado')
+print('metodo finalizado')
 
 

@@ -75,10 +75,10 @@ class HandleDBpsql(object):
                 if param[1]:
                     data_parameters[param[0]] = param[1]
                 else:
-                    raise Exception(
+                    raise ValueError(
                         f'Error configuration file {filename} \n missing value for fiel: {param[0]}')
         else:
-            raise Exception(
+            raise ValueError(
                 f'Section {section} not found in the {filename} file')
 
         return data_parameters
