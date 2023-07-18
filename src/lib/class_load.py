@@ -2,6 +2,7 @@
 
 import os
 import json
+import yaml
 from pathlib import Path
 from typing import Union
 import numpy as np
@@ -262,3 +263,15 @@ class LoadFiles(object):
         with open(pickle_strategy, 'rb') as file:
             loaded_replace = pickle.load(file)
         return loaded_replace
+    
+    def save_yaml(self,datafile:dict,savepath:str):
+        '''save_yaml Metodo para guardar un archivo yaml en memoria
+
+        Args:
+            datafile (dict): Datos del archivo yaml
+            savepath (str): Ruta donde se guardara el archivo
+        '''
+
+        with open(savepath,mode='w',encoding='utf-8') as file:
+            yaml.dump(datafile,file)
+

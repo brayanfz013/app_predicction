@@ -1,0 +1,26 @@
+2023-07-14 15:29:14,171 - POSTGRES - ERROR - features_postgres : 314 - Fallo de insercion de la query
+2023-07-14 15:29:14,171 - POSTGRES - ERROR - features_postgres : 315 - can't execute an empty query
+2023-07-14 15:33:04,650 - POSTGRES - ERROR - features_postgres : 314 - Fallo de insercion de la query
+2023-07-14 15:33:04,650 - POSTGRES - ERROR - features_postgres : 315 - can't execute an empty query
+2023-07-14 15:34:03,522 - POSTGRES - ERROR - features_postgres : 314 - Fallo de insercion de la query
+2023-07-14 15:34:03,522 - POSTGRES - ERROR - features_postgres : 315 - can't execute an empty query
+2023-07-14 15:35:33,457 - POSTGRES - ERROR - features_postgres : 314 - Fallo de insercion de la query
+2023-07-14 15:35:33,457 - POSTGRES - ERROR - features_postgres : 315 - name 'data_send' is not defined
+2023-07-14 15:35:42,123 - POSTGRES - ERROR - features_postgres : 314 - Fallo de insercion de la query
+2023-07-14 15:35:42,123 - POSTGRES - ERROR - features_postgres : 315 - can't execute an empty query
+2023-07-14 15:35:58,867 - POSTGRES - ERROR - features_postgres : 314 - Fallo de insercion de la query
+2023-07-14 15:35:58,867 - POSTGRES - ERROR - features_postgres : 315 - can't execute an empty query
+2023-07-14 15:36:58,871 - POSTGRES - ERROR - features_postgres : 315 - Fallo de insercion de la query
+2023-07-14 15:36:58,871 - POSTGRES - ERROR - features_postgres : 316 - can't execute an empty query
+2023-07-14 15:37:26,832 - POSTGRES - ERROR - features_postgres : 315 - Fallo de insercion de la query
+2023-07-14 15:37:26,832 - POSTGRES - ERROR - features_postgres : 316 - can't execute an empty query
+2023-07-14 15:38:18,504 - POSTGRES - ERROR - features_postgres : 315 - Fallo de insercion de la query
+2023-07-14 15:38:18,504 - POSTGRES - ERROR - features_postgres : 316 - value too long for type character varying(50)
+
+2023-07-14 15:38:46,899 - POSTGRES - ERROR - features_postgres : 315 - Fallo de insercion de la query
+2023-07-14 15:38:46,899 - POSTGRES - ERROR - features_postgres : 316 - value too long for type character varying(50)
+
+2023-07-14 15:39:50,918 - POSTGRES - ERROR - features_postgres : 316 - Fallo de insercion de la query
+2023-07-14 15:39:50,918 - POSTGRES - ERROR - features_postgres : 317 - value too long for type character varying(50)
+
+2023-07-14 15:44:16,814 - POSTGRES - INFO - features_postgres : 313 - Query de insercion de archivo csv finalizada

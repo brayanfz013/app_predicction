@@ -47,26 +47,26 @@ query_template_write:
   columns: 
     "0": Fecha
     "1": predicion
-    "2": varianza
-    "3": ITEMNMBR
-    "4": CUSTNMBR
+    # "2": varianza
+    "2": ITEMNMBR
+    # "3": CUSTNMBR
   order: index
   where: posicion > 1
 
 type_data_out:
   column0: date
   column1: float
-  column2: float
-  column3: string
-  column4: string
+  # column2: float
+  column2: string
+  # column3: string
 
 filter_data:
   date_column: CREATDDT
   predict_column: QUANTITY
-  filter_1_column: CUSTNMBR
-  filter_1_feature: F00575
-  filter_2_column: ITEMNMBR
-  filter_2_feature: SME4-90
+  filter_1_column: ITEMNMBR
+  filter_1_feature: SME4-90
+  # filter_2_column: CUSTNMBR
+  # filter_2_feature: F00575
   group_frequecy: W
 
 scale: True

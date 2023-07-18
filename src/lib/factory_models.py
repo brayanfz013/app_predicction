@@ -11,10 +11,12 @@ from darts.models import (FFT, BlockRNNModel, DLinearModel,
                           RNNModel, TCNModel, TFTModel, TransformerModel)
 
 try:
+    from src.models.args_data_model import Parameters
     from src.data.save_models import SAVE_DIR
     from src.lib.class_load import LoadFiles
     from src.models.DP_model import ModelHyperparameters, Modelos
 except ImportError:
+    from args_data_model import Parameters
     from class_load import LoadFiles
     from DP_model import ModelHyperparameters, Modelos
     from save_models import SAVE_DIR
@@ -99,7 +101,7 @@ class ModelContext(Model):
             last_train, self.save_path, 'previus')
 
         return pred_series
-    
+
     def optimize(self):
         '''Metodo para generar optimizacion de datos'''
         optimizer = self.tunne_parameter.optimize()
@@ -133,6 +135,13 @@ class ModelContext(Model):
             dict_data=self.tunne_parameter.model_used_parameters,
             path_to_save=self.save_path.as_posix()
         )
+        
+        #Guardar el archivo de configuraciones de yaml
+        file_name = self.parameters['filter_data']['filter_1_feature']
+        self.handle_loader.save_yaml(
+            self.parameters, 
+            self.save_path.joinpath('config_'+file_name).with_suffix('.yaml').as_posix()
+            )
 
         # Guardar el modelo
         model.save(str(self.save_path.joinpath('model').with_suffix('.pt')))
@@ -140,7 +149,6 @@ class ModelContext(Model):
     def load_dirmodel(self):
         '''Cargar el listado de datos de archivos generados en el entrenamiento'''
         return [child.as_posix() for child in self.save_path.iterdir()]
-
 
     def load(self):
         '''Cargar los parametros del modelo'''

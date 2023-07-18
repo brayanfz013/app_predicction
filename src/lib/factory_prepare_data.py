@@ -7,7 +7,7 @@ certeza que se tenga sobre los tipo de datos importado
 
 from abc import ABC, abstractmethod
 import pandas as pd
-
+import re
 try:
     from src.features.features_fix_data import PrepareData
     from src.lib.class_load import LoadFiles
@@ -77,25 +77,19 @@ class OutliersToIQRMean(DataCleaningStrategy):
 
         handle_data = PrepareData(data,**self.parameters['query_template'])
 
-        # for filtro_eval in self.parameters_filter:
+        select_filter = list(self.parameters_filter.keys())
+        filter_columns = [column for column in select_filter if re.match(r'filter_\d+_column', column)]
+        filter_feature = [column for column in select_filter if re.match(r'filter_\d+_feature', column)]
 
-        column_check_1 = handle_data.dataframe[self.parameters_filter['filter_1_column']]
-        
+        for columns,feature in zip(filter_columns,filter_feature):
+            column_check = handle_data.dataframe[self.parameters_filter[columns]]
+            handle_data.filter_column(
+                    self.parameters_filter[columns],
+                    self.parameters_filter[feature],
+                    string_filter=all(isinstance(item, str) for item in column_check)
+                )
 
-        handle_data.filter_column(
-            self.parameters_filter['filter_1_column'],
-            self.parameters_filter['filter_1_feature'],
-            string_filter=all(isinstance(item, str) for item in column_check_1)
-        )
-        
-        column_check_2 = handle_data.dataframe[self.parameters_filter['filter_2_column']]
-        handle_data.filter_column(
-            self.parameters_filter['filter_2_column'],
-            self.parameters_filter['filter_2_feature'],
-            string_filter=all(isinstance(item, str) for item in column_check_2)
-        )
-        
-        handle_data.get_expand_date(self.parameters_filter['date_column'])
+        # handle_data.get_expand_date(self.parameters_filter['date_column'])
         handle_data.set_index_col(self.parameters_filter['date_column'])
         handle_data.group_by_time(self.parameters_filter['predict_column'],
                                   frequency_group=self.parameters_filter['group_frequecy'])
@@ -119,7 +113,7 @@ class DataModel(DataCleaningStrategy):
     def clean(self, data: pd.DataFrame) -> pd.DataFrame:
         '''Metodo para transformar y scalar los datos de los modelos'''
         handler_data = PrepareData(data,**self.parameters['query_template'])
-    
+
         time_series = handler_data.transforf_dataframe_dart(
             self.parameters_filter['date_column'],
             self.parameters_filter['predict_column']

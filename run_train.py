@@ -9,8 +9,9 @@ import os
 import numpy as np
 import pandas as pd
 import yaml
-from scipy import stats
 
+from pathlib import Path
+from scipy import stats
 from src.lib.class_load import LoadFiles
 from src.lib.factory_data import HandleRedis, SQLDataSourceFactory, get_data
 from src.lib.factory_models import ModelContext
@@ -31,7 +32,7 @@ with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
 
 parametros = Parameters(**parameters)
 
-#Interacion para hacer un cache de los datos en redis
+# Interacion para hacer un cache de los datos en redis
 try:
     data = handler_redis.set_cache_data(
         hash_name=parametros.query_template['table'],
@@ -99,65 +100,68 @@ replace = {
     float: lambda x: float(x.replace(',', '')),
     object: lambda x: x.strip()
 }
-
+# =================================================================
 # Imputacion de los datos
 imputation = MeanImputation(
     replace_dtypes=new_types,
     strategy_imputation=strategy,
     preprocess_function=replace,
-    **parameters
-)
-
-# Remocion de outliners y seleccion de columnas
-outliners = OutliersToIQRMean(**parameters)
-
-# Preparacion de los dato para el modelos escalizado y filtrado
-data_for_model = DataModel(**parameters)
+    **parameters)
 
 # Patron de diseno de seleecio=n de estrategia
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
-
 print("IMPUTACION DE DATOS")
 print(data_imputation.dataframe)
 
 
+MIN_DATA_VOLUME = 365
+criterial = data_imputation.dataframe[parameters['filter_data']
+                                      ['filter_1_column']].value_counts() > MIN_DATA_VOLUME
+items = data_imputation.dataframe[parameters['filter_data']['filter_1_column']].value_counts()[
+    criterial].index.to_list()
 
+for item in items:
+    parameters['filter_data']['filter_1_feature'] = item
 
-# Cambio de estrategia para remover outliners
-cleaner.strategy = outliners
-data_filled = cleaner.clean(data_imputation.dataframe)
-print('LIMPIEZA DE DATOS')
-print(data_filled)
+    # =================================================================
+    # Remocion de outliners y seleccion de columnas
+    outliners = OutliersToIQRMean(**parameters)
 
-# Cambio de estrategia para preparar los datos para modelo
-cleaner.strategy = data_for_model
-data_ready, scaler_data = cleaner.clean(data_filled)
-print('PREPARACION DE DATOS')
-print(data_ready)
+    # Cambio de estrategia para remover outliners
+    cleaner.strategy = outliners
+    data_filled = cleaner.clean(data_imputation.dataframe)
 
-if not parameters['scale']:
-    data_ready = scaler_data.inverse_transform(data_ready)
+    # =================================================================
+    # Preparacion de los dato para el modelos escalizado y filtrado
+    data_for_model = DataModel(**parameters)
 
-# print(data_ready)
-# # =================================================================
-# #            Preparacion de modelo
-# # =================================================================
+    # Cambio de estrategia para preparar los datos para modelo
+    cleaner.strategy = data_for_model
+    data_ready, scaler_data = cleaner.clean(data_filled)
+    #=================================================================
+    if not parameters['scale']:
+        data_ready = scaler_data.inverse_transform(data_ready)
 
-# # MODE_USED = 'NBeatsModel'
-# # modelo = ModelContext(model_name = MODE_USED,
-# #                       data=data_ready,
-# #                       split=83,
-# #                       **parameters)
+    # =================================================================
+    #            Preparacion de modelo
+    # =================================================================
 
-# # #Entrenar el modelo
-# # model_trained = modelo.train()
+    MODE_USED = 'NBeatsModel'
+    modelo = ModelContext(model_name = MODE_USED,
+                          data=data_ready,
+                          split=83,
+                          **parameters)
 
-# # #Optimizar los parametros del modelo
-# # if parameters['optimize']:
-# #     model_trained = modelo.optimize()
+    #Entrenar el modelo
+    model_trained = modelo.train()
 
-# # #Guargar los modelos entrenados
-# # modelo.save(model_trained,scaler=scaler_data)
+    #Optimizar los parametros del modelo
+    if parameters['optimize']:
+        model_trained = modelo.optimize()
 
-# # print('metodo finalizado')
+    #Guargar los modelos entrenados
+    modelo.save(model_trained,scaler=scaler_data)
+
+    print('metodo finalizado')
+

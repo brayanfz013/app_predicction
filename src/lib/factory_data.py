@@ -33,8 +33,6 @@ class DataSource(ABC):
         '''Metodo para crear tablas en base de datos'''
 
 # Implementaciones concretas de la interfaz para cada tipo de fuente de datos
-
-
 class SQLPostgres(DataSource):
     '''Metodo para manipulacion de datos de postgres'''
 
@@ -45,7 +43,7 @@ class SQLPostgres(DataSource):
         self.query_read = _file_path.joinpath(
             'src/data/querys/get_table.sql').as_posix()
         self.query_write = _file_path.joinpath(
-            'src/data/querys/get_table.sql').as_posix()
+            'src/data/querys/insert_table.sql').as_posix()
         self.query_create = _file_path.joinpath(
             'src/data/querys/new_table.sql').as_posix()
 
@@ -122,7 +120,7 @@ class SQLPostgres(DataSource):
         # self.parametro.query_template_write['table'] = str(self.parametro.filter_data['filter_1_feature'])
 
         query = self.data_source.prepare_query_replace_value(
-            sql_file=self.query_write,
+            sql_file=self.query_create,
             data_replace=fix_data_dict
         )
 

@@ -6,7 +6,7 @@ from scipy import stats
 from pathlib import Path
 from src.lib.class_load import LoadFiles
 from src.features.features_fix_data import PrepareData
-from src.lib.factory_data import SQLDataSourceFactory, get_data,create_table, set_data
+from src.lib.factory_data import SQLDataSourceFactory, get_data, create_table, set_data
 from src.lib.factory_models import ModelContext
 from src.lib.factory_prepare_data import (DataCleaner, DataModel,
                                           MeanImputation, OutliersToIQRMean)
@@ -55,8 +55,7 @@ strategy = {
 replace = {
     int: lambda x: int(float(x.replace(',', ''))),
     float: lambda x: float(x.replace(',', '')),
-    object:lambda x: x.strip()
-    
+    object: lambda x: x.strip()
 }
 
 
@@ -97,8 +96,10 @@ modelo = ModelContext(model_name=MODE_USED,
 # Rutas de los parametros para predicciones
 model_train = modelo.save_path.joinpath('model').with_suffix('.pt').as_posix()
 scaler = modelo.save_path.joinpath('scaler').with_suffix('.pkl').as_posix()
-last_pred = modelo.save_path.joinpath('previus').with_suffix('.json').as_posix()
-parameters_model = modelo.save_path.joinpath('parametros').with_suffix('.json').as_posix()
+last_pred = modelo.save_path.joinpath(
+    'previus').with_suffix('.json').as_posix()
+parameters_model = modelo.save_path.joinpath(
+    'parametros').with_suffix('.json').as_posix()
 
 
 # Cargar escaler
@@ -118,28 +119,57 @@ pred_series = modelo.predict(
 # Invertir predicciones escaler de entrenamietno
 pred_scale = scaler.inverse_transform(pred_series)
 
-## Invertir Predicciones escaler de transformacion de los datos
+# Invertir Predicciones escaler de transformacion de los datos
 # pred_scale = scaler_data.inverse_transform(pred_series)
-
 
 data_frame_predicciones = pred_scale.pd_dataframe()
 column_field = list(data_frame_predicciones.columns)
-data_frame_predicciones['Varianza'] = data_frame_predicciones[column_field].pct_change() * 100
+# data_frame_predicciones['Varianza'] = data_frame_predicciones[column_field].pct_change()*100
 data_frame_predicciones.reset_index(inplace=True)
+data_frame_predicciones[parameters['filter_data']
+                        ['predict_column']].clip(lower=0, inplace=True)
+
+#Rango de valores Unidades
+range_ = data_frame_predicciones[parameters['filter_data']['predict_column']].max(
+) - data_frame_predicciones[parameters['filter_data']['predict_column']].min()
+
+#Varianza de los datos Unidades
+variance = data_frame_predicciones[parameters['filter_data']
+                                   ['predict_column']].var()
+#Desvicion estandasr Unidades
+std_dev = data_frame_predicciones[parameters['filter_data']
+                                  ['predict_column']].std()
+#Coeficiente de variacion %
+cv = std_dev / \
+    data_frame_predicciones[parameters['filter_data']['predict_column']].mean()
+
+#Cuantiles Unidades
+q1 = data_frame_predicciones[parameters['filter_data']
+                             ['predict_column']].quantile(0.25)
+q3 = data_frame_predicciones[parameters['filter_data']
+                             ['predict_column']].quantile(0.75)
+iqr = q3 - q1
+
+#Desviacion media absoluta Unidades
+mad = data_frame_predicciones[parameters['filter_data']
+                              ['predict_column']].mad()
+
 
 filter = []
 for filter_list in parameters['filter_data']:
     if 'feature' in filter_list:
         filter.append(parameters['filter_data'][filter_list])
 
-for adding_data  in filter:
+for adding_data in filter:
     data_frame_predicciones[str(adding_data)] = adding_data
 
 new_names = list(parameters['query_template_write']['columns'].values())
-rename= {x:y for x,y in zip(list(data_frame_predicciones.columns),new_names)}
-data_frame_predicciones.rename(columns=rename,inplace=True)
+rename = {x: y for x, y in zip(
+    list(data_frame_predicciones.columns), new_names)}
+data_frame_predicciones.rename(columns=rename, inplace=True)
 
-# Crear tabla para guardas la informacion 
+# Crear tabla para guardas la informacion
 create_table(SQLDataSourceFactory(**parameters))
 
-set_data(SQLDataSourceFactory(**parameters),data_frame_predicciones)
+# Ingresar los datos a la base de datos
+set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
