@@ -1,7 +1,15 @@
-''' 
-Codigo para ejecutar un entrenamiento completo de una base de datos
-'''
-
+# -*- coding: utf-8 -*-
+# =============================================================================
+__author__ = "Brayan Felipe Zapata "
+__copyright__ = "Copyright 2007, The Cogent Project"
+__license__ = "GPL"
+__version__ = "1.0.0"
+__maintainer__ = "Brayan Felipe Zapata"
+__email__ = "bzapata@smgsoftware.com"
+__status__ = "Production"
+# =============================================================================
+'''Codigo para ejecutar un entrenamiento completo de una base de datos '''
+# =============================================================================
 
 import json
 import os
@@ -145,7 +153,6 @@ for item in items:
     # =================================================================
     #            Preparacion de modelo
     # =================================================================
-
     MODE_USED = 'NBeatsModel'
     modelo = ModelContext(model_name = MODE_USED,
                           data=data_ready,
@@ -163,4 +170,3 @@ for item in items:
     modelo.save(model_trained,scaler=scaler_data)
 
     print('metodo finalizado')
-

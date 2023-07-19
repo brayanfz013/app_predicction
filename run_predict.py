@@ -1,3 +1,17 @@
+# -*- coding: utf-8 -*-
+# =============================================================================
+__author__ = "Brayan Felipe Zapata "
+__copyright__ = "Copyright 2007, The Cogent Project"
+__license__ = "GPL"
+__version__ = "1.0.0"
+__maintainer__ = "Brayan Felipe Zapata"
+__email__ = "bzapata@smgsoftware.com"
+__status__ = "Production"
+# =============================================================================
+'''Codigo base para hacer predicciones sobre toda la base de datos  '''
+# =============================================================================
+
+
 import os
 import re
 import yaml
@@ -30,8 +44,41 @@ CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = yaml.safe_load(file)
 
-print("Probando el estacion de datos de sql")
-data = get_data(SQLDataSourceFactory(**parameters))
+# Interacion para hacer un cache de los datos en redis
+try:
+    data = handler_redis.set_cache_data(
+        hash_name=parametros.query_template['table'],
+        old_dataframe=None,
+        new_dataframe=None,
+        exp_time=parametros.exp_time_cache,
+        config=parametros.connection_data_source
+    )
+    # Verificar que existieran datos en cache
+    if data is None:
+        # #Peticion de la API
+        # url  = 'http://192.168.115.99:3333/getinvoices'
+        # response = requests.get(url)
+
+        # if response.status_code == 200:
+        #     invoices  = response.json()
+        # else:
+        #     print(response.status_code)
+
+        # data = pd.DataFrame(invoices)
+        # filter_cols = list(parameters['query_template']['columns'].values())
+        # data = data[filter_cols]
+
+        data = get_data(SQLDataSourceFactory(**parameters))
+
+        data = handler_redis.set_cache_data(
+            hash_name=parametros.query_template['table'],
+            old_dataframe=data,
+            new_dataframe=None,
+            exp_time=parametros.exp_time_cache,
+            config=parametros.connection_data_source
+        )
+except ValueError as error:
+    print("[ERROR] No se puede hacer un cache de la fuente de datos")
 
 # =================================================================
 #             Limpieza de datos
@@ -225,6 +272,38 @@ for item in items:
     create_table(SQLDataSourceFactory(**parameters))
 
     send_metrics = pd.DataFrame([metric_columns_pred])
+
+    set_data(SQLDataSourceFactory(**parameters), send_metrics)
+
+    # ===============================================================================================
+    #                            ORIGINAL DATA
+    # ===============================================================================================
+
+    data_filled.reset_index(inplace=True)
+    date_col = parameters['filter_data']['date_column']
+    data_col = parameters['filter_data']['predict_column']
+
+    # Filtrar data por tiempo
+    filter_date = data_filled[(data_filled[date_col] >= metric_columns_pred['init_date']) & (
+        data_filled[date_col] <= metric_columns_pred['end_date'])]
+    original = data_imputation.metrics_column(filter_date[data_col])
+    original['init_date'] = metric_columns_pred['init_date']
+    original['end_date'] = metric_columns_pred['end_date']
+    original['product'] = '/'.join(value_product)
+
+    fix_data_dict = {
+        'table': 'metric_data',
+        'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
+        'order': 'index',
+        'where': 'posicion > 1'
+    }
+
+    parameters['query_template_write'] = fix_data_dict
+    parameters['type_data_out'] = type_data_out
+
+    create_table(SQLDataSourceFactory(**parameters))
+
+    send_metrics = pd.DataFrame([original])
 
     set_data(SQLDataSourceFactory(**parameters), send_metrics)
 

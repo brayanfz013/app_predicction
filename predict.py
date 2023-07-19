@@ -133,9 +133,9 @@ column_field = list(data_frame_predicciones.columns)
 data_frame_predicciones.reset_index(inplace=True)
 data_frame_predicciones[parameters['filter_data']
                         ['predict_column']].clip(lower=0, inplace=True)
-#===============================================================================================
-#                                         Metricas 
-#===============================================================================================
+# ===============================================================================================
+#                                         Metricas
+# ===============================================================================================
 '''Esta parte tiene un ToDo importante: Tiene que ordenarse y optimizarce para se escalable
    De momento funciona de manera estatica para ciertas cosas sobre todo el tema de la escritura 
    en postgres, ademas de tener codigo copiado de funciones internas ya ordenadas
@@ -166,11 +166,13 @@ create_table(SQLDataSourceFactory(**parameters))
 set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
 
 print(data_frame_predicciones)
-#===============================================================================================
+# ===============================================================================================
 #                            METRICAS
-#===============================================================================================
-filter_columns = [column for column in parameters['filter_data'] if re.match(r'filter_\d+_column', column)]
-filter_feature = [column for column in parameters['filter_data'] if re.match(r'filter_\d+_feature', column)]
+# ===============================================================================================
+filter_columns = [column for column in parameters['filter_data']
+                  if re.match(r'filter_\d+_column', column)]
+filter_feature = [column for column in parameters['filter_data']
+                  if re.match(r'filter_\d+_feature', column)]
 
 value_product = []
 for i in filter_feature:
@@ -182,31 +184,64 @@ metric_columns_pred['init_date'] = data_frame_predicciones[fecha].min()
 metric_columns_pred['end_date'] = data_frame_predicciones[fecha].max()
 metric_columns_pred['product'] = '/'.join(value_product)
 
-type_data_out = {'Rango':'float',
- 'Varianza':'float',
- 'Desviacion_estandar':'float',
- 'Coeficiente_varianza':'float',
- 'Quantile Q1':'float',
- 'Quantile Q3':'float',
- 'InterQuantile':'float',
- 'Desviacion_media_absoluta':'float',
- 'init_date':'date',
- 'end_date':'date',
- 'product':'string'
- }
+type_data_out = {'Rango': 'float',
+                 'Varianza': 'float',
+                 'Desviacion_estandar': 'float',
+                 'Coeficiente_varianza': 'float',
+                 'Quantile Q1': 'float',
+                 'Quantile Q3': 'float',
+                 'InterQuantile': 'float',
+                 'Desviacion_media_absoluta': 'float',
+                 'init_date': 'date',
+                 'end_date': 'date',
+                 'product': 'string'
+                 }
 
 fix_data_dict = {
-'table': 'metric_predict',
-'columns': {str(index): key for index ,key in enumerate(type_data_out.keys())},
-'order': 'index',
-'where': 'posicion > 1'
+    'table': 'metric_predict',
+    'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
+    'order': 'index',
+    'where': 'posicion > 1'
 }
 
-parameters['query_template_write']  = fix_data_dict
+parameters['query_template_write'] = fix_data_dict
 parameters['type_data_out'] = type_data_out
 
 create_table(SQLDataSourceFactory(**parameters))
 
-send_metrics  = pd.DataFrame([metric_columns_pred])
+send_metrics = pd.DataFrame([metric_columns_pred])
+
+set_data(SQLDataSourceFactory(**parameters), send_metrics)
+
+
+# ===============================================================================================
+#                            ORIGINAL DATA
+# ===============================================================================================
+
+data_filled.reset_index(inplace=True)
+date_col = parameters['filter_data']['date_column']
+data_col = parameters['filter_data']['predict_column']
+
+# Filtrar data por tiempo
+filter_date = data_filled[(data_filled[date_col] >= metric_columns_pred['init_date']) & (
+    data_filled[date_col] <= metric_columns_pred['end_date'])]
+original = data_imputation.metrics_column(filter_date[data_col])
+original['init_date'] = metric_columns_pred['init_date']
+original['end_date'] = metric_columns_pred['end_date']
+original['product'] = '/'.join(value_product)
+
+fix_data_dict = {
+    'table': 'metric_data',
+    'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
+    'order': 'index',
+    'where': 'posicion > 1'
+}
+
+parameters['query_template_write'] = fix_data_dict
+parameters['type_data_out'] = type_data_out
+
+create_table(SQLDataSourceFactory(**parameters))
+
+send_metrics = pd.DataFrame([original])
 
 set_data(SQLDataSourceFactory(**parameters), send_metrics)
