@@ -111,8 +111,7 @@ imputation = MeanImputation(
 # Patron de diseno de seleecio=n de estrategia
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
-print("IMPUTACION DE DATOS")
-print(data_imputation.dataframe)
+
 
 
 MIN_DATA_VOLUME = 365

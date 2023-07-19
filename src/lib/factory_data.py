@@ -43,7 +43,7 @@ class SQLPostgres(DataSource):
         self.query_read = _file_path.joinpath(
             'src/data/querys/get_table.sql').as_posix()
         self.query_write = _file_path.joinpath(
-            'src/data/querys/insert_table.sql').as_posix()
+            'src/data/querys/insert_data.sql').as_posix()
         self.query_create = _file_path.joinpath(
             'src/data/querys/new_table.sql').as_posix()
 
@@ -103,15 +103,13 @@ class SQLPostgres(DataSource):
         column_declarations = []
 
         # Obtén los nombres de las columnas y los tipos de datos del yaml.
-        column_names = self.parametro.query_template_write['columns']
+        # column_names = self.parametro.query_template_write['columns']
         data_types = self.parametro.type_data_out
 
+
         # Ahora, crea las declaraciones para las columnas usando los nombres y los tipos de datos.
-        for i in range(len(column_names)):
-            column_name = column_names[str(i)]
-            data_type = data_types['column' + str(i)]
-            postgrest_type = conver_postgrest[data_type]
-            column_declarations.append(f'"{column_name}" {postgrest_type}')
+        for key, val in data_types.items():
+            column_declarations.append(f'"{key}" {conver_postgrest[val]}')
 
         fix_data_dict = self.parametro.query_template_write.copy()
         fix_data_dict['columns'] = ",\n".join(column_declarations)

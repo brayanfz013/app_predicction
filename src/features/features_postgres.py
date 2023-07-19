@@ -332,11 +332,13 @@ class HandleDBpsql(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
+            print(params)
             # connect to the PostgreSQL database
             conn = psycopg2.connect(**params)
+            print(conn)
             # create a new cursor
             cur = conn.cursor()
-
+    
             for data_row in dataframe.values:
                 # execute the INSERT statement
                 cur.execute(query, (data_row))
@@ -349,6 +351,7 @@ class HandleDBpsql(object):
         except (Exception, psycopg2.DatabaseError) as error_insert_data_frame:
             self.log.error('Fallo de insercion de la query')
             self.log.error(error_insert_data_frame)
+            print(error_insert_data_frame)
         finally:
             if conn is not None:
                 conn.close()

@@ -392,6 +392,27 @@ class PrepareData(ColumnsNameHandler):
         '''
         return data.split_after(pd.Timestamp(time_stamp))
 
+    def metrics_column(self,dataframe:pd.DataFrame):
+        '''metrics_column Calcular metricas en un columna
+
+        Args:
+            dataframe (pd.DataFrame): Columan de un dataframe sobre la cual se quieren extraer
+            los valores seleccionados
+
+        Returns:
+            _type_: Diccionario con las metricas extraidas
+        '''
+
+        return {'Rango': round( dataframe.max() - dataframe.min(),3),
+            'Varianza' : round( dataframe.var(),3),
+            'Desviacion_estandar': round( dataframe.std(),3),
+            'Coeficiente_varianza': round( dataframe.std()/dataframe.mean(),3),#Resultaod en porcentaje)
+            'Quantile Q1': round( dataframe.quantile(0.25),3),
+            'Quantile Q3': round( dataframe.quantile(0.75),3),
+            'InterQuantile' : round( dataframe.quantile(0.75)-dataframe.quantile(0.25),3),
+            'Desviacion_media_absoluta': round((dataframe-dataframe.mean()).abs().mean(),3)
+            }
+
 
     def display_forecast(self,pred_series, ts_transformed, forecast_type:str, start_date:str=None):
         '''display_forecast Metodo para hacer graficas y predicciones sobre datos a partir de 

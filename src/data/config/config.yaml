@@ -43,7 +43,7 @@ type_data:
   column3: string
 
 query_template_write:
-  table: ModeloPredicciones
+  table: modelopredicciones
   columns: 
     "0": Fecha
     "1": predicion
@@ -54,10 +54,10 @@ query_template_write:
   where: posicion > 1
 
 type_data_out:
-  column0: date
-  column1: float
+  Fecha: date
+  predicion: float
   # column2: float
-  column2: string
+  ITEMNMBR: string
   # column3: string
 
 filter_data:

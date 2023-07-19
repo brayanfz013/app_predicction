@@ -1,23 +1,28 @@
 import os
+import re
 import yaml
 import numpy as np
 import pandas as pd
 from scipy import stats
 from pathlib import Path
 from src.lib.class_load import LoadFiles
-from src.features.features_fix_data import PrepareData
+# from src.features.features_fix_data import PrepareData
 from src.lib.factory_data import SQLDataSourceFactory, get_data, create_table, set_data
 from src.lib.factory_models import ModelContext
 from src.lib.factory_prepare_data import (DataCleaner, DataModel,
                                           MeanImputation, OutliersToIQRMean)
 from src.models.DP_model import Modelos
+from src.features.features_postgres import HandleDBpsql
+
 
 path_folder = os.path.dirname(__file__)
 folder_model = Path(path_folder).joinpath('scr/data/save_models')
 
+
 handler_load = LoadFiles()
 ruta_actual = os.path.dirname(__file__)
 
+data_source = HandleDBpsql()
 # =================================================================
 #             Cargar datos de la fuente de datos
 # =================================================================
@@ -76,6 +81,7 @@ data_for_model = DataModel(**parameters)
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
 
+
 # Cambio de estrategia para remover outliners
 cleaner.strategy = outliners
 data_filled = cleaner.clean(data_imputation.dataframe)
@@ -124,43 +130,28 @@ pred_scale = scaler.inverse_transform(pred_series)
 
 data_frame_predicciones = pred_scale.pd_dataframe()
 column_field = list(data_frame_predicciones.columns)
-# data_frame_predicciones['Varianza'] = data_frame_predicciones[column_field].pct_change()*100
 data_frame_predicciones.reset_index(inplace=True)
 data_frame_predicciones[parameters['filter_data']
                         ['predict_column']].clip(lower=0, inplace=True)
+#===============================================================================================
+#                                         Metricas 
+#===============================================================================================
+'''Esta parte tiene un ToDo importante: Tiene que ordenarse y optimizarce para se escalable
+   De momento funciona de manera estatica para ciertas cosas sobre todo el tema de la escritura 
+   en postgres, ademas de tener codigo copiado de funciones internas ya ordenadas
+'''
 
-#Rango de valores Unidades
-range_ = data_frame_predicciones[parameters['filter_data']['predict_column']].max(
-) - data_frame_predicciones[parameters['filter_data']['predict_column']].min()
-
-#Varianza de los datos Unidades
-variance = data_frame_predicciones[parameters['filter_data']
-                                   ['predict_column']].var()
-#Desvicion estandasr Unidades
-std_dev = data_frame_predicciones[parameters['filter_data']
-                                  ['predict_column']].std()
-#Coeficiente de variacion %
-cv = std_dev / \
-    data_frame_predicciones[parameters['filter_data']['predict_column']].mean()
-
-#Cuantiles Unidades
-q1 = data_frame_predicciones[parameters['filter_data']
-                             ['predict_column']].quantile(0.25)
-q3 = data_frame_predicciones[parameters['filter_data']
-                             ['predict_column']].quantile(0.75)
-iqr = q3 - q1
-
-#Desviacion media absoluta Unidades
-mad = data_frame_predicciones[parameters['filter_data']
-                              ['predict_column']].mad()
-
-
-filter = []
+# Cuantificar metricas de la columan de predicciones
+metric_columns_pred = data_imputation.metrics_column(
+    data_frame_predicciones[parameters['filter_data']['predict_column']]
+)
+# Seleccion de columans para generar el dataframe de salida para la base de datos
+filter_temp = []
 for filter_list in parameters['filter_data']:
     if 'feature' in filter_list:
-        filter.append(parameters['filter_data'][filter_list])
+        filter_temp.append(parameters['filter_data'][filter_list])
 
-for adding_data in filter:
+for adding_data in filter_temp:
     data_frame_predicciones[str(adding_data)] = adding_data
 
 new_names = list(parameters['query_template_write']['columns'].values())
@@ -173,3 +164,49 @@ create_table(SQLDataSourceFactory(**parameters))
 
 # Ingresar los datos a la base de datos
 set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
+
+print(data_frame_predicciones)
+#===============================================================================================
+#                            METRICAS
+#===============================================================================================
+filter_columns = [column for column in parameters['filter_data'] if re.match(r'filter_\d+_column', column)]
+filter_feature = [column for column in parameters['filter_data'] if re.match(r'filter_\d+_feature', column)]
+
+value_product = []
+for i in filter_feature:
+    value_product.append(parameters['filter_data'][i])
+fecha = parameters['query_template_write']['columns']['0']
+min_date = data_frame_predicciones[fecha].min()
+max_data = data_frame_predicciones[fecha].max()
+metric_columns_pred['init_date'] = data_frame_predicciones[fecha].min()
+metric_columns_pred['end_date'] = data_frame_predicciones[fecha].max()
+metric_columns_pred['product'] = '/'.join(value_product)
+
+type_data_out = {'Rango':'float',
+ 'Varianza':'float',
+ 'Desviacion_estandar':'float',
+ 'Coeficiente_varianza':'float',
+ 'Quantile Q1':'float',
+ 'Quantile Q3':'float',
+ 'InterQuantile':'float',
+ 'Desviacion_media_absoluta':'float',
+ 'init_date':'date',
+ 'end_date':'date',
+ 'product':'string'
+ }
+
+fix_data_dict = {
+'table': 'metric_predict',
+'columns': {str(index): key for index ,key in enumerate(type_data_out.keys())},
+'order': 'index',
+'where': 'posicion > 1'
+}
+
+parameters['query_template_write']  = fix_data_dict
+parameters['type_data_out'] = type_data_out
+
+create_table(SQLDataSourceFactory(**parameters))
+
+send_metrics  = pd.DataFrame([metric_columns_pred])
+
+set_data(SQLDataSourceFactory(**parameters), send_metrics)

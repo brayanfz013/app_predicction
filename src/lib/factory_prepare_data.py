@@ -68,8 +68,6 @@ class OutliersToIQRMean(DataCleaningStrategy):
             de outliners
         '''    
         self.parameters = parameters
-        # handle_loader = LoadFiles()
-        # self.parameters_filter = handle_loader.json_to_dict(self.parameters["filter_columns"])[0]
         self.parameters_filter = parameters['filter_data']
         
     def clean(self, data):
