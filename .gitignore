@@ -22,7 +22,7 @@ downloads/
 eggs/
 .eggs/
 lib64/
-darts_logs/
+darts_logs/*
 parts/
 sdist/
 var/
@@ -86,7 +86,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-notebooks/
+notebooks/*
 
 # IPython
 profile_default/
