@@ -42,11 +42,9 @@ query_template_write:
   columns:
     '0': Fecha
     '1': predicion
-    '2': varianza
-    '3': ITEMNMBR
-    '4': CUSTNMBR
+    '2': ITEMNMBR
   order: index
-  table: ModeloPredicciones
+  table: modelopredicciones
   where: posicion > 1
 scale: true
 type_data:
@@ -55,8 +53,6 @@ type_data:
   column2: integer
   column3: string
 type_data_out:
-  column0: date
-  column1: float
-  column2: float
-  column3: string
-  column4: string
+  Fecha: date
+  ITEMNMBR: string
+  predicion: float

@@ -1,1 +1,1 @@
-SELECT columns FROM table 
+SELECT columns FROM table WHERE where ORDER by order asc

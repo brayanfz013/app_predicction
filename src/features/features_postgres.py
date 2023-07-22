@@ -171,14 +171,13 @@ class HandleDBpsql(object):
         '''fix_dict_query Funcion para prepara los parametros del diccionario busqueda 
         para la funcion prepare_query_replace_value, demanrea que se pueda hacer querys
         '''
-
         data_replace = {
-            'table': tabla,
-            'columns': ', '.join(['"' + columna + '"' for columna in columnas]),
-            '_insert': ', '.join(['%s' for _ in columnas]),
-            'order': order,
-            'where': where
-        }
+                'table': tabla,
+                'columns': ', '.join(['"' + columna + '"' for columna in columnas]),
+                '_insert': ', '.join(['%s' for _ in columnas]),
+                'order': order,
+                'where': where
+            }
         return data_replace
 
     def query_data(self, connection, sql):
@@ -221,6 +220,12 @@ class HandleDBpsql(object):
                 sql_statements = sql_statements.replace('\t', ' ')
 
             for field, replace in data_replace.items():
+                if replace is None:
+                    if field =='order':
+                        sql_statements = sql_statements.replace('by', '')
+                        sql_statements = sql_statements.replace('asc', '')
+                    sql_statements = sql_statements.replace(field.upper(), '')
+                    sql_statements = sql_statements.replace(field, '')
                 sql_statements = sql_statements.replace(field, str(replace))
             return sql_statements
 

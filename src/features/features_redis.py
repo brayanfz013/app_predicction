@@ -313,7 +313,8 @@ class HandleRedis(object):
             # Verficar si existe nueva informacion por rellenar
             if new_dataframe is not None and isinstance(old_df,pd.DataFrame):
                 # Combina el DataFrame antiguo con el nuevo
-                update_frame = old_df.append(new_dataframe, ignore_index=True).drop_duplicates()
+                # update_frame = old_df.append(new_dataframe, ignore_index=True).drop_duplicates()
+                update_frame = pd.concat([old_df,new_dataframe])
 
                 # Serializa el DataFrame a bytes usando pickle
                 # Guarda los bytes en Redis
@@ -323,13 +324,13 @@ class HandleRedis(object):
             else:
                 update_frame = None
 
+            return update_frame
+        
                 # self.log.debug("Extracion de datos completa")
         except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)
 
-        return update_frame
-    
     def search_public_ip(self):
         '''Funcion para buscar la ip publica en una conexion'''
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as search:

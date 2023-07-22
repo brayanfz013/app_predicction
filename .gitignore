@@ -13,6 +13,7 @@ __pycache__/
 *.pkl
 
 # Distribution / packaging
+/src/data/save_models/*
 .Python
 build/
 develop-eggs/
