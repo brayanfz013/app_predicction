@@ -45,16 +45,16 @@ type_data:
 query_template_write:
   table: modelopredicciones
   columns: 
-    "0": Fecha
+    "0": fecha
     "1": predicion
-    # "2": varianza
+    # "2": real
     "2": ITEMNMBR
     # "3": CUSTNMBR
   order: 
   where: 
 
 type_data_out:
-  Fecha: date
+  fecha: date
   predicion: float
   # column2: float
   ITEMNMBR: string
@@ -72,5 +72,5 @@ filter_data:
 scale: True
 first_train: True
 optimize: False
-forecast_val: 15
+forecast_val: 4
 exp_time_cache: 8600000

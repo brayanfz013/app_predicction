@@ -74,6 +74,7 @@ class ModelHyperparameters:
         # Separacion de datos para entrenamiento
         percent_split = int(temp_df.shape[0] * split/100)
         self.split_value = temp_df.iloc[percent_split].values[0]
+        self.last_value = temp_df.iloc[-1].values[0]
         self.train, self.val = self.data.split_after(
             pd.Timestamp(self.split_value.strftime('%Y%m%d')))
 
@@ -128,7 +129,9 @@ class ModelHyperparameters:
         MAX_SAMPLES_PER_TS = 10  # parametro por optimizar
         model_prepare.fit(
             series=self.train,
+            past_covariates = self.train,
             val_series=self.val,
+            val_past_covariates = self.val,
             # max_samples_per_ts=MAX_SAMPLES_PER_TS,
             # num_loader_workers=num_workers,
             verbose=True

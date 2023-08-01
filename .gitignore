@@ -25,6 +25,7 @@ eggs/
 lib64/
 darts_logs/*
 darts_logs/
+notebooks/
 parts/
 sdist/
 var/

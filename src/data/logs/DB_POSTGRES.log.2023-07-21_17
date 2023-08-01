@@ -1,0 +1,13 @@
+2023-07-21 17:48:45,514 - POSTGRES - ERROR - features_postgres : 463 - column "creatddt" does not exist
+LINE 1: ...voices WHERE  "CREATDDT" > '2022-12-22'  ORDER by CREATDDT a...
+                                                             ^
+
+2023-07-21 17:50:51,433 - POSTGRES - ERROR - features_postgres : 463 - syntax error at or near ")"
+LINE 1: ...ERE  "CREATDDT" > '2022-12-22'  ORDER by ('"CREATDDT"',) asc
+                                                                  ^
+
+2023-07-21 17:54:56,485 - POSTGRES - ERROR - features_postgres : 463 - operator does not exist: date > integer
+LINE 1: ..."CUSTNMBR" FROM custom_invoices WHERE  "CREATDDT" > 2022-12-...
+                                                             ^
+HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
+

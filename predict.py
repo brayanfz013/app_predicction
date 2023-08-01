@@ -184,14 +184,14 @@ metric_columns_pred['init_date'] = data_frame_predicciones[fecha].min()
 metric_columns_pred['end_date'] = data_frame_predicciones[fecha].max()
 metric_columns_pred['product'] = '/'.join(value_product)
 
-type_data_out = {'Rango': 'float',
-                 'Varianza': 'float',
-                 'Desviacion_estandar': 'float',
-                 'Coeficiente_varianza': 'float',
-                 'Quantile Q1': 'float',
-                 'Quantile Q3': 'float',
-                 'InterQuantile': 'float',
-                 'Desviacion_media_absoluta': 'float',
+type_data_out = {'rango': 'float',
+                 'varianza': 'float',
+                 'desviacion_estandar': 'float',
+                 'coeficiente_varianza': 'float',
+                 'quantile_q1': 'float',
+                 'quantile_q3': 'float',
+                 'interquantile': 'float',
+                 'desviacion_media_absoluta': 'float',
                  'init_date': 'date',
                  'end_date': 'date',
                  'product': 'string'
@@ -208,9 +208,7 @@ parameters['query_template_write'] = fix_data_dict
 parameters['type_data_out'] = type_data_out
 
 create_table(SQLDataSourceFactory(**parameters))
-
 send_metrics = pd.DataFrame([metric_columns_pred])
-
 set_data(SQLDataSourceFactory(**parameters), send_metrics)
 
 

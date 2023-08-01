@@ -86,8 +86,9 @@ class ModelContext(Model):
         # Parter los datos en funcion de la ultima fecha de prediccion
         past, _ = data.split_after(
             split_point=pd.Timestamp(last_train['last_date_pred'])
-        )
-        pred_series = model.predict(series=past, n=horizont)
+            )
+        
+        pred_series = model.predict(series=past, n=horizont,past_covariates = past)
 
         # Toma la ultima posicion para hacer predicciones
         filter_data = pred_series.pd_dataframe().reset_index(
@@ -117,7 +118,9 @@ class ModelContext(Model):
         '''Guardar modelo en ruta'''
 
         last_train = {
-            'last_date_pred': self.tunne_parameter.split_value.strftime('%Y-%m-%d')
+            'last_date_pred': self.tunne_parameter.last_value.strftime('%Y-%m-%d')
+            # La linea inferior se usa cuando se quiere hacer predicciones sobre data anterior
+            # 'last_date_pred': self.tunne_parameter.split_value.strftime('%Y-%m-%d')
         }
 
         # Guardar la ultima prediccion
