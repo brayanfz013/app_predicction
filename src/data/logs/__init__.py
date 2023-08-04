@@ -3,7 +3,7 @@
 import os 
 LOGS_DIR = os.path.dirname(__file__)
 
-FILE_LOGS = 'DB_POSTGRES.log'
+FILE_LOGS = 'logger_p_data.log'
 path_logs = os.path.join(LOGS_DIR,FILE_LOGS)
 
 if not os.path.isfile(path_logs):

@@ -28,7 +28,7 @@ from src.lib.factory_prepare_data import (DataCleaner, DataModel,
 from src.models.DP_model import Modelos
 from src.features.features_postgres import HandleDBpsql
 from src.models.args_data_model import Parameters
-
+from pprint import pprint
 path_folder = os.path.dirname(__file__)
 folder_model = Path(path_folder).joinpath('scr/data/save_models')
 
@@ -124,17 +124,25 @@ imputation = MeanImputation(
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
 
-MIN_DATA_VOLUME = 365
-criterial = data_imputation.dataframe[parameters['filter_data']
-                                      ['filter_1_column']].value_counts() > MIN_DATA_VOLUME
-items = data_imputation.dataframe[parameters['filter_data']['filter_1_column']].value_counts()[
-    criterial].index.to_list()
+# MIN_DATA_VOLUME = 365
+# criterial = data_imputation.dataframe[parameters['filter_data']
+#                                       ['filter_1_column']].value_counts() > MIN_DATA_VOLUME
+# items = data_imputation.dataframe[parameters['filter_data']['filter_1_column']].value_counts()[
+#     criterial].index.to_list()
+
+MODEL_FOLDERS = Path(ruta_actual).joinpath('src/data/save_models').as_posix()
+items = []
+for folder in  Path(MODEL_FOLDERS).iterdir() :
+    if folder.is_dir() and folder.name != '__pycache__' :
+        items.append(folder.name)
 
 for item in items:
-
+    CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
+    with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
+        parameters = yaml.safe_load(file)
     try:
         parameters['filter_data']['filter_1_feature'] = item
-
+        
         # =================================================================
         # Remocion de outliners y seleccion de columnas
         outliners = OutliersToIQRMean(**parameters)
@@ -223,13 +231,13 @@ for item in items:
 
         parameters['type_data_out'] = dict((k.lower(), v.lower()) for k,v in parameters['type_data_out'].items())
         parameters['query_template_write']['columns'] = dict((k.lower(), v.lower()) for k,v in parameters['query_template_write']['columns'].items())
+        parameters['query_template_write']['columns']['2'] = 'code'
+        parameters['type_data_out'] = {'fecha': 'date', 'predicion': 'float', 'code': 'string'}
         # Crear tabla para guardas la informacion
         create_table(SQLDataSourceFactory(**parameters))
 
         # Ingresar los datos a la base de datos
         set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
-
-        # print(data_frame_predicciones)
 
         # ===============================================================================================
         #                             DATOS REALES SEMANALES
@@ -246,9 +254,10 @@ for item in items:
 
         parameters['query_template_write']['table'] = 'modeloreal'
         parameters['query_template_write']['columns']['1'] = 'real'
+        parameters['query_template_write']['columns']['2'] = 'code'
         parameters['type_data_out'] = {'fecha': 'date',
                                         'real': 'float',
-                                        'itemnmbr': 'string'}
+                                        'code': 'string'}
 
         # Crear tabla para guardas la informacion
         create_table(SQLDataSourceFactory(**parameters))
@@ -280,7 +289,7 @@ for item in items:
                         'coeficiente_varianza': 'float',
                         'quantile_q1': 'float',
                         'quantile_q3': 'float',
-                        'interQuantile': 'float',
+                        'interquantile': 'float',
                         'desviacion_media_absoluta': 'float',
                         'init_date': 'date',
                         'end_date': 'date',
@@ -333,186 +342,7 @@ for item in items:
         create_table(SQLDataSourceFactory(**parameters))
         send_metrics = pd.DataFrame([original])
         set_data(SQLDataSourceFactory(**parameters), send_metrics)
-        break
+      
     except (ValueError,Exception) as error_predict:
         print("Error en las prediccioens")
         print(error_predict)
-
-
-
-        # parameters['filter_data']['filter_1_feature'] = item
-
-        # # =================================================================
-        # # Remocion de outliners y seleccion de columnas
-        # outliners = OutliersToIQRMean(**parameters)
-
-        # # Cambio de estrategia para remover outliners
-        # cleaner.strategy = outliners
-        # data_filled = cleaner.clean(data_imputation.dataframe)
-
-        # # =================================================================
-        # # Preparacion de los dato para el modelos escalizado y filtrado
-        # data_for_model = DataModel(**parameters)
-
-        # # Cambio de estrategia para preparar los datos para modelo
-        # cleaner.strategy = data_for_model
-        # data_ready, scaler_data = cleaner.clean(data_filled)
-        # # =================================================================
-        # if not parameters['scale']:
-        #     data_ready = scaler_data.inverse_transform(data_ready)
-
-        # # =================================================================
-        # #            Preparacion de modelo
-        # # =================================================================
-
-        # MODE_USED = 'NBeatsModel'
-        # modelo = ModelContext(model_name=MODE_USED,
-        #                     data=data_ready,
-        #                     split=83,
-        #                     **parameters)
-
-        # # Rutas de los parametros para predicciones
-        # model_train = modelo.save_path.joinpath(
-        #     'model').with_suffix('.pt').as_posix()
-        # scaler = modelo.save_path.joinpath('scaler').with_suffix('.pkl').as_posix()
-        # last_pred = modelo.save_path.joinpath(
-        #     'previus').with_suffix('.json').as_posix()
-        # parameters_model = modelo.save_path.joinpath(
-        #     'parametros').with_suffix('.json').as_posix()
-
-        # # Cargar escaler
-        # scaler = handler_load.load_scaler(scaler)
-
-        # # Cargar modelo para hacer las predicciones
-        # MODE_USED = 'NBeatsModel'
-        # IntModel = Modelos[MODE_USED]
-        # model_trained = IntModel.load(model_train)
-
-        # pred_series = modelo.predict(
-        #     model=model_trained,
-        #     data=modelo.tunne_parameter.data,
-        #     horizont=parameters['forecast_val']
-        # )
-
-        # # Invertir predicciones escaler de entrenamietno
-        # pred_scale = scaler.inverse_transform(pred_series)
-
-        # # Invertir Predicciones escaler de transformacion de los datos
-        # # pred_scale = scaler_data.inverse_transform(pred_series)
-
-        # data_frame_predicciones = pred_scale.pd_dataframe()
-        # column_field = list(data_frame_predicciones.columns)
-        # data_frame_predicciones.reset_index(inplace=True)
-        # data_frame_predicciones[parameters['filter_data']
-        #                         ['predict_column']].clip(lower=0, inplace=True)
-        # # ===============================================================================================
-        # #                                         Metricas
-        # # ===============================================================================================
-        # # Esta parte tiene un ToDo importante: Tiene que ordenarse y optimizarce para se escalable
-        # # De momento funciona de manera estatica para ciertas cosas sobre todo el tema de la escritura 
-        # # en postgres, ademas de tener codigo copiado de funciones internas ya ordenadas
-        
-
-        # # Cuantificar metricas de la columan de predicciones
-        # metric_columns_pred = data_imputation.metrics_column(
-        #     data_frame_predicciones[parameters['filter_data']['predict_column']]
-        # )
-        # # Seleccion de columans para generar el dataframe de salida para la base de datos
-        # filter_temp = []
-        # for filter_list in parameters['filter_data']:
-        #     if 'feature' in filter_list:
-        #         filter_temp.append(parameters['filter_data'][filter_list])
-
-        # for adding_data in filter_temp:
-        #     data_frame_predicciones[str(adding_data)] = adding_data
-
-        # new_names = list(parameters['query_template_write']['columns'].values())
-        # rename = {x: y for x, y in zip(
-        #     list(data_frame_predicciones.columns), new_names)}
-        # data_frame_predicciones.rename(columns=rename, inplace=True)
-
-        # # Crear tabla para guardas la informacion
-        # create_table(SQLDataSourceFactory(**parameters))
-
-        # # Ingresar los datos a la base de datos
-        # set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
-
-        # print(data_frame_predicciones)
-        # # ===============================================================================================
-        # #                            METRICAS
-        # # ===============================================================================================
-        # filter_columns = [column for column in parameters['filter_data'] if re.match(
-        #     r'filter_\d+_column', column)]
-        # filter_feature = [column for column in parameters['filter_data'] if re.match(
-        #     r'filter_\d+_feature', column)]
-
-        # value_product = []
-        # for i in filter_feature:
-        #     value_product.append(parameters['filter_data'][i])
-        # fecha = parameters['query_template_write']['columns']['0']
-        # min_date = data_frame_predicciones[fecha].min()
-        # max_data = data_frame_predicciones[fecha].max()
-        # metric_columns_pred['init_date'] = data_frame_predicciones[fecha].min()
-        # metric_columns_pred['end_date'] = data_frame_predicciones[fecha].max()
-        # metric_columns_pred['product'] = '/'.join(value_product)
-
-        # type_data_out = {'rango': 'float',
-        #                 'varianza': 'float',
-        #                 'desviacion_estandar': 'float',
-        #                 'coeficiente_varianza': 'float',
-        #                 'quantile_q1': 'float',
-        #                 'quantile_q3': 'float',
-        #                 'interQuantile': 'float',
-        #                 'desviacion_media_absoluta': 'float',
-        #                 'init_date': 'date',
-        #                 'end_date': 'date',
-        #                 'product': 'string'
-        #                 }
-
-        # fix_data_dict = {
-        #     'table': 'metric_predict',
-        #     'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
-        #     'order': 'index',
-        #     'where': 'posicion > 1'
-        # }
-
-        # parameters['query_template_write'] = fix_data_dict
-        # parameters['type_data_out'] = type_data_out
-
-        # create_table(SQLDataSourceFactory(**parameters))
-
-        # send_metrics = pd.DataFrame([metric_columns_pred])
-
-        # set_data(SQLDataSourceFactory(**parameters), send_metrics)
-
-        # # ===============================================================================================
-        # #                            ORIGINAL DATA
-        # # ===============================================================================================
-
-        # data_filled.reset_index(inplace=True)
-        # date_col = parameters['filter_data']['date_column']
-        # data_col = parameters['filter_data']['predict_column']
-
-        # # Filtrar data por tiempo
-        # filter_date = data_filled[(data_filled[date_col] >= metric_columns_pred['init_date']) & (
-        #     data_filled[date_col] <= metric_columns_pred['end_date'])]
-        # original = data_imputation.metrics_column(filter_date[data_col])
-        # original['init_date'] = metric_columns_pred['init_date']
-        # original['end_date'] = metric_columns_pred['end_date']
-        # original['product'] = '/'.join(value_product)
-
-        # fix_data_dict = {
-        #     'table': 'metric_data',
-        #     'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
-        #     'order': 'index',
-        #     'where': 'posicion > 1'
-        # }
-
-        # parameters['query_template_write'] = fix_data_dict
-        # parameters['type_data_out'] = type_data_out
-
-        # create_table(SQLDataSourceFactory(**parameters))
-
-        # send_metrics = pd.DataFrame([original])
-
-        # set_data(SQLDataSourceFactory(**parameters), send_metrics)

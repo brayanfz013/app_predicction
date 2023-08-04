@@ -1,0 +1,6 @@
+2023-08-03 17:11:30,017 - __main__ - DEBUG - run_train : 54 - Inciando secuencia de entrenamiento
+2023-08-03 17:12:01,991 - __main__ - DEBUG - run_train : 47 - Inciando secuencia de entrenamiento
+2023-08-03 17:12:01,996 - __main__ - DEBUG - run_train : 59 - Archivo de configuraciones cargado
+2023-08-03 17:12:01,997 - __main__ - DEBUG - run_train : 64 - verficando si existe data cache
+2023-08-03 17:12:02,645 - __main__ - DEBUG - run_train : 74 - Existe data en cache
+2023-08-03 17:12:02,645 - __main__ - DEBUG - run_train : 83 - Realizando peticion a la fuente de datos

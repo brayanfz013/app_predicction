@@ -1,3 +1,0 @@
-2023-07-19 13:57:39,747 - POSTGRES - ERROR - features_postgres : 277 - relation "modelopredicciones" already exists
-
-2023-07-19 13:57:39,749 - POSTGRES - DEBUG - features_postgres : 281 - Finalizacion query

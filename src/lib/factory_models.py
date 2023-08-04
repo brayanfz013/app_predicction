@@ -88,7 +88,7 @@ class ModelContext(Model):
             split_point=pd.Timestamp(last_train['last_date_pred'])
             )
         
-        pred_series = model.predict(series=past, n=horizont,past_covariates = past)
+        pred_series = model.predict(series=past, n=horizont,past_covariates = data)
 
         # Toma la ultima posicion para hacer predicciones
         filter_data = pred_series.pd_dataframe().reset_index(
