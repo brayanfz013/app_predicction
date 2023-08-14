@@ -33,12 +33,10 @@ handler_load = LoadFiles()
 handler_redis = HandleRedis()
 ruta_actual = os.path.dirname(__file__)
 
+# Configura un logger personalizado en lugar de usar el logger raíz
 logfile=ruta_actual+'/src/data/config/logging.conf'
 logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
-# Configura un logger personalizado en lugar de usar el logger raíz
 logger = logging.getLogger('train')
-logger.setLevel(logging.DEBUG)
-
 logger.debug('Inciando secuencia de entrenamiento')
 
 # =================================================================
@@ -55,13 +53,17 @@ parametros = Parameters(**parameters)
 # Interacion para hacer un cache de los datos en redis
 try:
     logger.debug('verficando si existe data cache')
-    data = handler_redis.set_cache_data(
+    # data = handler_redis.set_cache_data(
+    #     hash_name=parametros.query_template['table'],
+    #     old_dataframe=None,
+    #     new_dataframe=None,
+    #     exp_time=parametros.exp_time_cache,
+    #     config=parametros.connection_data_source
+    # )
+    data = handler_redis.get_cache_data(
         hash_name=parametros.query_template['table'],
-        old_dataframe=None,
-        new_dataframe=None,
-        exp_time=parametros.exp_time_cache,
         config=parametros.connection_data_source
-    )
+        )
     # Condicional para actualizar datos en caso de existan datos en redis
     if data is not None:
         logger.debug('Existe data en cache')
@@ -86,6 +88,8 @@ try:
         # new = pd.DataFrame(invoices)
         # filter_cols = list(parameters['query_template']['columns'].values())
         # new = new[filter_cols]
+        
+        #Extraccion de la nueva data para actualizar
         new = get_data(SQLDataSourceFactory(**parameters))
         logger.debug('Actualizando cache en redis')
         data = handler_redis.set_cache_data(

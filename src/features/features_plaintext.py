@@ -40,7 +40,7 @@ class HandlePlainText:
 
         # Constructor que permite inicializar los parametros
         logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
-        self.log = logging.getLogger('POSTGRES')
+        self.log = logging.getLogger(__file__)
 
         self.log.debug("Instancia libreria")
 

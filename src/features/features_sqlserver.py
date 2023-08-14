@@ -45,7 +45,7 @@ class HandleDBsqlserver(object):
 
         # Constructor que permite inicializar los parametros
         logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
-        self.log = logging.getLogger('SQLSERVER')
+        self.log = logging.getLogger(__file__)
 
     def file_ini_(self, filename: str = 'database', section: str = 'sqlserver'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 

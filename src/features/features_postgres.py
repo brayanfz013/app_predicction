@@ -31,6 +31,7 @@ except ImportError as error:
         sys.path.insert(0, i)
     from data.logs import LOGS_DIR
 
+
 class HandleDBpsql(object):
     """
     Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy    
@@ -43,8 +44,7 @@ class HandleDBpsql(object):
 
         # Constructor que permite inicializar los parametros
         logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
-        self.log = logging.getLogger('POSTGRES')
-
+        self.log = logging.getLogger('datasource')
 
     def file_ini_(self, filename: str = 'database', section: str = 'postgresql'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
@@ -98,7 +98,7 @@ class HandleDBpsql(object):
 
         return load_yaml['connection_data_source'][section]
 
-    def get_config_file(self, filename:dict | str = 'database', section: str = 'postgresql'):
+    def get_config_file(self, filename: dict | str = 'database', section: str = 'postgresql'):
         """
         Lee el archivo de configuracion con los parametros a la base de datos
         se tiene que seleccion el motor de base de datos.
@@ -107,7 +107,7 @@ class HandleDBpsql(object):
         de conexion 
 
         """
-        if isinstance(filename,str):
+        if isinstance(filename, str):
             if Path(filename).suffix == '.ini':
                 parameters = self.file_ini_(filename=filename, section=section)
 
@@ -117,7 +117,7 @@ class HandleDBpsql(object):
                 raise ValueError(
                     f"Archivo no válido: {filename}. Sólo se permiten archivos .ini o .yaml.")
 
-        elif isinstance(filename,dict):
+        elif isinstance(filename, dict):
             parameters = filename[section]
 
         return parameters
@@ -154,7 +154,6 @@ class HandleDBpsql(object):
                 conn.close()
                 print('Database connection closed.')
 
-
     def read_parameters_query(self, file_parametro: str):
         '''Funcion para leer un json y convertirlo en un diccionario
         para ser usado posteriormente en el metodo fix_dict_query'''
@@ -165,19 +164,18 @@ class HandleDBpsql(object):
         data['columns'] = list(data['columns'].values())
 
         return data
-    
-   
+
     def fix_dict_query(self, tabla: str, columnas: list, order: str, where: str):
         '''fix_dict_query Funcion para prepara los parametros del diccionario busqueda 
         para la funcion prepare_query_replace_value, demanrea que se pueda hacer querys
         '''
         data_replace = {
-                'table': tabla,
-                'columns': ', '.join(['"' + columna + '"' for columna in columnas]),
-                '_insert': ', '.join(['%s' for _ in columnas]),
-                'order': order,
-                'where': where
-            }
+            'table': tabla,
+            'columns': ', '.join(['"' + columna + '"' for columna in columnas]),
+            '_insert': ', '.join(['%s' for _ in columnas]),
+            'order': order,
+            'where': where
+        }
         return data_replace
 
     def query_data(self, connection, sql):
@@ -221,7 +219,7 @@ class HandleDBpsql(object):
 
             for field, replace in data_replace.items():
                 if replace is None:
-                    if field =='order':
+                    if field == 'order':
                         sql_statements = sql_statements.replace('by', '')
                         sql_statements = sql_statements.replace('asc', '')
                     sql_statements = sql_statements.replace(field.upper(), '')
@@ -305,7 +303,7 @@ class HandleDBpsql(object):
             cur = conn.cursor()
 
             data_to_send = pd.read_csv(data_path)
-        
+
             for data_row in data_to_send.values:
                 # execute the INSERT statement
                 cur.execute(query, (data_row))
@@ -336,13 +334,13 @@ class HandleDBpsql(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
-    
+
             # connect to the PostgreSQL database
             conn = psycopg2.connect(**params)
-    
+
             # create a new cursor
             cur = conn.cursor()
-    
+
             for data_row in dataframe.values:
                 # execute the INSERT statement
                 cur.execute(query, (data_row))
@@ -358,7 +356,6 @@ class HandleDBpsql(object):
         finally:
             if conn is not None:
                 conn.close()
-
 
     def insert_data(self, connection_parameters: str, query: str, data: tuple):
         '''insert_data Insertar un unico valor segun los una query
@@ -431,7 +428,7 @@ class HandleDBpsql(object):
                 conn.close()
 
     def get_table(self, connection_parameters: str, query: str):
-    # def get_table(self, params, query: str):
+        # def get_table(self, params, query: str):
         '''get_table Funcion para extraer la tabla completa de una base de datos
         usando una query
 
@@ -443,7 +440,7 @@ class HandleDBpsql(object):
         try:
             # read database configuration
             params = self.get_config_file(connection_parameters)
-            
+
             # connect to the PostgreSQL database
             conn = psycopg2.connect(**params)
             # create a new cursor
@@ -466,11 +463,10 @@ class HandleDBpsql(object):
                 conn.close()
 
 
-
 # if __name__ == '__main__':
 
     # '''
-    # Codigo para insertar datos en  una tabla en postgres usando python junto con las funciones 
+    # Codigo para insertar datos en  una tabla en postgres usando python junto con las funciones
     # propiamente creadas
     # '''
 
@@ -488,12 +484,11 @@ class HandleDBpsql(object):
 
     # pg_handler.insert_data_from_csv(
     #     connection_parameters=CONNECTION_PARAMETERS,
-    #     query=query_data_ready, 
+    #     query=query_data_ready,
     #     data_path=DATA_TO_INSERT)
 
-
     #     '''
-    # Codigo para traer datos de una tabla en postgres usando python junto con las funciones 
+    # Codigo para traer datos de una tabla en postgres usando python junto con las funciones
     # propiamente creadas
     # '''
 
@@ -510,12 +505,11 @@ class HandleDBpsql(object):
 
     # data_postgres = pg_handler.get_table(
     #     connection_parameters=CONNECTION_PARAMETERS,
-    #     query=query_data_ready, 
+    #     query=query_data_ready,
     #     )
 
-
     #     '''
-    # Codigo para traer datos de una tabla en postgres usando python junto con las funciones 
+    # Codigo para traer datos de una tabla en postgres usando python junto con las funciones
     # propiamente creadas
     # '''
 
@@ -532,5 +526,5 @@ class HandleDBpsql(object):
 
     # data_postgres = pg_handler.get_table(
     #     connection_parameters=CONNECTION_PARAMETERS,
-    #     query=query_data_ready, 
+    #     query=query_data_ready,
     #     )

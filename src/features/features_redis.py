@@ -50,7 +50,7 @@ class HandleRedis(object):
 
         # Constructor que permite inicializar los parametros
         logging.config.fileConfig(os.path.join(LOGS_DIR, logs_file))
-        self.log = logging.getLogger('REDIS')
+        self.log = logging.getLogger('datasource')
 
     def file_ini_(self, filename: str = 'database', section: str = 'redis'):
         '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
@@ -240,6 +240,18 @@ class HandleRedis(object):
             # print(redis_error)
 
     def get_dict_data(self, hash_name: str, config: str):
+        """
+        The function `get_dict_data` retrieves data from a Redis hash and returns it as a dictionary.
+
+        Args:
+          hash_name (str): The `hash_name` parameter is a string that represents the name of the hash in
+        Redis from which you want to retrieve data.
+          config (str): The `config` parameter is the path to the configuration file that contains the
+        necessary information for connecting to Redis.
+
+        Returns:
+          a dictionary object named `data`.
+        """
         '''get_dict_data _summary_
 
         Args:
@@ -279,17 +291,59 @@ class HandleRedis(object):
 
         except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
             self.log.error(redis_error)
-            
 
-    def set_cache_data(self, hash_name: str, old_dataframe: pd.DataFrame, new_dataframe: pd.DataFrame, exp_time: int, config: str):
-        '''set_cache_data Metodo para hacer un cache en redis de la base de datos usadas
+    def get_cache_data(self, hash_name: str, config: str):
+        """
+        The function `get_cache_data` retrieves data from a Redis cache using a given hash name and
+        configuration.
 
         Args:
-            hash_name (str): Nombre del hash/key que se usa para almacenar la informacion 
-            old_dataframe (DataFrame): Diccionarion con data anterior
-            new_dataframe (DataFrame): Diccionario con data nueva
-            config (str): Parametros de conexion a redis
-        '''
+          hash_name (str): The `hash_name` parameter is a string that represents the name 
+          of the hash or key in the Redis cache from which you want to retrieve data.
+          config (str): The `config` parameter is a string that represents the name or path of the
+        configuration file. It is used to retrieve the connection parameters for the Redis server.
+
+        Returns:
+          the data retrieved from the cache, which is either a deserialized object or None if there
+         is no data in the cache.
+        """
+
+        parameters_connection = self.get_config_file(
+            config, section='redis')
+
+        with redis.Redis(**parameters_connection) as connection:
+            data = connection.get(hash_name)
+            if data is not None:
+                data = pickle.loads(data)
+            else:
+                self.log.debug("No hay datos en cache")
+                data = None
+        return data
+
+    def set_cache_data(self, hash_name: str, old_dataframe: pd.DataFrame, new_dataframe: pd.DataFrame, exp_time: int, config: str):
+        """
+        The `set_cache_data` function is used to cache database data in Redis, allowing 
+        for the storage and retrieval of old and new dataframes.
+
+        Args:
+            hash_name (str): The `hash_name` parameter is a string that represents the name of 
+            the hash/key used to store the information in the Redis cache.
+            old_dataframe (pd.DataFrame): The `old_dataframe` parameter is a Pandas DataFrame that
+            contains the previous data that was stored in the cache. It is used to check if there
+            is any existing data in the cache.
+            new_dataframe (pd.DataFrame): The `new_dataframe` parameter is a Pandas DataFrame
+            that contains the new data that you want to add to the cache.
+            exp_time (int): The `exp_time` parameter represents the expiration time in seconds for the
+            cached data in Redis. After this time has passed, the data will be automatically 
+            removed from the cache.
+            config (str): The `config` parameter is a string that represents the parameters for 
+            connecting to Redis. It is used to retrieve the connection parameters from a 
+            configuration file.
+
+        Returns:
+          The method `set_cache_data` returns the updated DataFrame `update_frame`.
+        """
+
         try:
             parameters_connection = self.get_config_file(
                 config, section='redis')
@@ -299,34 +353,35 @@ class HandleRedis(object):
 
                 # Si existe un DataFrame antiguo, deserialízalo
                 if old_df_bytes is not None:
-                    # print('Recuperando data existente')
+                    self.log.debug('Recuperando data existente')
                     old_df = pickle.loads(old_df_bytes)
                 elif old_dataframe is not None:
                     # Si no existe un DataFrame antiguo, crea uno vacío con las mismas columnas
-                    # print('Insertando nueva data')
+                    self.log.debug('Insertando nueva data')
                     old_df = old_dataframe.copy()
                     connection.set(hash_name, pickle.dumps(
                         old_dataframe), ex=exp_time)
                 else:
-                    old_df =None
+                    self.log.debug("No hay datos en cache")
+                    old_df = None
 
             # Verficar si existe nueva informacion por rellenar
-            if new_dataframe is not None and isinstance(old_df,pd.DataFrame):
+            if new_dataframe is not None and isinstance(old_df, pd.DataFrame):
                 # Combina el DataFrame antiguo con el nuevo
                 # update_frame = old_df.append(new_dataframe, ignore_index=True).drop_duplicates()
-                update_frame = pd.concat([old_df,new_dataframe])
+                self.log.debug('Verificacion si existe nueva informacion')
+                update_frame = pd.concat([old_df, new_dataframe])
 
                 # Serializa el DataFrame a bytes usando pickle
                 # Guarda los bytes en Redis
-                connection.set(hash_name, pickle.dumps(update_frame), ex=exp_time)
-            elif isinstance(old_df,pd.DataFrame):
+                connection.set(hash_name, pickle.dumps(
+                    update_frame), ex=exp_time)
+            elif isinstance(old_df, pd.DataFrame):
                 update_frame = old_df.copy()
             else:
                 update_frame = None
-
             return update_frame
-        
-                # self.log.debug("Extracion de datos completa")
+            # self.log.debug("Extracion de datos completa")
         except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
             self.log.error(redis_error)
             # print(redis_error)

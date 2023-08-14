@@ -33,6 +33,8 @@ class DataSource(ABC):
         '''Metodo para crear tablas en base de datos'''
 
 # Implementaciones concretas de la interfaz para cada tipo de fuente de datos
+# The `SQLPostgres` class is a Python class that provides methods for manipulating data in a
+# PostgreSQL database.
 class SQLPostgres(DataSource):
     '''Metodo para manipulacion de datos de postgres'''
 
@@ -48,6 +50,13 @@ class SQLPostgres(DataSource):
             'src/data/querys/new_table.sql').as_posix()
 
     def read(self):
+        """
+        The `read` method reads data from a data source using a query template and returns the resulting
+        table.
+        
+        Returns:
+          The method is returning the result of the `get_table` method from the `data_source` object.
+        """
         '''metodo base para hacer lectura de los datos'''
         fix_dict_query = self.data_source.fix_dict_query(
             self.parametro.query_template['table'],
@@ -66,6 +75,14 @@ class SQLPostgres(DataSource):
         )
 
     def write(self, data: pd.DataFrame):
+        """
+        The `write` method is a base method for writing data to a PostgreSQL database using a template
+        query.
+        
+        Args:
+          data (pd.DataFrame): The `data` parameter is a pandas DataFrame that contains the data to be
+        written to a PostgreSQL database.
+        """
         '''metodo base para hacer escritura de los datos en postgres'''
         fix_dict_query = self.data_source.fix_dict_query(
             self.parametro.query_template_write['table'],
@@ -85,6 +102,10 @@ class SQLPostgres(DataSource):
         )
 
     def create(self):
+        """
+        The `create` method is used to create tables in a PostgreSQL database based on the column names
+        and data types specified in a YAML file.
+        """
         '''Metodo para crear tablas '''
 
         conver_postgrest = {
@@ -187,6 +208,10 @@ class SQLDataSourceFactory(AbstractDataSourceFactory):
 
 class NoSQLDataSourceFactory(AbstractDataSourceFactory):
     '''Fabricante de metodos NoSQL '''
+
+    def __init__(self, **parametros) -> None:
+        self.parametro = parametros
+
 
     def create_data_source(self) -> DataSource:
         return NoSQLRedis()

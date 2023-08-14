@@ -1,0 +1,9 @@
+AlertaBajaCantidad: 60 #Medido en unidades de venta
+AlertaTiempoDeVentaBajo: 12 #Medido en dias o meses
+AlertaCambiosBruscos: 9 #Medido en unidades
+AlertaInventarioInactivo: 12 #Medido en dias o meses
+AlertaVarianzaPreciosProveedores: 2 #Medido en unides
+AlertaSeguimientoTendendicas: 3 #Medido en terminos de la varianza desviacion estandar y varianza de las unidades
+AlertaDemandaEstacional: 3 #Medido en escala Mensual o trimestral
+# AlertaSeguridadInventario: 3 #Actualmente no se puede generar esta alerta
+# AlertaEvaluacionProveedores: 3 #Actualmente no se puede generar esta alerta
