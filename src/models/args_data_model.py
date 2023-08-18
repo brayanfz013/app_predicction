@@ -45,6 +45,21 @@ class ParamsPostgres:
     filter_columns: Optional[Union[str, os.PathLike, PosixPath]]
 
 @dataclass
+class AlertsData:
+    '''
+    The class "AlertsData" represents different types of alerts
+    and their corresponding integer values.
+    '''
+    alerta_bajacantidad : int
+    alerta_tiempodeventabajo : int
+    alerta_cambiosbruscos : int
+    alerta_inventarioinactivo : int
+    alerta_varianzapreciosproveedores : int
+    alerta_seguimientotendencias : int
+    alerta_demandaestacional : int
+    
+
+@dataclass
 class Parameters:
     '''Modelo de dato para datos importados con el yaml'''
     data_source:dict

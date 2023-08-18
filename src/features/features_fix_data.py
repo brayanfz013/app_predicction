@@ -413,7 +413,6 @@ class PrepareData(ColumnsNameHandler):
             'Desviacion_media_absoluta': round((dataframe-dataframe.mean()).abs().mean(),3)
             }
 
-
     def display_forecast(self,pred_series, ts_transformed, forecast_type:str, start_date:str=None):
         '''display_forecast Metodo para hacer graficas y predicciones sobre datos a partir de 
         de la transformaciones

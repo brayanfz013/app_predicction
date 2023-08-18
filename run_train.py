@@ -33,6 +33,9 @@ handler_load = LoadFiles()
 handler_redis = HandleRedis()
 ruta_actual = os.path.dirname(__file__)
 
+# =================================================================
+#             Configuracion Logger
+# =================================================================
 # Configura un logger personalizado en lugar de usar el logger raíz
 logfile=ruta_actual+'/src/data/config/logging.conf'
 logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
@@ -40,9 +43,8 @@ logger = logging.getLogger('train')
 logger.debug('Inciando secuencia de entrenamiento')
 
 # =================================================================
-#             Cargar datos de la fuente de datos
+#             Cargar los parametros
 # =================================================================
-
 CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = yaml.safe_load(file)
@@ -50,16 +52,12 @@ with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
 logger.debug('Archivo de configuraciones cargado')
 parametros = Parameters(**parameters)
 
+# =================================================================
+#             Cargar datos de la fuente de datos
+# =================================================================
 # Interacion para hacer un cache de los datos en redis
 try:
     logger.debug('verficando si existe data cache')
-    # data = handler_redis.set_cache_data(
-    #     hash_name=parametros.query_template['table'],
-    #     old_dataframe=None,
-    #     new_dataframe=None,
-    #     exp_time=parametros.exp_time_cache,
-    #     config=parametros.connection_data_source
-    # )
     data = handler_redis.get_cache_data(
         hash_name=parametros.query_template['table'],
         config=parametros.connection_data_source
@@ -129,6 +127,7 @@ try:
 except ValueError as error:
     logger.debug("[ERROR] No se puede hacer un cache de la fuente de datos")
     logger.debug(error)
+    exit()
 # 910051 rows x 4 columns
 
 
@@ -190,21 +189,22 @@ newest_labels = data_imputation.dataframe[parameters['filter_data']['filter_1_co
     last_values_filter)
 # Subseleccionar los datos
 selected_data = data_imputation.dataframe[newest_labels]
-# criterial = data_imputation.dataframe[filter][parameters['filter_data']['filter_1_column']].value_counts()>MIN_DATA_VOLUME
+
 # Filtrar por datos que tenga mas de 365 registros
 criterial = selected_data[parameters['filter_data']
                           ['filter_1_column']].value_counts() > MIN_DATA_VOLUME
 items = selected_data[parameters['filter_data']['filter_1_column']].value_counts()[
     criterial].index.to_list()
 
-
 items = items[0:5]
 logger.debug('Filtrado terminado')
+
 for item in items:
     logger.debug('Iniciando entrenamiento de : %s',item)
     try:
         parameters['filter_data']['filter_1_feature'] = item
         logger.debug("removiendo outliners : %s",item)
+
         # =================================================================
         # Remocion de outliners y seleccion de columnas
         outliners = OutliersToIQRMean(**parameters)
@@ -213,6 +213,7 @@ for item in items:
         cleaner.strategy = outliners
         data_filled = cleaner.clean(data_imputation.dataframe)
         logger.debug('Preparando datos para el modelo : %s',item)
+
         # =================================================================
         # Preparacion de los dato para el modelos escalizado y filtrado
         data_for_model = DataModel(**parameters)
@@ -220,6 +221,7 @@ for item in items:
         # Cambio de estrategia para preparar los datos para modexlo
         cleaner.strategy = data_for_model
         data_ready, scaler_data = cleaner.clean(data_filled)
+
         # =================================================================
         if not parameters['scale']:
             data_ready = scaler_data.inverse_transform(data_ready)
@@ -247,4 +249,4 @@ for item in items:
         logger.debug('Finalizando entrenamiento de : %s',item)
 
     except (Exception, ValueError) as error_train:
-        print(error_train)
+        logger.error(error_train)

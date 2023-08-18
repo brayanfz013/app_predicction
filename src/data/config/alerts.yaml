@@ -1,9 +1,23 @@
-AlertaBajaCantidad: 60 #Medido en unidades de venta
-AlertaTiempoDeVentaBajo: 12 #Medido en dias o meses
-AlertaCambiosBruscos: 9 #Medido en unidades
-AlertaInventarioInactivo: 12 #Medido en dias o meses
-AlertaVarianzaPreciosProveedores: 2 #Medido en unides
-AlertaSeguimientoTendendicas: 3 #Medido en terminos de la varianza desviacion estandar y varianza de las unidades
-AlertaDemandaEstacional: 3 #Medido en escala Mensual o trimestral
+alerta_bajacantidad: 
+  cantidadbaja: 60 #Medido en unidades de venta
+
+alerta_tiempodeventabajo: 
+  min_dias: 12 #Medido en dias o meses
+
+alerta_cambiosbruscos:
+  umbral_varianza: 9 #Medido en unidades
+  umbral_desviacion: 9 #Medido en unidades
+
+alerta_inventarioinactivo: 
+  max_dias_inactivo: 12 #Medido en dias o meses
+
+alerta_varianzapreciosproveedores: 2 #Medido en unides
+
+alerta_seguimientotendencias:
+  threshold: 3 #Medido en terminos de la varianza desviacion estandar y varianza de las unidades
+
+alerta_demandaestacional:
+  item_to_check: 3 #Medido en escala Mensual o trimestral
+  threshold: 3
 # AlertaSeguridadInventario: 3 #Actualmente no se puede generar esta alerta
 # AlertaEvaluacionProveedores: 3 #Actualmente no se puede generar esta alerta

@@ -29,8 +29,8 @@ connection_data_source:
 query_template:
   table: custom_invoices
   columns:
-    "0": CREATDDT
-    "1": ITEMNMBR
+    "0": CREATDDT #Fecha
+    "1": ITEMNMBR #iteam para
     "2": QUANTITY
     "3": CUSTNMBR
   order: #index

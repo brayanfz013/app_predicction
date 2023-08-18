@@ -38,21 +38,27 @@ ruta_actual = os.path.dirname(__file__)
 handler_redis = HandleRedis()
 data_source = HandleDBpsql()
 
+# =================================================================
+#             Configuracion Logger
+# =================================================================
 # Configura un logger personalizado en lugar de usar el logger raíz
 logfile=ruta_actual+'/src/data/config/logging.conf'
 logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
 logger = logging.getLogger('predict')
 logger.debug('Inciando secuencia de entrenamiento')
 
-
 # =================================================================
-#             Cargar datos de la fuente de datos
+#             Cargar los parametros
 # =================================================================
 CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     parameters = yaml.safe_load(file)
 logger.debug('Archivo de configuraciones cargado')
 parametros = Parameters(**parameters)
+
+# =================================================================
+#             Cargar datos de la fuente de datos
+# =================================================================
 # Interacion para hacer un cache de los datos en redis
 try:
     logger.debug('verficando si existe data cache')
@@ -90,6 +96,7 @@ try:
 except ValueError as error:
     logger.debug("No se puede hacer un cache de la fuente de datos")
     logger.error(error)
+    exit()
 # =================================================================
 #             Limpieza de datos
 # =================================================================
@@ -129,15 +136,11 @@ imputation = MeanImputation(
     **parameters
 )
 logger.debug('Realizando imputacion de datos')
+
 # Patron de diseno de seleecion de estrategia
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
 
-# MIN_DATA_VOLUME = 365
-# criterial = data_imputation.dataframe[parameters['filter_data']
-#                                       ['filter_1_column']].value_counts() > MIN_DATA_VOLUME
-# items = data_imputation.dataframe[parameters['filter_data']['filter_1_column']].value_counts()[
-#     criterial].index.to_list()
 logger.debug('Filtrando informacion para seleccionar modelos')
 MODEL_FOLDERS = Path(ruta_actual).joinpath('src/data/save_models').as_posix()
 items = []
@@ -146,6 +149,7 @@ for folder in  Path(MODEL_FOLDERS).iterdir() :
         items.append(folder.name)
 items = items[0:5]
 logger.debug('Filtrado terminado')
+
 for item in items:
     CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
     with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
