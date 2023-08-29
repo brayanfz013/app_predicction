@@ -7,6 +7,8 @@ que pueda se modificable en el tiempo
 '''
 
 from abc import ABC, abstractmethod
+import datetime
+from datetime import datetime as dtime
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
@@ -67,39 +69,61 @@ class Alertas(ABC):
 #               Listado de alertas a evaluar en los datos
 # ===================================================================
 
+
 class AlertaPorBajaCantidad(Alertas):
     '''
     # The class "AlertaPorBajaCantidad" is a subclass of "Alertas" and it defines a method "eval" that
     # prints an alert message if the quantity of a product is below 50.
     '''
-    def __init__(self, cantidad: str,item:str = 'modulo' ,**cols) -> None:
+
+    def __init__(self, cantidad: str, item: str = 'modulo', column: str = '') -> None:
         self.cantidad = cantidad
-        self.date = cols['0']
-        self.model = cols['1']
-        self.quantity = cols['2']
-        self.customer = cols['3']
+        self.column = column
+        self.item = item
 
     def eval(self, data):
-        #Evalua el ultimo valor de los datos 
-        if data[self.quantity][-1] < self.cantidad:
+        # Evalua el ultimo valor de los datos
+        if data[self.column][-1] < self.cantidad:
             # aqui se genera el codigo para o el indicador de alerta para escribir en la base
             # de datos
-            print("Alerta: Baja cantidad de:", item)
+            print("Alerta: Baja cantidad de:", self.item)
+
+
+class AlertasPorVariacionPreciosProveedores(Alertas):
+    '''Alerta para cuando existe variacion en los precios de los proveedores'''
+
+
+class AlertaPorVarianza(Alertas):
+    '''Alerta por alta varianza en los ultimos valores'''
+    # Esta alerta se aplica a los datos agrupados por semanas  aplicada multiples meses
+
+    def __init__(self, threshold=0.1, item: str = 'modulo', column: str = ''):
+        # threshold es el umbral que determina cuánto debe cambiar el coeficiente de variación
+        # para que se dispare la alerta.
+        self.item = item
+        self.threshold = threshold
+        self.previous_coeficiente_varianza = None
+        self.column = column
+
+    def eval(self, data):
+        # Evalua el ultimo valor de los datos
+        if data[self.column][-1] < self.threshold:
+            # aqui se genera el codigo para o el indicador de alerta para escribir en la base
+            # de datos
+            print("Alerta: Varianza cantidad de:", self.item)
+
 
 class AlertaPorTiempoDeVentaBajo(Alertas):
     '''
     The `AlertaPorTiempoDeVentaBajo` class triggers an alert if a product is sold in fewer days than a
     specified threshold.
     '''
-    
-    def __init__(self, min_dias_venta:int=7,item:str = 'modulo' ,**cols):
+
+    def __init__(self, min_dias_venta: int = 7, item: str = 'modulo'):
         # min_dias_venta es el número mínimo de días que un producto debe durar en el inventario
         # antes de que se dispare la alerta
         self.min_dias_venta = min_dias_venta
-        self.date = cols['0']
-        self.model = cols['1']
-        self.quantity = cols['2']
-        self.customer = cols['3']
+        self.item = item
 
     def eval(self, data):
         """
@@ -113,33 +137,36 @@ class AlertaPorTiempoDeVentaBajo(Alertas):
           item: The 'item' parameter represents the name or identifier of the product being evaluated.
         """
         # Convierte las fechas de inicio y fin a objetos datetime
-        init_date = datetime.strptime(data['init_date'].values[0], '%Y-%m-%d')
-        end_date = datetime.strptime(data['end_date'].values[0], '%Y-%m-%d')
+        if not isinstance(data.index[0], datetime.date):
+            init_date = dtime.strptime(data.index[0], '%Y-%m-%d')
+            end_date = dtime.strptime(data.index[-1], '%Y-%m-%d')
+        else:
+            init_date = data.index[0]
+            init_date = datetime.datetime.combine(init_date, datetime.time())
+            end_date = data.index[-1]
+            end_date = datetime.datetime.combine(end_date, datetime.time())
 
         # Calcula la diferencia en días entre las fechas
         dias_venta = (end_date - init_date).days
-        
-        print('Dias de venta',dias_venta)
+
+        print('Dias de venta', dias_venta)
         # Si la cantidad de días de venta es menor al umbral, se dispara la alerta
         if dias_venta < self.min_dias_venta:
             print(
-                f"Alerta: El producto '{item}' se vendió en solo {dias_venta} días.")
+                f"Alerta: El producto '{self.item}' se vendió en solo {dias_venta} días.")
 
 
 class AlertaPorCambiosBruscosEnLasVentas(Alertas):
     '''Alerta por cambio brusco en ventas'''
 
-    def __init__(self, umbral_varianza, umbral_desviacion_estandar,item:str = 'modulo' ,**cols):
+    def __init__(self, umbral_varianza, umbral_desviacion_estandar, item: str = 'modulo'):
         self.umbral_varianza = umbral_varianza
         self.umbral_desviacion_estandar = umbral_desviacion_estandar
-        self.date = cols['0']
-        self.model = cols['1']
-        self.quantity = cols['2']
-        self.customer = cols['3']
+        self.item = item
 
     def eval(self, data):
-        varianza = data['Varianza'].values[0]
-        desviacion_estandar = data['Desviacion_estandar'].values[0]
+        varianza = data['varianza'].values[0]
+        desviacion_estandar = data['desviacion_estandar'].values[0]
         if varianza > self.umbral_varianza:
             print(
                 f"Alerta: Cambio brusco en ventas detectado. Varianza: {varianza}")
@@ -153,114 +180,100 @@ class AlertaPorInventarioInactivo(Alertas):
     '''Alerta por tiempo inventario inactivo'''
     # Esta alerta se aplica a los datos por dias (sin agrupacion)
 
-    def __init__(self, max_dias_inactivo=30,item:str = 'modulo' ,**cols):
+    def __init__(self, max_dias_inactivo=30, item: str = 'modulo', previus_val: float = 0):
+        super().__init__()
         # max_dias_inactivo es el número máximo de días que un producto puede estar inactivo
         # antes de que se dispare la alerta
         self.max_dias_inactivo = max_dias_inactivo
-        self.previus_stock = None
-        self.date = cols['0']
-        self.model = cols['1']
-        self.quantity = cols['2']
-        self.customer = cols['3']
+        self.previus_stock = previus_val
+        self.item = item
 
     def eval(self, data):
-        # Si es la primera vez que evaluamos, simplemente guardamos el valor actual de cantidad       
+        # Si es la primera vez que evaluamos, simplemente guardamos el valor actual de cantidad
         if self.previus_stock is None:
-            self.previus_stock = data['mean'].values[0]
-            # return
+            print('Condicional None')
+            self.previus_stock = data['predicion'].values[-1]
 
-        '''Las fechas init_date y end_date deben ser cadenas en el formato 'AAAA-MM-DD'.'''
+        # '''Las fechas init_date y end_date deben ser cadenas en el formato 'AAAA-MM-DD'.'''
         # Convierte las fechas de inicio y fin a objetos datetime
-        now = datetime.now()
+        now = dtime.now()
 
-        # real_day = datetime.strptime(now, '%Y-%m-%d')
-        end_date = datetime.strptime(data['end_date'].values[0], '%Y-%m-%d')
-        
-        # Calcula la diferencia en días entre las fechas
+        if not isinstance(data.index[-1], datetime.date):
+            end_date = dtime.strptime(data.index[-1], '%Y-%m-%d')
+        else:
+            end_date = data.index[-1]
+
+        end_date = datetime.datetime.combine(end_date, datetime.time())
+
+        # Calcula la diferencia en días entre las fecha
         dias_inactivo = (now - end_date).days
-    
+
         # Si la cantidad de días inactivos supera el umbral, se dispara la alerta
-        if dias_inactivo > self.max_dias_inactivo and self.previus_stock == data['mean'].values[0]:
+        if dias_inactivo > self.max_dias_inactivo and self.previus_stock == data['predicion'].values[-1]:
             print(
-                f"Alerta: El producto '{item}' ha estado inactivo por {dias_inactivo} días.")
+                f"Alerta: El producto '{self.item}' ha estado inactivo por {dias_inactivo} días.")
 
 
-class AlertasPorVariacionPreciosProveedores(Alertas):
-    '''Alerta para cuando existe variacion en los precios de los proveedores'''
+class AlertaPorSeguimientoTendencias:
+    '''
+    # The `AlertaPorSeguimientoTendencias` class is designed to evaluate the trend of a specific item
+    # based on the coefficient of variation in a given dataset and generate an alert if the trend changes
+    # significantly.
+    '''
 
-
-class AlertaPorSeguimientoTendencias(Alertas):
-    '''Alerta para saber cuando un modelo entra en una tendencias'''
-    # Esta alerta se aplica a los datos agrupados por semanas  aplicada multiples meses
-
-    def __init__(self, threshold=0.1,item:str = 'modulo' ,**cols):
-        # threshold es el umbral que determina cuánto debe cambiar el coeficiente de variación
-        # para que se dispare la alerta.
+    def __init__(self, threshold=0.1, item='modulo'):
+        self.item = item
         self.threshold = threshold
-        self.previous_coeficiente_varianza = None
-        self.date = cols['0']
-        self.model = cols['1']
-        self.quantity = cols['2']
-        self.customer = cols['3']
 
-    def eval(self, data):
-        # Si es la primera vez que evaluamos, simplemente guardamos el coeficiente de variación actual
-        varianza = data['Varianza'].values[0]
-        desviacion_estandar = data['Desviacion_estandar'].values[0]
-        coeficiente_varianza = data['Coeficiente_varianza'].values[0]
+    def eval(self, data: pd.DataFrame):
+        # Suponiendo que los datos están ordenados por fecha y que la última fila contiene los valores actuales
+        # y la penúltima fila contiene los valores anteriores
+        current_row = data.iloc[-1]
+        previous_row = data.iloc[-2]
 
-        print('Varianza',varianza)
-        print('Desviacion estandar',desviacion_estandar)
-        print('coeficiente_varianza',coeficiente_varianza)
-        
-        if self.previous_coeficiente_varianza is None:
-            self.previous_coeficiente_varianza = coeficiente_varianza
-            # return
-        print('self.previous_coeficiente_varianza',self.previous_coeficiente_varianza)
-        # Calculamos el cambio relativo en el coeficiente de variación
-        cambio_relativo = abs(
-            coeficiente_varianza - self.previous_coeficiente_varianza) / self.previous_coeficiente_varianza
+        coeficiente_varianza = current_row['coeficiente_varianza']
+        previous_coeficiente_varianza = previous_row['coeficiente_varianza']
 
-        print(cambio_relativo)
-        # Si el cambio relativo supera el umbral, se dispara la alerta
+        cambio = coeficiente_varianza - previous_coeficiente_varianza
+        cambio_relativo = abs(cambio) / previous_coeficiente_varianza
+
         if cambio_relativo > self.threshold:
-            print("Alerta: Cambio significativo en la tendencia de ventas detectado.")
-            print("Varianza:", varianza)
-            print("Desviación estándar:", desviacion_estandar)
+            tendencia = "a la alza" if cambio > 0 else "a la baja"
+            print(
+                f"Alerta: Cambio significativo en la tendencia de ventas detectado ({tendencia}).")
             print("Coeficiente de variación anterior:",
-                  self.previous_coeficiente_varianza)
+                  previous_coeficiente_varianza)
             print("Coeficiente de variación actual:", coeficiente_varianza)
         else:
             print('No hay cambios')
-
-        # Actualizamos el coeficiente de variación anterior para la próxima evaluación
-        self.previous_coeficiente_varianza = coeficiente_varianza
 
 
 class AlertaPorDemandaEstacional(Alertas):
     '''Alerta para saber cuando una producot esta en demanda estacional'''
     # Esta alerta se aplica a los datos agrupados por semanas aplicada multiples meses
 
-    def __init__(self, item_to_check, threshold,item:str = 'modulo' ,**cols) -> None:
-        super().__init__()
+    def __init__(self, item, threshold, column_time: str = '', column_value: str = '') -> None:
         self.threshold = threshold
-        self.item_to_check = item_to_check
-        self.date = cols['0']
-        self.model = cols['1']
-        self.quantity = cols['2']
-        self.customer = cols['3']
+        self.item_to_check = item
+        self.column_time = column_time
+        self.column_value = column_value
 
     def eval(self, data):
         # Realiza la descomposición estacional
         # puedes ajustar el período según tus necesidades
-        self.result = seasonal_decompose(
-            data, model='additive', period=12)
+        # if data.shape[0] < 12
+        result = seasonal_decompose(
+            data.set_index(self.column_time)[self.column_value],
+            model='additive',
+            period=4
+        )
 
         # Supongamos que quieres disparar una alerta si la amplitud de la componente estacional supera un umbral
-        seasonal_amplitude = self.result.seasonal.max() - self.result.seasonal.min()
+        seasonal_amplitude = result.seasonal.max() - result.seasonal.min()
         if seasonal_amplitude > self.threshold:  # ajusta este umbral según tus necesidades
             print(
                 f"Alerta: Demanda estacional detectada para el artículo {self.item_to_check}. Amplitud: {seasonal_amplitude}")
+
 # ===================================================================
 #          Clase concreta de Observer para utilizar la alerta
 # ===================================================================
@@ -283,6 +296,7 @@ class Inventario(Subject):
     '''
     La clase `Inventario` representa un inventario con varios elementos.
     '''
+
     def __init__(self, inventario) -> None:
         '''
         Args:
@@ -291,7 +305,7 @@ class Inventario(Subject):
         '''
         super().__init__()
         self.inventario = inventario
-        self.alertas = [] # Lista de objetos Alertas
+        self.alertas = []  # Lista de objetos Alertas
         # self.observers = [] # Lista de observadores
 
     def agregar_alerta(self, alerta):
@@ -303,20 +317,21 @@ class Inventario(Subject):
         for item in self.inventario:
             for alerta in self.alertas:
                 print(alerta)
-                if alerta.eval(item): # Aquí puedes pasar los datos necesarios dependiendo de cómo estén estructuradas tus alertas
+                # Aquí puedes pasar los datos necesarios dependiendo de cómo estén estructuradas tus alertas
+                if alerta.eval(item):
                     # self.notify(f"Alerta: {alerta.message} para el item {item}")
                     self.notify()
 
-    def evaluar_historico(self,init_data,end_date):
+    def evaluar_historico(self, init_data, end_date):
         '''Evalúa todos los elementos en el inventario con todas las alertas.'''
         self.inventario = self.inventario[init_data:end_date]
         for alerta in self.alertas:
             # Aquí puedes pasar los datos necesarios dependiendo de cómo estén estructuradas tus alertas
-            if isinstance(alerta,AlertaPorBajaCantidad):
-                if alerta.eval(self.inventario[end_date:]): 
+            if isinstance(alerta, AlertaPorBajaCantidad):
+                if alerta.eval(self.inventario[end_date:]):
                     self.notify()
-            if isinstance(alerta,AlertaPorInventarioInactivo):
-                if alerta.eval(self.inventario[end_date:]): 
+            if isinstance(alerta, AlertaPorInventarioInactivo):
+                if alerta.eval(self.inventario[end_date:]):
                     self.notify()
 
     def evaluar_metricas(self):

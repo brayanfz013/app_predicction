@@ -8,6 +8,7 @@ alerta_demandaestacional:
   threshold: 3
 alerta_inventarioinactivo:
   max_dias_inactivo: 12
+  valor_anterior_inventario: null
 alerta_seguimientotendencias:
   threshold: 3
 alerta_tiempodeventabajo:

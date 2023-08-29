@@ -196,6 +196,21 @@ class HandleRedis(object):
             # print(redis_error)
 
     def set_single_value(self, dict_key: str, file_name: str, value: int, config: str,):
+        """
+        The `set_single_value` function sets a single value in a Redis hash using the provided dictionary
+        key, file name, value, and configuration.
+        
+        Args:
+          dict_key (str): The `dict_key` parameter is the key of the dictionary in Redis where you want to
+        set the value. It is a string that represents the key of the dictionary.
+          file_name (str): The `file_name` parameter is a string that represents the name or key of the file
+        you want to set the value for in Redis.
+          value (int): The `value` parameter in the `set_single_value` function is an integer that
+        represents the value you want to set for a specific key in a Redis hash.
+          config (str): The `config` parameter is the path to the configuration file that contains the
+        connection details for Redis. It is used to establish a connection with Redis and perform operations
+        on it.
+        """
         '''get_posicition Funcion para traer toda la lista de datos de una collecion de redis
 
         Args:
@@ -393,6 +408,51 @@ class HandleRedis(object):
             ip_publica = search.getsockname()[0]
         return ip_publica
 
+
+
+    def update_alert(self):
+        '''Metodo en redis para escribir a un campo especifico en una key de redis'''
+        # try:
+        #     parameters_connection = self.get_config_file(
+        #         config, section='redis')
+
+        #     with redis.Redis(**parameters_connection) as connection:
+        #         old_df_bytes = connection.get(hash_name)
+
+        #         # Si existe un DataFrame antiguo, deserialízalo
+        #         if old_df_bytes is not None:
+        #             self.log.debug('Recuperando data existente')
+        #             old_df = pickle.loads(old_df_bytes)
+        #         elif old_dataframe is not None:
+        #             # Si no existe un DataFrame antiguo, crea uno vacío con las mismas columnas
+        #             self.log.debug('Insertando nueva data')
+        #             old_df = old_dataframe.copy()
+        #             connection.set(hash_name, pickle.dumps(
+        #                 old_dataframe), ex=exp_time)
+        #         else:
+        #             self.log.debug("No hay datos en cache")
+        #             old_df = None
+
+        #     # Verficar si existe nueva informacion por rellenar
+        #     if new_dataframe is not None and isinstance(old_df, pd.DataFrame):
+        #         # Combina el DataFrame antiguo con el nuevo
+        #         # update_frame = old_df.append(new_dataframe, ignore_index=True).drop_duplicates()
+        #         self.log.debug('Verificacion si existe nueva informacion')
+        #         update_frame = pd.concat([old_df, new_dataframe])
+
+        #         # Serializa el DataFrame a bytes usando pickle
+        #         # Guarda los bytes en Redis
+        #         connection.set(hash_name, pickle.dumps(
+        #             update_frame), ex=exp_time)
+        #     elif isinstance(old_df, pd.DataFrame):
+        #         update_frame = old_df.copy()
+        #     else:
+        #         update_frame = None
+        #     return update_frame
+        #     # self.log.debug("Extracion de datos completa")
+        # except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
+        #     self.log.error(redis_error)
+        #     # print(redis_error)
 
 # if __name__ == '__main__':
 

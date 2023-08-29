@@ -10,6 +10,7 @@ alerta_cambiosbruscos:
 
 alerta_inventarioinactivo: 
   max_dias_inactivo: 12 #Medido en dias o meses
+  valor_anterior_inventario: None
 
 alerta_varianzapreciosproveedores: 2 #Medido en unides
 
@@ -17,7 +18,8 @@ alerta_seguimientotendencias:
   threshold: 3 #Medido en terminos de la varianza desviacion estandar y varianza de las unidades
 
 alerta_demandaestacional:
-  item_to_check: 3 #Medido en escala Mensual o trimestral
-  threshold: 3
+  item_to_check: 3 
+  threshold: 3 #Medido en escala Mensual o trimestral
+  
 # AlertaSeguridadInventario: 3 #Actualmente no se puede generar esta alerta
 # AlertaEvaluacionProveedores: 3 #Actualmente no se puede generar esta alerta

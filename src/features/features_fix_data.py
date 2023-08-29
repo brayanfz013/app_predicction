@@ -406,7 +406,7 @@ class PrepareData(ColumnsNameHandler):
         return {'Rango': round( dataframe.max() - dataframe.min(),3),
             'Varianza' : round( dataframe.var(),3),
             'Desviacion_estandar': round( dataframe.std(),3),
-            'Coeficiente_varianza': round( dataframe.std()/dataframe.mean(),3),#Resultaod en porcentaje)
+            'Coeficiente_varianza': round( (dataframe.std()/dataframe.mean())*100,3),#Resultaod en porcentaje)
             'Quantile Q1': round( dataframe.quantile(0.25),3),
             'Quantile Q3': round( dataframe.quantile(0.75),3),
             'InterQuantile' : round( dataframe.quantile(0.75)-dataframe.quantile(0.25),3),

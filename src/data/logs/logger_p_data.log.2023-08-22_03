@@ -1,0 +1,16 @@
+2023-08-22 03:14:57,593 - datasource - ERROR - features_postgres : 460 - column "real" does not exist
+LINE 1: SELECT "fecha", "real", "code" FROM modelopredicciones      
+                        ^
+
+2023-08-22 03:14:57,593 - datasource - ERROR - features_postgres : 460 - column "real" does not exist
+LINE 1: SELECT "fecha", "real", "code" FROM modelopredicciones      
+                        ^
+
+2023-08-22 03:15:12,008 - datasource - ERROR - features_postgres : 460 - column "real" does not exist
+LINE 1: SELECT "fecha", "real", "code" FROM modelopredicciones      
+                        ^
+
+2023-08-22 03:15:12,008 - datasource - ERROR - features_postgres : 460 - column "real" does not exist
+LINE 1: SELECT "fecha", "real", "code" FROM modelopredicciones      
+                        ^
+
