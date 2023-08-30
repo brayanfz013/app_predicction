@@ -5,10 +5,10 @@ alerta_cambiosbruscos:
   umbral_varianza: 9
 alerta_demandaestacional:
   item_to_check: 3
-  threshold: 3
+  threshold: 293.127
 alerta_inventarioinactivo:
   max_dias_inactivo: 12
-  valor_anterior_inventario: 
+  valor_anterior_inventario: 293.127
 alerta_seguimientotendencias:
   threshold: 3
 alerta_tiempodeventabajo:

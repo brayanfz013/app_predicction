@@ -9,32 +9,28 @@ __email__ = "bzapata@smgsoftware.com"
 __status__ = "Production"
 # =============================================================================
 '''
-Codigo para aplicar criterios de filtrado a la base de datos, generando 
-alerta para lo diferentes modelos en un base de datos escribiendolos en 
+Codigo para aplicar criterios de filtrado a la base de datos, generando
+alerta para lo diferentes modelos en un base de datos escribiendolos en
 en postgres o redis
 '''
 # =============================================================================
 import os
-import sys
 import yaml
 import logging
 import numpy as np
-import pandas as pd
 from scipy import stats
 from pathlib import Path
+from src.features.features_fix_data import ColumnsNameHandler
 from src.lib.class_load import LoadFiles
 from src.features.features_postgres import HandleDBpsql
 from src.lib.factory_data import HandleRedis, SQLDataSourceFactory, get_data
-from src.lib.factory_models import ModelContext
-from src.lib.factory_prepare_data import (DataCleaner, DataModel,
-                                          MeanImputation, OutliersToIQRMean)
 from src.models.args_data_model import Parameters, AlertsData
 from src.data.logs import LOGS_DIR
 from src.features.filter_data import (AlertaPorBajaCantidad,
                                       AlertaPorTiempoDeVentaBajo,
                                       AlertaPorCambiosBruscosEnLasVentas,
                                       AlertaPorInventarioInactivo,
-                                    #   AlertasPorVariacionPreciosProveedores,
+                                      #   AlertasPorVariacionPreciosProveedores,
                                       AlertaPorSeguimientoTendencias,
                                       AlertaPorDemandaEstacional,
                                       AlertaObserver,
@@ -72,212 +68,240 @@ parametros = Parameters(**parameters)
 
 CONFIG_FILE = ruta_actual+'/src/data/config/alerts.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
-    alerts_parameters = yaml.safe_load(file)
+    alerts_parameters_source = yaml.safe_load(file)
 
 # parameter_alerts = AlertsData(**alerts_parameters)
 
 # =================================================================
 #             Cargar datos de la fuente de datos
 # =================================================================
-try:
-    # Interacion para hacer un cache de los datos en redis
-    logger.debug("No existen datos en cache")
-    data = handler_redis.get_cache_data(
-        hash_name=parametros.query_template['table'],
-        config=parametros.connection_data_source
-    )
 
-    # Verificar que existieran datos en cache
-    if data is None:
-        #     #Peticion de la API
-        #     url  = 'http://192.168.115.99:3333/getinvoices'
-        #     response = requests.get(url)
+# # Nuevos datos para reemplazar en las columnas
+# new_types = []
+# base = {
+#     'date': np.datetime64,
+#     'integer': int,
+#     'float': float,
+#     'string': object,
+# }
 
-        #     if response.status_code == 200:
-        #         invoices  = response.json()
-        #     else:
-        #         print(response.status_code)
+# for dtypo in parameters['type_data'].values():
+#     # print(dtypo)
+#     new_types.append(base[dtypo])
 
-        #     data = pd.DataFrame(invoices)
-        #     filter_cols = list(parameters['query_template']['columns'].values())AttributeError
-        #     data = data[filter_cols]
-        logger.debug('Extrayendo datos de la fuente de datos')
-        data = get_data(SQLDataSourceFactory(**parameters))
+# # metodo para transformar los tipo de datos
+# strategy = {
+#     int: np.mean,
+#     float: np.mean,
+#     object: stats.mode
+# }
 
-        data = handler_redis.set_cache_data(
-            hash_name=parametros.query_template['table'],
-            old_dataframe=data,
-            new_dataframe=None,
-            exp_time=parametros.exp_time_cache,
-            config=parametros.connection_data_source
-        )
-except Exception as error:
-    logger.debug("No se puede hacer un cache de la fuente de datos")
-    logger.error('Error')
+# # Estrategias para imputar los datos faltantes de NA
+# replace = {
+#     int: lambda x: int(float(x.replace(',', ''))),
+#     float: lambda x: float(x.replace(',', '')),
+#     object: lambda x: x.strip()
+# }
 
 # =================================================================
-#             Limpieza de datos
+#     Cargar los resultados de la base de datos de predicciones
 # =================================================================
-# Nuevos datos para reemplazar en las columnas
-new_types = []
-base = {
-    'date': np.datetime64,
-    'integer': int,
-    'float': float,
-    'string': object,
-}
 
-for dtypo in parameters['type_data'].values():
-    # print(dtypo)
-    new_types.append(base[dtypo])
+# Traer los datos de las predicciones
+predictec_data = {'fecha': 'date',
+                  'predicion': 'float',
+                  'code': 'string'
+                  }
 
-# metodo para transformar los tipo de datos
-strategy = {
-    int: np.mean,
-    float: np.mean,
-    object: stats.mode
-}
+parameters['query_template']['table'] = 'modelopredicciones'
+parameters['query_template']['columns'] = {
+    str(index): key for index, key in enumerate(predictec_data.keys())}
+parameters['type_data'] = {
+    'columns'+str(index): key for index, key in enumerate(predictec_data.values())}
+parameters['filter_data']['date_column'] = 'fecha'
+parameters['filter_data']['predict_column'] = 'predicion'
+parameters['filter_data']['filter_1_column'] = 'code'
 
-# Estrategias para imputar los datos faltantes de NA
-replace = {
-    int: lambda x: int(float(x.replace(',', ''))),
-    float: lambda x: float(x.replace(',', '')),
-    object: lambda x: x.strip()
-}
-# =================================================================
-# Imputacion de los datos
-imputation = MeanImputation(
-    replace_dtypes=new_types,
-    strategy_imputation=strategy,
-    preprocess_function=replace,
-    **parameters)
+data = get_data(SQLDataSourceFactory(**parameters))
 
-logger.debug('Realizando imputacion de datos')
+handler_data = ColumnsNameHandler(data, **parameters['query_template'])
 
-# Patron de diseno de seleecio=n de estrategia
-cleaner = DataCleaner(imputation)
-data_imputation = cleaner.clean(data)
-data = data_imputation
-MIN_DATA_VOLUME = 365
+# Traer metricas de las predicciones en la base de datos
+metrics_data = {'rango': 'float',
+                'varianza': 'float',
+                'desviacion_estandar': 'float',
+                'coeficiente_varianza': 'float',
+                'quantile_q1': 'float',
+                'quantile_q3': 'float',
+                'interquantile': 'float',
+                'desviacion_media_absoluta': 'float',
+                'init_date': 'date',
+                'end_date': 'date',
+                'product': 'string'
+                }
 
-# Segmento de filtrado de datos para simplificar la cantidad de modelos
-# Filtrado por fecha reciente del ultimo ano
-filter = data.dataframe[parameters['filter_data']
-                        ['date_column']] >= pd.Timestamp('2023-01-01')
-# Seleccion de los datos mas recientes en el dataframe
-last_values_filter = data.dataframe[filter][parameters['filter_data']
-                                            ['filter_1_column']].value_counts().index.to_list()
-# Verificacion si las etiquetas estan en el dataframe general
-newest_labels = data.dataframe[parameters['filter_data']['filter_1_column']].isin(
-    last_values_filter)
-# Subseleccionar los datos
-data = data.dataframe[newest_labels]
-# criterial = data.dataframe[filter][parameters['filter_data']['filter_1_column']].value_counts()>MIN_DATA_VOLUME
-# Filtrar por datos que tenga mas de 365 registros
-criterial = data[parameters['filter_data']
-                 ['filter_1_column']].value_counts() > MIN_DATA_VOLUME
-items = data[parameters['filter_data']['filter_1_column']].value_counts()[
-    criterial].index.to_list()
+parameters['query_template']['table'] = 'metric_data'
+parameters['query_template']['columns'] = {
+    str(index): key for index, key in enumerate(metrics_data.keys())}
+parameters['type_data'] = {
+    'columns'+str(index): key for index, key in enumerate(metrics_data.values())}
 
-for item in items:
+data_metricas = get_data(SQLDataSourceFactory(**parameters))
 
-    # =================================================================
-    #             Cargar los parametros de alertas de modelos
-    # =================================================================
-    
-    CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
-    with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
-        parameters = yaml.safe_load(file)
-    
-    PARAM_ALARM = Path(ruta_actual).joinpath( 'src/data/alarm_files').joinpath(item).with_suffix('.yaml').as_posix()
-    if not os.path.isfile(PARAM_ALARM):
-        # PARAM_ALARM = Path(ruta_actual).joinpath( 'src/data/alarm_files').joinpath(item).with_suffix('.yaml').as_posix()
-        handler_load.save_yaml(datafile=alerts_parameters,savepath=PARAM_ALARM)
-    else:
-        with open(PARAM_ALARM, 'r', encoding='utf-8') as file:
-            alerts_parameters = yaml.safe_load(file)
-    
-    try:
-        parameters['filter_data']['filter_1_feature'] = item
-        date = parameters['filter_data']['date_column']
-        filter_col = parameters['filter_data']['filter_1_column']
-        quantity = parameters['filter_data']['predict_column']
-
-        # data[date] = pd.to_datetime(data[date])
-        
-        # Filtrar el DataFrame para contener sólo el artículo que quieres evaluar
-        item_data = data[data[filter_col] == item].copy()
-
-        # Asegúrate de que los datos estén ordenados por fecha
-        item_data.sort_values(date, inplace=True)
-
-        # Define la serie temporal
-        time_series = item_data.set_index(date)[quantity]
-
-        #Dataframe para evaluar las alertas que son de todos los datos
-        group_item = time_series.groupby([pd.Grouper(freq='W')]).sum()
-        group_item = pd.DataFrame(group_item)
-
-        #Dataframe con las metricas descriptivas para las alertas
-        original = data_imputation.metrics_column(group_item[quantity])
-        original['init_date'] = str(group_item.index.min())
-        original['end_date'] = str(group_item.index.max())
-        original['product'] = item
-        df_metrics = pd.DataFrame([original])
+# Clase para manipular y transformar los datos
+handler_metricas = ColumnsNameHandler(
+    data_metricas, **parameters['query_template'])
 
 
-    except (ValueError,Exception) as error_predict:
-        print(error_predict)
+MODEL_FOLDERS = Path(ruta_actual).joinpath('src/data/save_models').as_posix()
+items = []
+for folder in Path(MODEL_FOLDERS).iterdir():
+    if folder.is_dir() and folder.name != '__pycache__':
+        items.append(folder.name)
+items = items[0:5]
 
 
 # =================================================================
 #           Secuencia de alarmas
 # =================================================================
-# Creacion de alertas para gene
-alerta_baja_cantidad = AlertaPorBajaCantidad(
-    alerts_parameters['alerta_bajacantidad']['cantidadbaja'])
-observer_baja_cantidad = AlertaObserver(alerta_baja_cantidad)
+for item in items:
 
-alerta_tiempo_de_venta_bajo = AlertaPorTiempoDeVentaBajo(
-    alerts_parameters['alerta_tiempodeventabajo']['min_dias'])
-observer_tiempo_de_venta_bajo = AlertaObserver(alerta_tiempo_de_venta_bajo)
+    # Verificar si el archivo de configuracion de alarmas ya existe
+    PARAM_ALARM = Path(ruta_actual).joinpath(
+        'src/data/alarm_files').joinpath(item).with_suffix('.yaml').as_posix()
+    print(PARAM_ALARM)
+    if not os.path.isfile(PARAM_ALARM):
+        handler_load.save_yaml(
+            datafile=alerts_parameters_source, savepath=PARAM_ALARM)
+        alerts_parameters = alerts_parameters_source
+    else:
+        with open(PARAM_ALARM, 'r', encoding='utf-8') as file:
+            alerts_parameters = yaml.safe_load(file)
 
-alerta_cambio_ventas = AlertaPorCambiosBruscosEnLasVentas(
-    alerts_parameters['alerta_cambiosbruscos']['umbral_varianza'],
-    alerts_parameters['alerta_cambiosbruscos']['umbral_desviacion'])
-observer_cambio_ventas = AlertaObserver(alerta_cambio_ventas)
+    # Traer metricas de las predicciones en la base de datos
+    metrics_data = {'rango': 'float',
+                    'varianza': 'float',
+                    'desviacion_estandar': 'float',
+                    'coeficiente_varianza': 'float',
+                    'quantile_q1': 'float',
+                    'quantile_q3': 'float',
+                    'interquantile': 'float',
+                    'desviacion_media_absoluta': 'float',
+                    'init_date': 'date',
+                    'end_date': 'date',
+                    'product': 'string'
+                    }
 
-alerta_inventario_inactivo = AlertaPorInventarioInactivo(
-    alerts_parameters['alerta_inventarioinactivo']['max_dias_inactivo'])
-observer_inventario_inactivo = AlertaObserver(alerta_inventario_inactivo)
+    parameters['query_template']['table'] = 'metric_data'
+    parameters['query_template']['columns'] = {
+        str(index): key for index, key in enumerate(metrics_data.keys())}
+    parameters['type_data'] = {
+        'columns'+str(index): key for index, key in enumerate(metrics_data.values())}
+    parameters['filter_data']['filter_1_column'] = 'product'
 
-alerta_seguimiento_tendencias = AlertaPorSeguimientoTendencias(
-    alerts_parameters['alerta_seguimientotendencias']['threshold'])
-observer_seguimiento_tendencias = AlertaObserver(alerta_seguimiento_tendencias)
+    # Criterio de filtrado de informacion por item existente
+    filter_item = handler_metricas.dataframe[parameters['filter_data']
+                                             ['filter_1_column']] == item
+    data_metricas = handler_metricas.dataframe[filter_item]
 
-# Crear el inventario inicial
-inventario_inicial = [
-    {'modelo': 'manzana', 'cantidad': 100, 'init_date': '2022-01-01', 'end_date': '2022-01-15',
-        'varianza': 12, 'desviacion_estandar': 12, 'coeficiente_varianza': 42},
-    {'modelo': 'banana', 'cantidad': 10, 'init_date': '2022-01-01', 'end_date': '2022-01-05',
-        'varianza': 43, 'desviacion_estandar': 13, 'coeficiente_varianza': 42}
-]
+    # display(data_metricas)
 
-# Crear una instancia de Inventario y adjuntar el observador
-inventario = Inventario(inventario_inicial)
-inventario.attach(observer_baja_cantidad)
-inventario.attach(observer_tiempo_de_venta_bajo)
-inventario.attach(observer_cambio_ventas)
-inventario.attach(observer_inventario_inactivo)
-inventario.attach(observer_seguimiento_tendencias)
+    # Traer los datos de las predicciones
+    predictec_data = {'fecha': 'date',
+                      'predicion': 'float',
+                      'code': 'string'
+                      }
+    parameters['query_template']['table'] = 'modelopredicciones'
+    parameters['query_template']['columns'] = {
+        str(index): key for index, key in enumerate(predictec_data.keys())}
+    parameters['type_data'] = {
+        'columns'+str(index): key for index, key in enumerate(predictec_data.values())}
+    parameters['filter_data']['date_column'] = 'fecha'
+    parameters['filter_data']['predict_column'] = 'predicion'
+    parameters['filter_data']['filter_1_column'] = 'code'
 
+    # Criterio de filtrado de informacion por item existente
+    filter_item = handler_data.dataframe[parameters['filter_data']
+                                         ['filter_1_column']] == item
+    data = handler_data.dataframe[filter_item]
 
-# Agregar la alerta al inventario
-inventario.agregar_alerta(alerta_baja_cantidad)
-inventario.agregar_alerta(alerta_tiempo_de_venta_bajo)
-inventario.agregar_alerta(alerta_cambio_ventas)
-inventario.agregar_alerta(alerta_inventario_inactivo)
-inventario.agregar_alerta(alerta_seguimiento_tendencias)
+    # Creacion de alertas para gene
+    alerta_baja_cantidad = AlertaPorBajaCantidad(
+        # alerts_parameters['alerta_bajacantidad']['cantidadbaja'],
+        cantidad=250,
+        item=item,
+        column='predicion',
+        config=parametros.connection_data_source)
+    observer_baja_cantidad = AlertaObserver(alerta_baja_cantidad)
 
-# Evaluar el inventario
-inventario.evaluar_inventario()
+    alerta_tiempo_de_venta_bajo = AlertaPorTiempoDeVentaBajo(
+        # alerts_parameters['alerta_tiempodeventabajo']['min_dias'],
+        min_dias_venta=10,
+        item=item,
+        config=parametros.connection_data_source)
+    observer_tiempo_de_venta_bajo = AlertaObserver(alerta_tiempo_de_venta_bajo)
+
+    alerta_cambio_ventas = AlertaPorCambiosBruscosEnLasVentas(
+        umbral_varianza=alerts_parameters['alerta_cambiosbruscos']['umbral_varianza'],
+        umbral_desviacion_estandar=alerts_parameters['alerta_cambiosbruscos']['umbral_desviacion'],
+        item=item,
+        config=parametros.connection_data_source)
+    observer_cambio_ventas = AlertaObserver(alerta_cambio_ventas)
+
+    alerta_inventario_inactivo = AlertaPorInventarioInactivo(
+        max_dias_inactivo=alerts_parameters['alerta_inventarioinactivo']['max_dias_inactivo'],
+        item=item,
+        previus_val=alerts_parameters['alerta_inventarioinactivo']['valor_anterior_inventario'],
+        config=parametros.connection_data_source)
+    observer_inventario_inactivo = AlertaObserver(alerta_inventario_inactivo)
+
+    alerta_seguimiento_tendencias = AlertaPorSeguimientoTendencias(
+        threshold=alerts_parameters['alerta_seguimientotendencias']['threshold'],
+        item=item,
+        config=parametros.connection_data_source)
+    observer_seguimiento_tendencias = AlertaObserver(
+        alerta_seguimiento_tendencias)
+
+    alerta_demanda_estacional = AlertaPorDemandaEstacional(
+        item=item,
+        threshold=alerts_parameters['alerta_demandaestacional']['threshold'],
+        column_time='fecha',
+        column_value='predicion',
+        config=parametros.connection_data_source)
+    observer_demanda_estacional = AlertaObserver(alerta_demanda_estacional)
+
+    # Crear una instancia de Inventario y adjuntar el observador
+    data.set_index('fecha', inplace=True)
+
+    # Linea temporal para eliminar repetidos en la serie de tiempo
+    data = data.reset_index().drop_duplicates(
+        subset='fecha', keep='first').set_index('fecha')
+
+    # Metodo para administrar alertas y observadores
+    inventario_historic = Inventario(data)
+    inventario_metricas = Inventario(data_metricas)
+
+    inventario_historic.attach(observer_baja_cantidad)
+    inventario_historic.attach(observer_inventario_inactivo)
+    inventario_historic.attach(observer_demanda_estacional)
+    inventario_historic.attach(observer_tiempo_de_venta_bajo)
+    inventario_metricas.attach(observer_cambio_ventas)
+    inventario_metricas.attach(observer_seguimiento_tendencias)
+
+    # Agregar la alerta al inventario
+    inventario_historic.agregar_alerta(alerta_baja_cantidad)
+    inventario_historic.agregar_alerta(alerta_inventario_inactivo)
+    inventario_historic.agregar_alerta(alerta_demanda_estacional)
+    inventario_historic.agregar_alerta(alerta_tiempo_de_venta_bajo)
+    inventario_metricas.agregar_alerta(alerta_cambio_ventas)
+    inventario_metricas.agregar_alerta(alerta_seguimiento_tendencias)
+
+    # Evaluar el inventario
+    inventario_historic.evaluar_historico(
+        init_data=data.index[0], end_date=data.index[-1])
+    # inventario_metricas.evaluar_metricas()
+
+    # Actualiza los parametros en caso de ser necesario
+    alerts_parameters['alerta_inventarioinactivo']['valor_anterior_inventario'] = float(
+        alerta_inventario_inactivo.previus_stock)
+    handler_load.save_yaml(datafile=alerts_parameters, savepath=PARAM_ALARM)

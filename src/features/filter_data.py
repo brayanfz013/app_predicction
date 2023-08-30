@@ -1,4 +1,4 @@
-''' 
+'''
 Codigo para generar un sistema de alertas usando patrones de diseno, se aplica tanto a los datos
 de inventario real como a los datos de las predicciones de los modelos
 
@@ -10,9 +10,10 @@ from abc import ABC, abstractmethod
 import datetime
 from datetime import datetime as dtime
 import pandas as pd
-import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
-from datetime import datetime, timedelta
+from src.features.features_redis import HandleRedis
+
+handler_redis = HandleRedis()
 
 
 class Subject:
@@ -38,14 +39,14 @@ class Subject:
         The detach function removes an observer from the list of observers.
 
         Args:
-          observer: The observer parameter is an object that is currently 
+          observer: The observer parameter is an object that is currently
           observing or listening to changes in the subject.
         """
         self._observers.remove(observer)
 
     def notify(self):
         """
-        The `notify` function iterates over a list of observers and calls their `update` 
+        The `notify` function iterates over a list of observers and calls their `update`
         method, passing in the current object.
         """
         for observer in self._observers:
@@ -76,17 +77,30 @@ class AlertaPorBajaCantidad(Alertas):
     # prints an alert message if the quantity of a product is below 50.
     '''
 
-    def __init__(self, cantidad: str, item: str = 'modulo', column: str = '') -> None:
+    def __init__(self, cantidad: str, item: str = 'modulo', column: str = '', config: dict = None) -> None:
         self.cantidad = cantidad
         self.column = column
         self.item = item
+        self.config = config
 
     def eval(self, data):
         # Evalua el ultimo valor de los datos
         if data[self.column][-1] < self.cantidad:
             # aqui se genera el codigo para o el indicador de alerta para escribir en la base
             # de datos
-            print("Alerta: Baja cantidad de:", self.item)
+            print("Alerta Activa: Baja cantidad de:", self.item)
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name="AlertaBajaCantidad",
+                value=1)
+        else:
+            print("Alerta Desactivada: Baja cantidad de:", self.item)
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name="AlertaBajaCantidad",
+                value=2)
 
 
 class AlertasPorVariacionPreciosProveedores(Alertas):
@@ -97,13 +111,13 @@ class AlertaPorVarianza(Alertas):
     '''Alerta por alta varianza en los ultimos valores'''
     # Esta alerta se aplica a los datos agrupados por semanas  aplicada multiples meses
 
-    def __init__(self, threshold=0.1, item: str = 'modulo', column: str = ''):
+    def __init__(self, threshold=0.1, item: str = 'modulo', column: str = '', config: dict = None):
         # threshold es el umbral que determina cuánto debe cambiar el coeficiente de variación
         # para que se dispare la alerta.
         self.item = item
         self.threshold = threshold
-        self.previous_coeficiente_varianza = None
         self.column = column
+        self.config = config
 
     def eval(self, data):
         # Evalua el ultimo valor de los datos
@@ -111,6 +125,19 @@ class AlertaPorVarianza(Alertas):
             # aqui se genera el codigo para o el indicador de alerta para escribir en la base
             # de datos
             print("Alerta: Varianza cantidad de:", self.item)
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorVarianza',
+                value=1
+            )
+        else:
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorVarianza',
+                value=2
+            )
 
 
 class AlertaPorTiempoDeVentaBajo(Alertas):
@@ -119,11 +146,13 @@ class AlertaPorTiempoDeVentaBajo(Alertas):
     specified threshold.
     '''
 
-    def __init__(self, min_dias_venta: int = 7, item: str = 'modulo'):
+    def __init__(self, min_dias_venta: int = 7, item: str = 'modulo', config: dict = None):
         # min_dias_venta es el número mínimo de días que un producto debe durar en el inventario
         # antes de que se dispare la alerta
         self.min_dias_venta = min_dias_venta
         self.item = item
+        self.config = config
+        self.dias_ventas_ = None
 
     def eval(self, data):
         """
@@ -136,6 +165,7 @@ class AlertaPorTiempoDeVentaBajo(Alertas):
           end_date: The `end_date` parameter represents the date when the sales period ends.
           item: The 'item' parameter represents the name or identifier of the product being evaluated.
         """
+        print("Esta mierda porque no responde")
         # Convierte las fechas de inicio y fin a objetos datetime
         if not isinstance(data.index[0], datetime.date):
             init_date = dtime.strptime(data.index[0], '%Y-%m-%d')
@@ -148,21 +178,35 @@ class AlertaPorTiempoDeVentaBajo(Alertas):
 
         # Calcula la diferencia en días entre las fechas
         dias_venta = (end_date - init_date).days
-
-        print('Dias de venta', dias_venta)
         # Si la cantidad de días de venta es menor al umbral, se dispara la alerta
         if dias_venta < self.min_dias_venta:
             print(
                 f"Alerta: El producto '{self.item}' se vendió en solo {dias_venta} días.")
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorTiempoDeVentaBajo',
+                value=1
+            )
+        else:
+            print(
+                f"Alerta Desactivada: El producto '{self.item}' se vendió en solo {dias_venta} días.")
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorTiempoDeVentaBajo',
+                value=2
+            )
 
 
 class AlertaPorCambiosBruscosEnLasVentas(Alertas):
     '''Alerta por cambio brusco en ventas'''
 
-    def __init__(self, umbral_varianza, umbral_desviacion_estandar, item: str = 'modulo'):
+    def __init__(self, umbral_varianza, umbral_desviacion_estandar, item: str = 'modulo', config: str = None):
         self.umbral_varianza = umbral_varianza
         self.umbral_desviacion_estandar = umbral_desviacion_estandar
         self.item = item
+        self.config = config
 
     def eval(self, data):
         varianza = data['varianza'].values[0]
@@ -170,28 +214,56 @@ class AlertaPorCambiosBruscosEnLasVentas(Alertas):
         if varianza > self.umbral_varianza:
             print(
                 f"Alerta: Cambio brusco en ventas detectado. Varianza: {varianza}")
-
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorCambiosBruscosVarianza',
+                value=1
+            )
+        else:
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorCambiosBruscosVarianza',
+                value=2
+            )
         if desviacion_estandar > self.umbral_desviacion_estandar:
             print(
                 f"Alerta: Cambio brusco en ventas detectado. Desviación Estándar: {desviacion_estandar}")
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorCambiosBruscosDesviacionEstandar',
+                value=1
+            )
+        else:
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorCambiosBruscosDesviacionEstandar',
+                value=2
+            )
 
 
 class AlertaPorInventarioInactivo(Alertas):
     '''Alerta por tiempo inventario inactivo'''
     # Esta alerta se aplica a los datos por dias (sin agrupacion)
 
-    def __init__(self, max_dias_inactivo=30, item: str = 'modulo', previus_val: float = 0):
+    def __init__(self, max_dias_inactivo=30, item: str = 'modulo', previus_val: float = 0, config: str = None):
         super().__init__()
         # max_dias_inactivo es el número máximo de días que un producto puede estar inactivo
         # antes de que se dispare la alerta
         self.max_dias_inactivo = max_dias_inactivo
         self.previus_stock = previus_val
         self.item = item
+        self.config = config
 
     def eval(self, data):
         # Si es la primera vez que evaluamos, simplemente guardamos el valor actual de cantidad
+        self.previus_stock = None if self.previus_stock == 'None' else self.previus_stock
+
         if self.previus_stock is None:
-            print('Condicional None')
+            print('Condicional valor previo')
             self.previus_stock = data['predicion'].values[-1]
 
         # '''Las fechas init_date y end_date deben ser cadenas en el formato 'AAAA-MM-DD'.'''
@@ -209,9 +281,24 @@ class AlertaPorInventarioInactivo(Alertas):
         dias_inactivo = (now - end_date).days
 
         # Si la cantidad de días inactivos supera el umbral, se dispara la alerta
-        if dias_inactivo > self.max_dias_inactivo and self.previus_stock == data['predicion'].values[-1]:
+        if dias_inactivo > self.max_dias_inactivo and float(self.previus_stock) == float(data['predicion'].values[-1]):
             print(
                 f"Alerta: El producto '{self.item}' ha estado inactivo por {dias_inactivo} días.")
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorInventarioInactivo',
+                value=1
+            )
+        else:
+            print(
+                f"Alerta Desactivasda: El producto '{self.item}' ha estado inactivo por {dias_inactivo} días.")
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorInventarioInactivo',
+                value=2
+            )
 
 
 class AlertaPorSeguimientoTendencias:
@@ -221,11 +308,22 @@ class AlertaPorSeguimientoTendencias:
     # significantly.
     '''
 
-    def __init__(self, threshold=0.1, item='modulo'):
+    def __init__(self, threshold=0.1, item='modulo', config: dict = None):
         self.item = item
         self.threshold = threshold
+        self.config = config
 
     def eval(self, data: pd.DataFrame):
+        """
+        The `eval` function compares the current and previous values of a coefficient of variation in a
+        DataFrame and prints an alert if the relative change exceeds a threshold.
+
+        Args:
+          data (pd.DataFrame): The `data` parameter is expected to be a pandas DataFrame containing the
+        sales data. It is assumed that the DataFrame is sorted by date, with the last row representing the
+        current values and the second-to-last row representing the previous values. The DataFrame should
+        have a column named 'coeficiente_varianza
+        """
         # Suponiendo que los datos están ordenados por fecha y que la última fila contiene los valores actuales
         # y la penúltima fila contiene los valores anteriores
         current_row = data.iloc[-1]
@@ -244,36 +342,87 @@ class AlertaPorSeguimientoTendencias:
             print("Coeficiente de variación anterior:",
                   previous_coeficiente_varianza)
             print("Coeficiente de variación actual:", coeficiente_varianza)
+
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorSeguimientoTendencias',
+                value=1
+            )
         else:
             print('No hay cambios')
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorSeguimientoTendencias',
+                value=2
+            )
+
+        if cambio > 0:
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorSeguimientoTendenciasCreciente',
+                value=2
+            )
+        else:
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorSeguimientoTendenciasCreciente',
+                value=3
+            )
 
 
 class AlertaPorDemandaEstacional(Alertas):
     '''Alerta para saber cuando una producot esta en demanda estacional'''
     # Esta alerta se aplica a los datos agrupados por semanas aplicada multiples meses
 
-    def __init__(self, item, threshold, column_time: str = '', column_value: str = '') -> None:
+    def __init__(self, item, threshold, column_time: str = '', column_value: str = '', config: dict = None) -> None:
         self.threshold = threshold
-        self.item_to_check = item
+        self.item = item
         self.column_time = column_time
         self.column_value = column_value
+        self.config = config
 
     def eval(self, data):
         # Realiza la descomposición estacional
         # puedes ajustar el período según tus necesidades
-        # if data.shape[0] < 12
-        result = seasonal_decompose(
-            data.set_index(self.column_time)[self.column_value],
-            model='additive',
-            period=4
-        )
-
-        # Supongamos que quieres disparar una alerta si la amplitud de la componente estacional supera un umbral
-        seasonal_amplitude = result.seasonal.max() - result.seasonal.min()
-        if seasonal_amplitude > self.threshold:  # ajusta este umbral según tus necesidades
+        if data.shape[0] <= 8:
             print(
-                f"Alerta: Demanda estacional detectada para el artículo {self.item_to_check}. Amplitud: {seasonal_amplitude}")
-
+                f"Alerta: Demanda estacional detectada para el artículo {self.item}. Datos insuficiente"
+            )
+            handler_redis.set_single_value(
+                dict_key=self.item,
+                config=self.config,
+                file_name='AlertaPorDemandaEstacional',
+                value=4
+            )
+        else:
+            result = seasonal_decompose(
+                data[self.column_value],
+                model='additive',
+                period=4
+            )
+            # Supongamos que quieres disparar una alerta si la amplitud de la componente estacional supera un umbral
+            seasonal_amplitude = result.seasonal.max() - result.seasonal.min()
+            if seasonal_amplitude > self.threshold:  # ajusta este umbral según tus necesidades
+                print(
+                    f"Alerta: Demanda estacional detectada para el artículo {self.item}. Amplitud: {seasonal_amplitude}")
+                handler_redis.set_single_value(
+                    dict_key=self.item,
+                    config=self.config,
+                    file_name='AlertaPorDemandaEstacional',
+                    value=1
+                )
+            else:
+                print('No hay cambios')
+                handler_redis.set_single_value(
+                    dict_key=self.item,
+                    config=self.config,
+                    file_name='AlertaPorDemandaEstacional',
+                    value=2
+                )
 # ===================================================================
 #          Clase concreta de Observer para utilizar la alerta
 # ===================================================================
@@ -281,7 +430,7 @@ class AlertaPorDemandaEstacional(Alertas):
 
 class AlertaObserver(Observer):
     '''
-    The `AlertaObserver` class is an implementation of the Observer pattern that updates an 
+    The `AlertaObserver` class is an implementation of the Observer pattern that updates an
        `Alertas` object based on changes in a subject.
     '''
 
@@ -300,7 +449,7 @@ class Inventario(Subject):
     def __init__(self, inventario) -> None:
         '''
         Args:
-          inventario: Una lista de diccionarios que representan los elementos en el inventario. 
+          inventario: Una lista de diccionarios que representan los elementos en el inventario.
                       Cada diccionario debe tener claves que coincidan con los datos que las alertas necesitan evaluar.
         '''
         super().__init__()
@@ -324,7 +473,11 @@ class Inventario(Subject):
 
     def evaluar_historico(self, init_data, end_date):
         '''Evalúa todos los elementos en el inventario con todas las alertas.'''
-        self.inventario = self.inventario[init_data:end_date]
+        try:
+            self.inventario = self.inventario[init_data:end_date]
+        except TypeError as date_error:
+            print('[Error] Fecha fuera de rango:',date_error)
+
         for alerta in self.alertas:
             # Aquí puedes pasar los datos necesarios dependiendo de cómo estén estructuradas tus alertas
             if isinstance(alerta, AlertaPorBajaCantidad):
@@ -333,6 +486,8 @@ class Inventario(Subject):
             if isinstance(alerta, AlertaPorInventarioInactivo):
                 if alerta.eval(self.inventario[end_date:]):
                     self.notify()
+            if alerta.eval(self.inventario):
+                self.notify()
 
     def evaluar_metricas(self):
         '''Evaluar las alertas '''

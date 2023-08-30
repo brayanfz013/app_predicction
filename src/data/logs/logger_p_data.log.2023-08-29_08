@@ -1,0 +1,6 @@
+2023-08-29 08:40:00,704 - matplotlib - DEBUG - __init__ : 307 - matplotlib data path: /home/bdebian/.virtualenvs/app_prediction/lib/python3.10/site-packages/matplotlib/mpl-data
+2023-08-29 08:40:00,707 - matplotlib - DEBUG - __init__ : 307 - CONFIGDIR=/home/bdebian/.config/matplotlib
+2023-08-29 08:40:00,708 - matplotlib - DEBUG - __init__ : 1475 - interactive is False
+2023-08-29 08:40:00,708 - matplotlib - DEBUG - __init__ : 1476 - platform is linux
+2023-08-29 08:40:00,736 - matplotlib - DEBUG - __init__ : 307 - CACHEDIR=/home/bdebian/.cache/matplotlib
+2023-08-29 08:40:00,737 - matplotlib.font_manager - DEBUG - font_manager : 1540 - Using fontManager instance from /home/bdebian/.cache/matplotlib/fontlist-v330.json

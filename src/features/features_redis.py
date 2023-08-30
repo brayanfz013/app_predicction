@@ -151,7 +151,7 @@ class HandleRedis(object):
             # print(redis_error)
 
     def get_alldata(self, file_name: str, config: str):
-        '''get_posicition Funcion para traer toda la lista de datos de una collecion de redis
+        """get_posicition Funcion para traer toda la lista de datos de una collecion de redis
 
         Args:
             file_name (str): Nombre / Key que se desea traer
@@ -159,7 +159,7 @@ class HandleRedis(object):
 
         Returns:
             _type_: _description_
-        '''
+        """
         try:
             parameters_connection = self.get_config_file(
                 config, section='redis')
@@ -174,7 +174,7 @@ class HandleRedis(object):
             # print(redis_error)
 
     def get_single_value(self, dict_key: str, file_name: str, config: str):
-        '''get_posicition Funcion para traer toda la lista de datos de una collecion de redis
+        """get_posicition Funcion para traer toda la lista de datos de una collecion de redis
 
         Args:
             file_name (str): Nombre / Key que se desea traer
@@ -182,7 +182,7 @@ class HandleRedis(object):
 
         Returns:
             _type_: _description_
-        '''
+        """
         try:
             parameters_connection = self.get_config_file(
                 config, section='redis')
@@ -210,8 +210,8 @@ class HandleRedis(object):
           config (str): The `config` parameter is the path to the configuration file that contains the
         connection details for Redis. It is used to establish a connection with Redis and perform operations
         on it.
-        """
-        '''get_posicition Funcion para traer toda la lista de datos de una collecion de redis
+
+                get_posicition Funcion para traer toda la lista de datos de una collecion de redis
 
         Args:
             file_name (str): Nombre / Key que se desea traer
@@ -219,7 +219,8 @@ class HandleRedis(object):
 
         Returns:
             _type_: _description_
-        '''
+        """
+
         try:
             parameters_connection = self.get_config_file(
                 config, section='redis')
@@ -231,13 +232,13 @@ class HandleRedis(object):
             # print(redis_error)
 
     def set_dict_data(self, hash_name: str, dict_data: dict, config: str):
-        '''set_dict_data Metodo para enviar un diccionario de datos a redis 
+        """set_dict_data Metodo para enviar un diccionario de datos a redis 
 
         Args:
             hash (str): Nombre del hash donde se guardara la informacion del diccionario
             dict_data (dict): data del diccionario tiene que estar denotado por un 
             config (str): Ruta del archivos de las configuraciones para la conexion con redis
-        '''
+        """
         try:
             # Conversion de los indicadores de keys como strings
             dict_data[hash_name] = {
@@ -266,14 +267,14 @@ class HandleRedis(object):
 
         Returns:
           a dictionary object named `data`.
-        """
-        '''get_dict_data _summary_
+
+          get_dict_data _summary_
 
         Args:
             hash_name (str): _description_
             dict_data (dict): _description_
             config (str): Ruta del archivos de las configuraciones para la conexion con redis
-        '''
+        """
 
         data = {hash_name: {}}
         try:
@@ -409,50 +410,6 @@ class HandleRedis(object):
         return ip_publica
 
 
-
-    def update_alert(self):
-        '''Metodo en redis para escribir a un campo especifico en una key de redis'''
-        # try:
-        #     parameters_connection = self.get_config_file(
-        #         config, section='redis')
-
-        #     with redis.Redis(**parameters_connection) as connection:
-        #         old_df_bytes = connection.get(hash_name)
-
-        #         # Si existe un DataFrame antiguo, deserialízalo
-        #         if old_df_bytes is not None:
-        #             self.log.debug('Recuperando data existente')
-        #             old_df = pickle.loads(old_df_bytes)
-        #         elif old_dataframe is not None:
-        #             # Si no existe un DataFrame antiguo, crea uno vacío con las mismas columnas
-        #             self.log.debug('Insertando nueva data')
-        #             old_df = old_dataframe.copy()
-        #             connection.set(hash_name, pickle.dumps(
-        #                 old_dataframe), ex=exp_time)
-        #         else:
-        #             self.log.debug("No hay datos en cache")
-        #             old_df = None
-
-        #     # Verficar si existe nueva informacion por rellenar
-        #     if new_dataframe is not None and isinstance(old_df, pd.DataFrame):
-        #         # Combina el DataFrame antiguo con el nuevo
-        #         # update_frame = old_df.append(new_dataframe, ignore_index=True).drop_duplicates()
-        #         self.log.debug('Verificacion si existe nueva informacion')
-        #         update_frame = pd.concat([old_df, new_dataframe])
-
-        #         # Serializa el DataFrame a bytes usando pickle
-        #         # Guarda los bytes en Redis
-        #         connection.set(hash_name, pickle.dumps(
-        #             update_frame), ex=exp_time)
-        #     elif isinstance(old_df, pd.DataFrame):
-        #         update_frame = old_df.copy()
-        #     else:
-        #         update_frame = None
-        #     return update_frame
-        #     # self.log.debug("Extracion de datos completa")
-        # except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
-        #     self.log.error(redis_error)
-        #     # print(redis_error)
 
 # if __name__ == '__main__':
 
