@@ -81,7 +81,7 @@ try:
     #     data = pd.DataFrame(invoices)
     #     filter_cols = list(parameters['query_template']['columns'].values())
     #     data = data[filter_cols]
-        
+
         #Si no existen datos buscar en la base de datos y meterlos al cache
         logger.debug('Extrayendo datos de la fuente de datos')
         data = get_data(SQLDataSourceFactory(**parameters))
@@ -96,7 +96,7 @@ try:
 except ValueError as error:
     logger.debug("No se puede hacer un cache de la fuente de datos")
     logger.error(error)
-    exit()
+
 # =================================================================
 #             Limpieza de datos
 # =================================================================
@@ -156,7 +156,7 @@ for item in items:
         parameters = yaml.safe_load(file)
     try:
         parameters['filter_data']['filter_1_feature'] = item
-        
+
         # =================================================================
         # Remocion de outliners y seleccion de columnas
         logger.debug("removiendo outliners : %s",item)
@@ -222,7 +222,7 @@ for item in items:
         #                               METRICAS PREDICCIONES
         # ===============================================================================================
         # Esta parte tiene un ToDo importante: Tiene que ordenarse y optimizarce para se escalable
-        # De momento funciona de manera estatica para ciertas cosas sobre todo el tema de la escritura 
+        # De momento funciona de manera estatica para ciertas cosas sobre todo el tema de la escritura
         # en postgres, ademas de tener codigo copiado de funciones internas ya ordenadas
         logger.debug('Generando metricas para el modelo : %s',item)
         # Cuantificar metricas de la columan de predicciones
@@ -238,7 +238,7 @@ for item in items:
         #agregar la columnas de filtrado de forma dinamica
         for adding_data in filter_temp:
             data_frame_predicciones[str(adding_data)] = adding_data
-            
+
         new_names = list(parameters['query_template_write']['columns'].values())
         rename = {x: y for x, y in zip(list(data_frame_predicciones.columns), new_names)}
         data_frame_predicciones.rename(columns=rename, inplace=True)
@@ -366,7 +366,7 @@ for item in items:
         send_metrics = pd.DataFrame([original])
         logger.debug('Insertando metricas de datos reales para el modelo : %s',item)
         set_data(SQLDataSourceFactory(**parameters), send_metrics)
- 
+
     except (ValueError,Exception) as error_predict:
         logging.debug("Error en las prediccioens")
         logging.error(error_predict)

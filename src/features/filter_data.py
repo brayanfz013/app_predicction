@@ -326,53 +326,61 @@ class AlertaPorSeguimientoTendencias:
         """
         # Suponiendo que los datos están ordenados por fecha y que la última fila contiene los valores actuales
         # y la penúltima fila contiene los valores anteriores
-        current_row = data.iloc[-1]
-        previous_row = data.iloc[-2]
+        if data.shape[0] >=2:
+            current_row = data.iloc[-1]
+            previous_row = data.iloc[-2]
 
-        coeficiente_varianza = current_row['coeficiente_varianza']
-        previous_coeficiente_varianza = previous_row['coeficiente_varianza']
+            coeficiente_varianza = current_row['coeficiente_varianza']
+            previous_coeficiente_varianza = previous_row['coeficiente_varianza']
 
-        cambio = coeficiente_varianza - previous_coeficiente_varianza
-        cambio_relativo = abs(cambio) / previous_coeficiente_varianza
+            cambio = coeficiente_varianza - previous_coeficiente_varianza
+            cambio_relativo = abs(cambio) / previous_coeficiente_varianza
 
-        if cambio_relativo > self.threshold:
-            tendencia = "a la alza" if cambio > 0 else "a la baja"
-            print(
-                f"Alerta: Cambio significativo en la tendencia de ventas detectado ({tendencia}).")
-            print("Coeficiente de variación anterior:",
-                  previous_coeficiente_varianza)
-            print("Coeficiente de variación actual:", coeficiente_varianza)
+            if cambio_relativo > self.threshold:
+                tendencia = "a la alza" if cambio > 0 else "a la baja"
+                print(
+                    f"Alerta: Cambio significativo en la tendencia de ventas detectado ({tendencia}).")
+                print("Coeficiente de variación anterior:",
+                    previous_coeficiente_varianza)
+                print("Coeficiente de variación actual:", coeficiente_varianza)
 
-            handler_redis.set_single_value(
-                dict_key=self.item,
-                config=self.config,
-                file_name='AlertaPorSeguimientoTendencias',
-                value=1
-            )
+                handler_redis.set_single_value(
+                    dict_key=self.item,
+                    config=self.config,
+                    file_name='AlertaPorSeguimientoTendencias',
+                    value=1
+                )
+            else:
+                print('No hay cambios')
+                handler_redis.set_single_value(
+                    dict_key=self.item,
+                    config=self.config,
+                    file_name='AlertaPorSeguimientoTendencias',
+                    value=2
+                )
+
+            if cambio > 0:
+                handler_redis.set_single_value(
+                    dict_key=self.item,
+                    config=self.config,
+                    file_name='AlertaPorSeguimientoTendenciasCreciente',
+                    value=2
+                )
+            else:
+                handler_redis.set_single_value(
+                    dict_key=self.item,
+                    config=self.config,
+                    file_name='AlertaPorSeguimientoTendenciasCreciente',
+                    value=3
+                )
         else:
-            print('No hay cambios')
+            print('Datos insuficientes')
             handler_redis.set_single_value(
-                dict_key=self.item,
-                config=self.config,
-                file_name='AlertaPorSeguimientoTendencias',
-                value=2
-            )
-
-        if cambio > 0:
-            handler_redis.set_single_value(
-                dict_key=self.item,
-                config=self.config,
-                file_name='AlertaPorSeguimientoTendenciasCreciente',
-                value=2
-            )
-        else:
-            handler_redis.set_single_value(
-                dict_key=self.item,
-                config=self.config,
-                file_name='AlertaPorSeguimientoTendenciasCreciente',
-                value=3
-            )
-
+                    dict_key=self.item,
+                    config=self.config,
+                    file_name='AlertaPorSeguimientoTendencias',
+                    value=4
+                )
 
 class AlertaPorDemandaEstacional(Alertas):
     '''Alerta para saber cuando una producot esta en demanda estacional'''

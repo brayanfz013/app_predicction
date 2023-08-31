@@ -70,39 +70,6 @@ CONFIG_FILE = ruta_actual+'/src/data/config/alerts.yaml'
 with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
     alerts_parameters_source = yaml.safe_load(file)
 
-# parameter_alerts = AlertsData(**alerts_parameters)
-
-# =================================================================
-#             Cargar datos de la fuente de datos
-# =================================================================
-
-# # Nuevos datos para reemplazar en las columnas
-# new_types = []
-# base = {
-#     'date': np.datetime64,
-#     'integer': int,
-#     'float': float,
-#     'string': object,
-# }
-
-# for dtypo in parameters['type_data'].values():
-#     # print(dtypo)
-#     new_types.append(base[dtypo])
-
-# # metodo para transformar los tipo de datos
-# strategy = {
-#     int: np.mean,
-#     float: np.mean,
-#     object: stats.mode
-# }
-
-# # Estrategias para imputar los datos faltantes de NA
-# replace = {
-#     int: lambda x: int(float(x.replace(',', ''))),
-#     float: lambda x: float(x.replace(',', '')),
-#     object: lambda x: x.strip()
-# }
-
 # =================================================================
 #     Cargar los resultados de la base de datos de predicciones
 # =================================================================
