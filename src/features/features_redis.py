@@ -1,4 +1,4 @@
-''' 
+'''
 Codigo con funciones base para enviar informacion al servidor de redis
 
 '''
@@ -18,8 +18,7 @@ try:
     from ..data.logs import LOGS_DIR
 except ImportError as error:
     print(error)
-    path_folder = os.path.dirname(__file__)
-    path_folder = str(Path(path_folder).parents)
+    PATH_FOLDER = str(Path(os.path.dirname(__file__)).parents)
     omitir = ''
 
     def search_subfolders(path: str):
@@ -33,19 +32,19 @@ except ImportError as error:
                     folder.append(os.path.join(root, name))
         return folder
 
-    for i in search_subfolders(path_folder):
+    for i in search_subfolders(PATH_FOLDER):
         sys.path.insert(0, i)
     from data.logs import LOGS_DIR
 
 
 class HandleRedis(object):
     """
-    Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy    
+    Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy
     """
 
     def __init__(self, logfile='data/config/logging.conf'):
-        path_folder = os.path.dirname(__file__)
-        path_folder = str(Path(path_folder).parents[0])
+
+        path_folder = str(Path(os.path.dirname(__file__)).parents[0])
         logs_file = str(Path(path_folder).joinpath(logfile))
 
         # Constructor que permite inicializar los parametros
@@ -53,7 +52,7 @@ class HandleRedis(object):
         self.log = logging.getLogger('datasource')
 
     def file_ini_(self, filename: str = 'database', section: str = 'redis'):
-        '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo 
+        '''file_ini_ Metodo para cargar parametros cuando la extencion del archivo
         de parametros es ini
 
         Args:
@@ -90,14 +89,14 @@ class HandleRedis(object):
         return data_parameters
 
     def file_yaml(self, filename: str, section: str = 'redis'):
-        '''file_yaml Metodo rapido para cargar los archivos de la base detaso 
+        '''file_yaml Metodo rapido para cargar los archivos de la base detaso
         cuando se tiene un yaml usando la clave de connection_data_source
 
         Args:
             filename (str): Ruta del archivo de la fuente de datos
 
         Returns:
-            _type_: Diccionario con los criterios de conexion 
+            _type_: Diccionario con los criterios de conexion
         '''
         with open(filename, 'r', encoding='utf-8') as file:
             load_yaml = yaml.safe_load(file)
@@ -110,7 +109,7 @@ class HandleRedis(object):
         se tiene que seleccion el motor de base de datos.
 
         Retorna un diccionario con la lectura de los parametros dentro del archivo
-        de conexion 
+        de conexion
 
         """
         if isinstance(filename, str):
@@ -199,7 +198,7 @@ class HandleRedis(object):
         """
         The `set_single_value` function sets a single value in a Redis hash using the provided dictionary
         key, file name, value, and configuration.
-        
+
         Args:
           dict_key (str): The `dict_key` parameter is the key of the dictionary in Redis where you want to
         set the value. It is a string that represents the key of the dictionary.
@@ -232,11 +231,11 @@ class HandleRedis(object):
             # print(redis_error)
 
     def set_dict_data(self, hash_name: str, dict_data: dict, config: str):
-        """set_dict_data Metodo para enviar un diccionario de datos a redis 
+        """set_dict_data Metodo para enviar un diccionario de datos a redis
 
         Args:
             hash (str): Nombre del hash donde se guardara la informacion del diccionario
-            dict_data (dict): data del diccionario tiene que estar denotado por un 
+            dict_data (dict): data del diccionario tiene que estar denotado por un
             config (str): Ruta del archivos de las configuraciones para la conexion con redis
         """
         try:
@@ -314,7 +313,7 @@ class HandleRedis(object):
         configuration.
 
         Args:
-          hash_name (str): The `hash_name` parameter is a string that represents the name 
+          hash_name (str): The `hash_name` parameter is a string that represents the name
           of the hash or key in the Redis cache from which you want to retrieve data.
           config (str): The `config` parameter is a string that represents the name or path of the
         configuration file. It is used to retrieve the connection parameters for the Redis server.
@@ -338,11 +337,11 @@ class HandleRedis(object):
 
     def set_cache_data(self, hash_name: str, old_dataframe: pd.DataFrame, new_dataframe: pd.DataFrame, exp_time: int, config: str):
         """
-        The `set_cache_data` function is used to cache database data in Redis, allowing 
+        The `set_cache_data` function is used to cache database data in Redis, allowing
         for the storage and retrieval of old and new dataframes.
 
         Args:
-            hash_name (str): The `hash_name` parameter is a string that represents the name of 
+            hash_name (str): The `hash_name` parameter is a string that represents the name of
             the hash/key used to store the information in the Redis cache.
             old_dataframe (pd.DataFrame): The `old_dataframe` parameter is a Pandas DataFrame that
             contains the previous data that was stored in the cache. It is used to check if there
@@ -350,10 +349,10 @@ class HandleRedis(object):
             new_dataframe (pd.DataFrame): The `new_dataframe` parameter is a Pandas DataFrame
             that contains the new data that you want to add to the cache.
             exp_time (int): The `exp_time` parameter represents the expiration time in seconds for the
-            cached data in Redis. After this time has passed, the data will be automatically 
+            cached data in Redis. After this time has passed, the data will be automatically
             removed from the cache.
-            config (str): The `config` parameter is a string that represents the parameters for 
-            connecting to Redis. It is used to retrieve the connection parameters from a 
+            config (str): The `config` parameter is a string that represents the parameters for
+            connecting to Redis. It is used to retrieve the connection parameters from a
             configuration file.
 
         Returns:

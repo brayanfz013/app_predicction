@@ -6,11 +6,11 @@ import os
 from pathlib import Path
 import pandas as pd
 try:
-    from src.features.features_redis import HandleRedis
+    # from src.features.features_redis import HandleRedis
     from src.features.features_postgres import HandleDBpsql
     from src.models.args_data_model import ParamsPostgres, Parameters
 except ImportError as Error:
-    from features_redis import HandleRedis
+    # from features_redis import HandleRedis
     from features_postgres import HandleDBpsql
     from args_data_model import Parameters
 
@@ -53,11 +53,11 @@ class SQLPostgres(DataSource):
         """
         The `read` method reads data from a data source using a query template and returns the resulting
         table.
-        
+
         Returns:
           The method is returning the result of the `get_table` method from the `data_source` object.
+        metodo base para hacer lectura de los datos
         """
-        '''metodo base para hacer lectura de los datos'''
         fix_dict_query = self.data_source.fix_dict_query(
             self.parametro.query_template['table'],
             list(self.parametro.query_template['columns'].values()),
@@ -78,12 +78,13 @@ class SQLPostgres(DataSource):
         """
         The `write` method is a base method for writing data to a PostgreSQL database using a template
         query.
-        
+
         Args:
           data (pd.DataFrame): The `data` parameter is a pandas DataFrame that contains the data to be
         written to a PostgreSQL database.
+        metodo base para hacer escritura de los datos en postgres
         """
-        '''metodo base para hacer escritura de los datos en postgres'''
+
         fix_dict_query = self.data_source.fix_dict_query(
             self.parametro.query_template_write['table'],
             list(self.parametro.query_template_write['columns'].values()),
@@ -105,8 +106,10 @@ class SQLPostgres(DataSource):
         """
         The `create` method is used to create tables in a PostgreSQL database based on the column names
         and data types specified in a YAML file.
+
+        Metodo para crear tablas
         """
-        '''Metodo para crear tablas '''
+
 
         conver_postgrest = {
             'date': 'DATE',
@@ -152,16 +155,18 @@ class SQLPostgres(DataSource):
 class SQLserver(DataSource):
     '''Metodo de manipulacion de datos de sql server'''
     def __init__(self) -> None:
-        super().__init__()
+        """ ToDo"""
 
     def read(self):
-        return super().read()
-    
+        """ ToDo"""
+
+
     def write(self, data):
-        return super().write(data)
-    
+        """ ToDo"""
+
     def create(self):
-        return super().create()
+        """ ToDo"""
+
 
 class NoSQLRedis(DataSource):
     '''Metodo para manipulacion de datos de redis'''
@@ -184,6 +189,16 @@ class PlainTextFileDataSource(DataSource):
 
     def write(self, data):
         return "Datos escritos en el archivo de texto plano"
+
+
+class APIinterface(DataSource):
+
+    def __init__(self) -> None:
+        """ ToDo"""
+
+    def read(self):
+        """ ToDo"""
+
 
 
 # Esta es la interfaz abstracta para la fábrica

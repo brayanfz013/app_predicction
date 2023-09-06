@@ -462,22 +462,6 @@ class Inventario(Subject):
         '''
         super().__init__()
         self.inventario = inventario
-        self.alertas = []  # Lista de objetos Alertas
-        # self.observers = [] # Lista de observadores
-
-    def agregar_alerta(self, alerta):
-        '''Agrega una alerta a la lista de alertas para evaluar.'''
-        self.alertas.append(alerta)
-
-    def evaluar_inventario(self):
-        '''Evalúa todos los elementos en el inventario con todas las alertas.'''
-        for item in self.inventario:
-            for alerta in self.alertas:
-                print(alerta)
-                # Aquí puedes pasar los datos necesarios dependiendo de cómo estén estructuradas tus alertas
-                if alerta.eval(item):
-                    # self.notify(f"Alerta: {alerta.message} para el item {item}")
-                    self.notify()
 
     def evaluar_historico(self, init_data, end_date):
         '''Evalúa todos los elementos en el inventario con todas las alertas.'''
@@ -485,23 +469,22 @@ class Inventario(Subject):
             self.inventario = self.inventario[init_data:end_date]
         except TypeError as date_error:
             print('[Error] Fecha fuera de rango:',date_error)
-
-        for alerta in self.alertas:
+        for alerta in self._observers:
             # Aquí puedes pasar los datos necesarios dependiendo de cómo estén estructuradas tus alertas
             if isinstance(alerta, AlertaPorBajaCantidad):
-                if alerta.eval(self.inventario[end_date:]):
+                if alerta.alerta.eval(self.inventario[end_date:]):
                     self.notify()
             if isinstance(alerta, AlertaPorInventarioInactivo):
-                if alerta.eval(self.inventario[end_date:]):
+                if alerta.alerta.eval(self.inventario[end_date:]):
                     self.notify()
-            if alerta.eval(self.inventario):
+            if alerta.alerta.eval(self.inventario):
                 self.notify()
 
     def evaluar_metricas(self):
         '''Evaluar las alertas '''
-        # for item in self.inventario:
-        for alerta in self.alertas:
-            if alerta.eval(self.inventario):
+
+        for alerta in self._observers:
+            if alerta.alerta.eval(self.inventario):
                 self.notify()
 
 # if __name__ == "__main__":

@@ -16,6 +16,7 @@ import re
 import yaml
 import numpy as np
 import pandas as pd
+import requests
 from scipy import stats
 from pathlib import Path
 from src.lib.class_load import LoadFiles

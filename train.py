@@ -18,7 +18,7 @@ from src.lib.factory_prepare_data import (DataCleaner, DataModel,
 handler_load = LoadFiles()
 ruta_actual = os.path.dirname(__file__)
 #=================================================================
-#             Cargar datos de la fuente de datos 
+#             Cargar datos de la fuente de datos
 #=================================================================
 
 CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
@@ -32,7 +32,7 @@ with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
 
 # if response.status_code == 200:
 #     invoices  = response.json()
-# else: 
+# else:
 #     print(response.status_code)
 
 # data = pd.DataFrame(invoices)
@@ -115,7 +115,7 @@ model_trained = modelo.train()
 if parameters['optimize']:
     model_trained = modelo.optimize()
 
-#Guargar los modelos entrenados 
+#Guargar los modelos entrenados
 modelo.save(model_trained,scaler=scaler_data)
 
 print('metodo finalizado')
