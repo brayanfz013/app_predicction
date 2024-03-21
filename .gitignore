@@ -13,7 +13,9 @@ __pycache__/
 *.pkl
 *.ipynb
 
+
 # Distribution / packaging
+/src/data/logs/*
 /src/data/save_models/*
 .Python
 build/
