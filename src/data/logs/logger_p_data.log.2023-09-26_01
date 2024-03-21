@@ -1,0 +1,84 @@
+2023-09-26 01:15:26,875 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2023-09-26 01:15:26,875 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2023-09-26 01:15:26,878 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2023-09-26 01:15:26,878 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2023-09-26 01:15:26,878 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2023-09-26 01:15:26,878 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2023-09-26 01:15:52,908 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2023-09-26 01:15:52,908 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2023-09-26 01:15:52,914 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2023-09-26 01:15:52,914 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2023-09-26 01:15:52,914 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2023-09-26 01:15:52,914 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2023-09-26 01:15:53,679 - train - DEBUG - run_train : 67 - Existe data en cache
+2023-09-26 01:15:53,679 - train - DEBUG - run_train : 67 - Existe data en cache
+2023-09-26 01:15:53,679 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2023-09-26 01:15:53,679 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2023-09-26 01:18:04,470 - datasource - ERROR - features_postgres : 460 - connection to server at "192.168.115.175", port 5432 failed: Connection timed out
+	Is the server running on that host and accepting TCP/IP connections?
+
+2023-09-26 01:18:04,470 - datasource - ERROR - features_postgres : 460 - connection to server at "192.168.115.175", port 5432 failed: Connection timed out
+	Is the server running on that host and accepting TCP/IP connections?
+
+2023-09-26 01:18:04,470 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2023-09-26 01:18:04,470 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2023-09-26 01:18:04,571 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2023-09-26 01:18:04,571 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2023-09-26 01:18:04,969 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2023-09-26 01:18:04,969 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2023-09-26 01:18:04,969 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2023-09-26 01:18:04,969 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2023-09-26 01:18:05,600 - train - DEBUG - run_train : 179 - Filtrando informacion
+2023-09-26 01:18:05,600 - train - DEBUG - run_train : 179 - Filtrando informacion
+2023-09-26 01:18:05,754 - train - DEBUG - run_train : 200 - Filtrado terminado
+2023-09-26 01:18:05,754 - train - DEBUG - run_train : 200 - Filtrado terminado
+2023-09-26 01:18:05,755 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2023-09-26 01:18:05,755 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2023-09-26 01:18:05,755 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2023-09-26 01:18:05,755 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2023-09-26 01:18:05,978 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2023-09-26 01:18:05,978 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2023-09-26 01:18:05,997 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2023-09-26 01:18:05,997 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2023-09-26 01:18:39,147 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2023-09-26 01:18:39,147 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2023-09-26 01:18:39,147 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2023-09-26 01:18:39,147 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2023-09-26 01:18:39,147 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2023-09-26 01:18:39,147 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2023-09-26 01:18:39,363 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2023-09-26 01:18:39,363 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2023-09-26 01:18:39,381 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2023-09-26 01:18:39,381 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2023-09-26 01:19:06,255 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2023-09-26 01:19:06,255 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2023-09-26 01:19:06,255 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2023-09-26 01:19:06,255 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2023-09-26 01:19:06,255 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2023-09-26 01:19:06,255 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2023-09-26 01:19:06,464 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2023-09-26 01:19:06,464 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2023-09-26 01:19:06,482 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2023-09-26 01:19:06,482 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2023-09-26 01:19:38,969 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2023-09-26 01:19:38,969 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2023-09-26 01:19:38,969 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2023-09-26 01:19:38,969 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2023-09-26 01:19:38,969 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2023-09-26 01:19:38,969 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2023-09-26 01:19:39,199 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2023-09-26 01:19:39,199 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2023-09-26 01:19:39,221 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2023-09-26 01:19:39,221 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2023-09-26 01:20:08,075 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2023-09-26 01:20:08,075 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2023-09-26 01:20:08,075 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2023-09-26 01:20:08,075 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2023-09-26 01:20:08,075 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2023-09-26 01:20:08,075 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2023-09-26 01:20:08,284 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2023-09-26 01:20:08,284 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2023-09-26 01:20:08,302 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2023-09-26 01:20:08,302 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2023-09-26 01:20:37,634 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2023-09-26 01:20:37,634 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5

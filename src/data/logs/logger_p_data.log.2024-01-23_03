@@ -1,0 +1,126 @@
+2024-01-23 03:17:49,450 - datasource - ERROR - features_postgres : 289 - syntax error at or near "{"
+LINE 1: ...ISTS SMART255 (     index serial PRIMARY KEY,     {'date': '...
+                                                             ^
+
+2024-01-23 03:17:49,450 - datasource - ERROR - features_postgres : 289 - syntax error at or near "{"
+LINE 1: ...ISTS SMART255 (     index serial PRIMARY KEY,     {'date': '...
+                                                             ^
+
+2024-01-23 03:17:49,451 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:17:49,451 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:27:06,227 - datasource - ERROR - features_postgres : 289 - syntax error at or near "["
+LINE 1: ...ISTS SMART255 (     index serial PRIMARY KEY,     ['"date" D...
+                                                             ^
+
+2024-01-23 03:27:06,227 - datasource - ERROR - features_postgres : 289 - syntax error at or near "["
+LINE 1: ...ISTS SMART255 (     index serial PRIMARY KEY,     ['"date" D...
+                                                             ^
+
+2024-01-23 03:27:06,228 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:27:06,228 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:28:07,120 - datasource - ERROR - features_postgres : 289 - no schema has been selected to create in
+LINE 1: CREATE TABLE IF NOT EXISTS SMART255 (     index serial PRIMA...
+                                   ^
+
+2024-01-23 03:28:07,120 - datasource - ERROR - features_postgres : 289 - no schema has been selected to create in
+LINE 1: CREATE TABLE IF NOT EXISTS SMART255 (     index serial PRIMA...
+                                   ^
+
+2024-01-23 03:28:07,121 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:28:07,121 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:29:12,993 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:29:12,993 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:29:12,994 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:29:12,994 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:30:47,815 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:30:47,815 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:30:47,816 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:30:47,816 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:31:23,268 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS predicciones.HardDrive.SMART255 (...
+                                   ^
+
+2024-01-23 03:31:23,268 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS predicciones.HardDrive.SMART255 (...
+                                   ^
+
+2024-01-23 03:31:23,268 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:31:23,268 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:31:44,164 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS predicciones.HardDrive.SMART255 (...
+                                   ^
+
+2024-01-23 03:31:44,164 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS predicciones.HardDrive.SMART255 (...
+                                   ^
+
+2024-01-23 03:31:44,165 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:31:44,165 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:33:24,058 - datasource - INFO - features_postgres : 149 - Query de verificacion de conexion de base de datos
+2024-01-23 03:33:24,058 - datasource - INFO - features_postgres : 149 - Query de verificacion de conexion de base de datos
+2024-01-23 03:35:20,096 - datasource - ERROR - features_postgres : 289 - column "HardDrive" does not exist
+LINE 1: ...M information_schema.schemata WHERE schema_name = "HardDrive...
+                                                             ^
+
+2024-01-23 03:35:20,096 - datasource - ERROR - features_postgres : 289 - column "HardDrive" does not exist
+LINE 1: ...M information_schema.schemata WHERE schema_name = "HardDrive...
+                                                             ^
+
+2024-01-23 03:35:20,098 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:35:20,098 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:38:20,788 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:38:20,788 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:38:20,789 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:38:20,789 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:38:33,550 - datasource - DEBUG - features_postgres : 287 - Query enviada
+2024-01-23 03:38:33,550 - datasource - DEBUG - features_postgres : 287 - Query enviada
+2024-01-23 03:38:33,555 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:38:33,555 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:42:26,905 - datasource - ERROR - features_postgres : 289 - no schema has been selected to create in
+LINE 1: CREATE TABLE IF NOT EXISTS SMART255 (     index serial PRIMA...
+                                   ^
+
+2024-01-23 03:42:26,905 - datasource - ERROR - features_postgres : 289 - no schema has been selected to create in
+LINE 1: CREATE TABLE IF NOT EXISTS SMART255 (     index serial PRIMA...
+                                   ^
+
+2024-01-23 03:42:26,906 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:42:26,906 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:46:18,994 - datasource - ERROR - features_postgres : 289 - no schema has been selected to create in
+LINE 1: CREATE TABLE IF NOT EXISTS SMART255 (     index serial PRIMA...
+                                   ^
+
+2024-01-23 03:46:18,994 - datasource - ERROR - features_postgres : 289 - no schema has been selected to create in
+LINE 1: CREATE TABLE IF NOT EXISTS SMART255 (     index serial PRIMA...
+                                   ^
+
+2024-01-23 03:46:18,995 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:46:18,995 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:52:10,302 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:52:10,302 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 03:52:10,303 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 03:52:10,303 - datasource - DEBUG - features_postgres : 293 - Finalizacion query

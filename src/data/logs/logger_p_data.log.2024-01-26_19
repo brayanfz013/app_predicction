@@ -1,0 +1,1755 @@
+2024-01-26 19:35:25,046 - py4j.java_gateway - DEBUG - java_gateway : 163 - GatewayClient.address is deprecated and will be removed in version 1.0. Use GatewayParameters instead.
+2024-01-26 19:35:25,050 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: A
+17314dcb6c086d50c6267d39fddb929bfef199b5c81d6c5870518d50c23c141a
+
+2024-01-26 19:35:25,071 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,072 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.SparkConf
+e
+
+2024-01-26 19:35:25,075 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,075 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.api.java.*
+e
+
+2024-01-26 19:35:25,076 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,077 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.api.python.*
+e
+
+2024-01-26 19:35:25,079 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,080 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.ml.python.*
+e
+
+2024-01-26 19:35:25,082 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,084 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.mllib.api.python.*
+e
+
+2024-01-26 19:35:25,087 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,088 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.resource.*
+e
+
+2024-01-26 19:35:25,089 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,090 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.sql.*
+e
+
+2024-01-26 19:35:25,090 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,091 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.sql.api.python.*
+e
+
+2024-01-26 19:35:25,092 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,092 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.sql.hive.*
+e
+
+2024-01-26 19:35:25,094 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,095 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+scala.Tuple2
+e
+
+2024-01-26 19:35:25,096 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:25,096 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+SparkConf
+rj
+e
+
+2024-01-26 19:35:25,098 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.SparkConf
+2024-01-26 19:35:25,098 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: i
+org.apache.spark.SparkConf
+bTrue
+e
+
+2024-01-26 19:35:25,106 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro0
+2024-01-26 19:35:25,106 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.app.name
+sdrive_data
+e
+
+2024-01-26 19:35:25,110 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro1
+2024-01-26 19:35:25,110 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.master
+sspark://172.20.0.2:7077
+e
+
+2024-01-26 19:35:25,111 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro2
+2024-01-26 19:35:25,111 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.serializer.objectStreamReset
+e
+
+2024-01-26 19:35:25,112 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:25,112 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.serializer.objectStreamReset
+s100
+e
+
+2024-01-26 19:35:25,113 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro3
+2024-01-26 19:35:25,113 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.rdd.compress
+e
+
+2024-01-26 19:35:25,114 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:25,114 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.rdd.compress
+sTrue
+e
+
+2024-01-26 19:35:25,115 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro4
+2024-01-26 19:35:25,115 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.master
+e
+
+2024-01-26 19:35:25,116 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:25,117 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.app.name
+e
+
+2024-01-26 19:35:25,117 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:25,118 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.master
+e
+
+2024-01-26 19:35:25,119 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:25,119 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+get
+sspark.master
+e
+
+2024-01-26 19:35:25,120 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark://172.20.0.2:7077
+2024-01-26 19:35:25,120 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.app.name
+e
+
+2024-01-26 19:35:25,121 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:25,121 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+get
+sspark.app.name
+e
+
+2024-01-26 19:35:25,122 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysdrive_data
+2024-01-26 19:35:25,122 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.home
+e
+
+2024-01-26 19:35:25,122 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:25,123 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+getAll
+e
+
+2024-01-26 19:35:25,123 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yto5
+2024-01-26 19:35:25,124 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,124 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,124 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i0
+e
+
+2024-01-26 19:35:25,125 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro6
+2024-01-26 19:35:25,125 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o6
+_1
+e
+
+2024-01-26 19:35:25,126 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.rdd.compress
+2024-01-26 19:35:25,126 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o6
+_2
+e
+
+2024-01-26 19:35:25,127 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysTrue
+2024-01-26 19:35:25,127 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,127 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,128 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i1
+e
+
+2024-01-26 19:35:25,128 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro7
+2024-01-26 19:35:25,129 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o7
+_1
+e
+
+2024-01-26 19:35:25,129 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.app.submitTime
+2024-01-26 19:35:25,129 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o7
+_2
+e
+
+2024-01-26 19:35:25,130 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys1706315724997
+2024-01-26 19:35:25,130 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,131 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,131 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i2
+e
+
+2024-01-26 19:35:25,131 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro8
+2024-01-26 19:35:25,132 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o8
+_1
+e
+
+2024-01-26 19:35:25,132 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.serializer.objectStreamReset
+2024-01-26 19:35:25,132 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o8
+_2
+e
+
+2024-01-26 19:35:25,133 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys100
+2024-01-26 19:35:25,133 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,134 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,134 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i3
+e
+
+2024-01-26 19:35:25,135 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro9
+2024-01-26 19:35:25,135 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o9
+_1
+e
+
+2024-01-26 19:35:25,135 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.submit.pyFiles
+2024-01-26 19:35:25,136 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o9
+_2
+e
+
+2024-01-26 19:35:25,136 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys
+2024-01-26 19:35:25,136 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,137 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,137 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i4
+e
+
+2024-01-26 19:35:25,138 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro10
+2024-01-26 19:35:25,138 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o10
+_1
+e
+
+2024-01-26 19:35:25,138 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.master
+2024-01-26 19:35:25,139 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o10
+_2
+e
+
+2024-01-26 19:35:25,139 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark://172.20.0.2:7077
+2024-01-26 19:35:25,139 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,140 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,140 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i5
+e
+
+2024-01-26 19:35:25,141 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro11
+2024-01-26 19:35:25,141 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o11
+_1
+e
+
+2024-01-26 19:35:25,141 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.submit.deployMode
+2024-01-26 19:35:25,142 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o11
+_2
+e
+
+2024-01-26 19:35:25,142 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysclient
+2024-01-26 19:35:25,142 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,143 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,143 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i6
+e
+
+2024-01-26 19:35:25,144 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro12
+2024-01-26 19:35:25,144 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o12
+_1
+e
+
+2024-01-26 19:35:25,145 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.ui.showConsoleProgress
+2024-01-26 19:35:25,145 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o12
+_2
+e
+
+2024-01-26 19:35:25,145 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ystrue
+2024-01-26 19:35:25,146 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,146 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,147 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i7
+e
+
+2024-01-26 19:35:25,147 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro13
+2024-01-26 19:35:25,148 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o13
+_1
+e
+
+2024-01-26 19:35:25,148 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.app.name
+2024-01-26 19:35:25,148 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o13
+_2
+e
+
+2024-01-26 19:35:25,149 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysdrive_data
+2024-01-26 19:35:25,149 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:25,150 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:25,150 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+JavaSparkContext
+rj
+e
+
+2024-01-26 19:35:25,161 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.java.JavaSparkContext
+2024-01-26 19:35:25,163 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: i
+org.apache.spark.api.java.JavaSparkContext
+ro0
+e
+
+2024-01-26 19:35:26,047 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: A
+17314dcb6c086d50c6267d39fddb929bfef199b5c81d6c5870518d50c23c141a
+
+2024-01-26 19:35:26,048 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:26,049 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o1
+e
+
+2024-01-26 19:35:26,049 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:26,050 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o2
+e
+
+2024-01-26 19:35:26,050 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:26,051 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o3
+e
+
+2024-01-26 19:35:26,051 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:26,051 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o4
+e
+
+2024-01-26 19:35:26,052 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:26,053 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o5
+e
+
+2024-01-26 19:35:26,054 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:26,124 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro14
+2024-01-26 19:35:26,125 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:26,127 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro15
+2024-01-26 19:35:26,127 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o15
+conf
+e
+
+2024-01-26 19:35:26,133 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro16
+2024-01-26 19:35:26,135 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonAccumulatorV2
+rj
+e
+
+2024-01-26 19:35:26,136 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonAccumulatorV2
+2024-01-26 19:35:26,137 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: i
+org.apache.spark.api.python.PythonAccumulatorV2
+s127.0.0.1
+i41245
+s17314dcb6c086d50c6267d39fddb929bfef199b5c81d6c5870518d50c23c141a
+e
+
+2024-01-26 19:35:26,137 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro17
+2024-01-26 19:35:26,138 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:26,138 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro18
+2024-01-26 19:35:26,139 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o18
+register
+ro17
+e
+
+2024-01-26 19:35:26,141 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:26,141 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonUtils
+rj
+e
+
+2024-01-26 19:35:26,143 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonUtils
+2024-01-26 19:35:26,143 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+isEncryptionEnabled
+e
+
+2024-01-26 19:35:26,144 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:26,145 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+isEncryptionEnabled
+ro14
+e
+
+2024-01-26 19:35:26,146 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:26,147 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonUtils
+rj
+e
+
+2024-01-26 19:35:26,148 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonUtils
+2024-01-26 19:35:26,148 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+getPythonAuthSocketTimeout
+e
+
+2024-01-26 19:35:26,149 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:26,149 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+getPythonAuthSocketTimeout
+ro14
+e
+
+2024-01-26 19:35:26,150 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yL15
+2024-01-26 19:35:26,150 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonUtils
+rj
+e
+
+2024-01-26 19:35:26,151 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonUtils
+2024-01-26 19:35:26,152 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+getSparkBufferSize
+e
+
+2024-01-26 19:35:26,152 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:26,152 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+getSparkBufferSize
+ro14
+e
+
+2024-01-26 19:35:26,153 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi65536
+2024-01-26 19:35:26,153 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org
+rj
+e
+
+2024-01-26 19:35:26,155 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,155 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache
+rj
+e
+
+2024-01-26 19:35:26,156 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,157 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark
+rj
+e
+
+2024-01-26 19:35:26,158 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,158 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.SparkFiles
+rj
+e
+
+2024-01-26 19:35:26,159 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.SparkFiles
+2024-01-26 19:35:26,159 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.SparkFiles
+getRootDirectory
+e
+
+2024-01-26 19:35:26,160 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:26,160 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.SparkFiles
+getRootDirectory
+e
+
+2024-01-26 19:35:26,161 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys/tmp/spark-1b1df5d2-2970-4128-a759-af90a780f1fc/userFiles-4bd97246-a743-48eb-b4d8-f6ba12aa6898
+2024-01-26 19:35:26,162 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o16
+get
+sspark.submit.pyFiles
+s
+e
+
+2024-01-26 19:35:26,163 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys
+2024-01-26 19:35:26,163 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org
+rj
+e
+
+2024-01-26 19:35:26,165 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,165 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache
+rj
+e
+
+2024-01-26 19:35:26,166 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,167 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark
+rj
+e
+
+2024-01-26 19:35:26,168 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,168 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util
+rj
+e
+
+2024-01-26 19:35:26,169 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,169 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util.Utils
+rj
+e
+
+2024-01-26 19:35:26,171 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.util.Utils
+2024-01-26 19:35:26,172 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.util.Utils
+getLocalDir
+e
+
+2024-01-26 19:35:26,176 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:26,176 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:26,177 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro19
+2024-01-26 19:35:26,177 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o19
+conf
+e
+
+2024-01-26 19:35:26,178 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro20
+2024-01-26 19:35:26,178 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.util.Utils
+getLocalDir
+ro20
+e
+
+2024-01-26 19:35:26,179 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys/tmp/spark-1b1df5d2-2970-4128-a759-af90a780f1fc
+2024-01-26 19:35:26,180 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org
+rj
+e
+
+2024-01-26 19:35:26,182 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,182 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache
+rj
+e
+
+2024-01-26 19:35:26,183 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,183 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark
+rj
+e
+
+2024-01-26 19:35:26,184 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,184 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util
+rj
+e
+
+2024-01-26 19:35:26,185 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:26,185 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util.Utils
+rj
+e
+
+2024-01-26 19:35:26,186 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.util.Utils
+2024-01-26 19:35:26,186 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.util.Utils
+createTempDir
+e
+
+2024-01-26 19:35:26,187 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:26,187 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.util.Utils
+createTempDir
+s/tmp/spark-1b1df5d2-2970-4128-a759-af90a780f1fc
+spyspark
+e
+
+2024-01-26 19:35:26,188 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro21
+2024-01-26 19:35:26,188 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o21
+getAbsolutePath
+e
+
+2024-01-26 19:35:26,189 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys/tmp/spark-1b1df5d2-2970-4128-a759-af90a780f1fc/pyspark-e8f3e250-8edb-41eb-bb5e-4d467fad9378
+2024-01-26 19:35:26,189 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o16
+get
+sspark.python.profile
+sfalse
+e
+
+2024-01-26 19:35:26,190 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysfalse
+2024-01-26 19:35:26,190 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o16
+get
+sspark.python.profile.memory
+sfalse
+e
+
+2024-01-26 19:35:26,191 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysfalse
+2024-01-26 19:35:26,197 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:26,199 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro22
+2024-01-26 19:35:26,199 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o22
+uiWebUrl
+e
+
+2024-01-26 19:35:26,200 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro23
+2024-01-26 19:35:26,201 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o23
+nonEmpty
+e
+
+2024-01-26 19:35:26,201 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:26,202 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o23
+get
+e
+
+2024-01-26 19:35:26,202 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yshttp://192.168.1.18:4040
+2024-01-26 19:35:26,203 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+version
+e
+
+2024-01-26 19:35:26,203 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys3.5.0
+2024-01-26 19:35:27,055 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o0
+e
+
+2024-01-26 19:35:27,056 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,056 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o6
+e
+
+2024-01-26 19:35:27,056 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,056 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o7
+e
+
+2024-01-26 19:35:27,057 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,057 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o8
+e
+
+2024-01-26 19:35:27,057 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,057 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o9
+e
+
+2024-01-26 19:35:27,058 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,058 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o10
+e
+
+2024-01-26 19:35:27,058 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,059 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o11
+e
+
+2024-01-26 19:35:27,059 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,059 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o12
+e
+
+2024-01-26 19:35:27,059 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,060 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o13
+e
+
+2024-01-26 19:35:27,060 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,060 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o15
+e
+
+2024-01-26 19:35:27,061 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,061 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o18
+e
+
+2024-01-26 19:35:27,062 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,062 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o19
+e
+
+2024-01-26 19:35:27,062 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,063 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o20
+e
+
+2024-01-26 19:35:27,064 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:27,064 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o21
+e
+
+2024-01-26 19:35:27,065 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:32,260 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+SparkConf
+rj
+e
+
+2024-01-26 19:35:32,261 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.SparkConf
+2024-01-26 19:35:32,262 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: i
+org.apache.spark.SparkConf
+bTrue
+e
+
+2024-01-26 19:35:32,263 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro24
+2024-01-26 19:35:32,263 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o24
+set
+sspark.app.name
+sdrive_data
+e
+
+2024-01-26 19:35:32,263 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro25
+2024-01-26 19:35:32,264 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o24
+set
+sspark.master
+sspark://172.20.0.2:7077
+e
+
+2024-01-26 19:35:32,264 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro26
+2024-01-26 19:35:32,652 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o24
+get
+sspark.executor.allowSparkContext
+sfalse
+e
+
+2024-01-26 19:35:32,653 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysfalse
+2024-01-26 19:35:33,072 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o25
+e
+
+2024-01-26 19:35:33,073 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:33,073 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o26
+e
+
+2024-01-26 19:35:33,076 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:33,078 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o22
+e
+
+2024-01-26 19:35:33,081 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:33,084 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o23
+e
+
+2024-01-26 19:35:33,087 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,755 - py4j.java_gateway - DEBUG - java_gateway : 163 - GatewayClient.address is deprecated and will be removed in version 1.0. Use GatewayParameters instead.
+2024-01-26 19:35:58,759 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: A
+6a63e8646a70d80a7391927bebc8d671f65be693a545d26d925ed489655c7658
+
+2024-01-26 19:35:58,770 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,771 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.SparkConf
+e
+
+2024-01-26 19:35:58,772 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,773 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.api.java.*
+e
+
+2024-01-26 19:35:58,773 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,774 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.api.python.*
+e
+
+2024-01-26 19:35:58,775 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,775 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.ml.python.*
+e
+
+2024-01-26 19:35:58,775 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,776 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.mllib.api.python.*
+e
+
+2024-01-26 19:35:58,776 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,777 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.resource.*
+e
+
+2024-01-26 19:35:58,777 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,777 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.sql.*
+e
+
+2024-01-26 19:35:58,778 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,778 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.sql.api.python.*
+e
+
+2024-01-26 19:35:58,779 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,779 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+org.apache.spark.sql.hive.*
+e
+
+2024-01-26 19:35:58,780 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,780 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: j
+i
+rj
+scala.Tuple2
+e
+
+2024-01-26 19:35:58,780 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:58,781 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+SparkConf
+rj
+e
+
+2024-01-26 19:35:58,782 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.SparkConf
+2024-01-26 19:35:58,782 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: i
+org.apache.spark.SparkConf
+bTrue
+e
+
+2024-01-26 19:35:58,786 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro0
+2024-01-26 19:35:58,786 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.app.name
+sdrive_data
+e
+
+2024-01-26 19:35:58,788 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro1
+2024-01-26 19:35:58,789 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.master
+sspark://172.20.0.2:7077
+e
+
+2024-01-26 19:35:58,790 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro2
+2024-01-26 19:35:58,790 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.serializer.objectStreamReset
+e
+
+2024-01-26 19:35:58,791 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:58,791 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.serializer.objectStreamReset
+s100
+e
+
+2024-01-26 19:35:58,792 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro3
+2024-01-26 19:35:58,793 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.rdd.compress
+e
+
+2024-01-26 19:35:58,793 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:58,794 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+set
+sspark.rdd.compress
+sTrue
+e
+
+2024-01-26 19:35:58,794 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro4
+2024-01-26 19:35:58,795 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.master
+e
+
+2024-01-26 19:35:58,795 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:58,795 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.app.name
+e
+
+2024-01-26 19:35:58,796 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:58,796 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.master
+e
+
+2024-01-26 19:35:58,796 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:58,797 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+get
+sspark.master
+e
+
+2024-01-26 19:35:58,797 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark://172.20.0.2:7077
+2024-01-26 19:35:58,798 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.app.name
+e
+
+2024-01-26 19:35:58,798 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:58,798 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+get
+sspark.app.name
+e
+
+2024-01-26 19:35:58,799 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysdrive_data
+2024-01-26 19:35:58,799 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+contains
+sspark.home
+e
+
+2024-01-26 19:35:58,799 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:58,800 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o0
+getAll
+e
+
+2024-01-26 19:35:58,800 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yto5
+2024-01-26 19:35:58,800 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,801 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,801 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i0
+e
+
+2024-01-26 19:35:58,801 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro6
+2024-01-26 19:35:58,801 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o6
+_1
+e
+
+2024-01-26 19:35:58,802 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.app.submitTime
+2024-01-26 19:35:58,802 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o6
+_2
+e
+
+2024-01-26 19:35:58,802 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys1706315758665
+2024-01-26 19:35:58,803 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,803 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,803 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i1
+e
+
+2024-01-26 19:35:58,803 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro7
+2024-01-26 19:35:58,803 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o7
+_1
+e
+
+2024-01-26 19:35:58,804 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.rdd.compress
+2024-01-26 19:35:58,804 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o7
+_2
+e
+
+2024-01-26 19:35:58,804 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysTrue
+2024-01-26 19:35:58,804 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,805 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,805 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i2
+e
+
+2024-01-26 19:35:58,805 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro8
+2024-01-26 19:35:58,805 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o8
+_1
+e
+
+2024-01-26 19:35:58,806 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.serializer.objectStreamReset
+2024-01-26 19:35:58,806 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o8
+_2
+e
+
+2024-01-26 19:35:58,806 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys100
+2024-01-26 19:35:58,806 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,806 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,807 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i3
+e
+
+2024-01-26 19:35:58,807 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro9
+2024-01-26 19:35:58,807 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o9
+_1
+e
+
+2024-01-26 19:35:58,808 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.submit.pyFiles
+2024-01-26 19:35:58,808 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o9
+_2
+e
+
+2024-01-26 19:35:58,808 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys
+2024-01-26 19:35:58,809 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,809 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,809 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i4
+e
+
+2024-01-26 19:35:58,810 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro10
+2024-01-26 19:35:58,810 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o10
+_1
+e
+
+2024-01-26 19:35:58,810 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.master
+2024-01-26 19:35:58,811 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o10
+_2
+e
+
+2024-01-26 19:35:58,811 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark://172.20.0.2:7077
+2024-01-26 19:35:58,811 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,811 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,812 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i5
+e
+
+2024-01-26 19:35:58,812 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro11
+2024-01-26 19:35:58,812 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o11
+_1
+e
+
+2024-01-26 19:35:58,813 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.submit.deployMode
+2024-01-26 19:35:58,813 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o11
+_2
+e
+
+2024-01-26 19:35:58,813 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysclient
+2024-01-26 19:35:58,814 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,814 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,814 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i6
+e
+
+2024-01-26 19:35:58,815 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro12
+2024-01-26 19:35:58,815 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o12
+_1
+e
+
+2024-01-26 19:35:58,815 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.ui.showConsoleProgress
+2024-01-26 19:35:58,816 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o12
+_2
+e
+
+2024-01-26 19:35:58,816 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ystrue
+2024-01-26 19:35:58,817 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,817 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,817 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+g
+o5
+i7
+e
+
+2024-01-26 19:35:58,818 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro13
+2024-01-26 19:35:58,818 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o13
+_1
+e
+
+2024-01-26 19:35:58,818 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysspark.app.name
+2024-01-26 19:35:58,819 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o13
+_2
+e
+
+2024-01-26 19:35:58,819 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysdrive_data
+2024-01-26 19:35:58,819 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: a
+e
+o5
+e
+
+2024-01-26 19:35:58,820 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi8
+2024-01-26 19:35:58,820 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+JavaSparkContext
+rj
+e
+
+2024-01-26 19:35:58,825 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.java.JavaSparkContext
+2024-01-26 19:35:58,826 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: i
+org.apache.spark.api.java.JavaSparkContext
+ro0
+e
+
+2024-01-26 19:35:59,459 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro14
+2024-01-26 19:35:59,460 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:59,461 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro15
+2024-01-26 19:35:59,462 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o15
+conf
+e
+
+2024-01-26 19:35:59,467 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro16
+2024-01-26 19:35:59,468 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonAccumulatorV2
+rj
+e
+
+2024-01-26 19:35:59,470 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonAccumulatorV2
+2024-01-26 19:35:59,470 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: i
+org.apache.spark.api.python.PythonAccumulatorV2
+s127.0.0.1
+i47727
+s6a63e8646a70d80a7391927bebc8d671f65be693a545d26d925ed489655c7658
+e
+
+2024-01-26 19:35:59,471 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro17
+2024-01-26 19:35:59,471 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:59,472 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro18
+2024-01-26 19:35:59,472 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o18
+register
+ro17
+e
+
+2024-01-26 19:35:59,474 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,474 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonUtils
+rj
+e
+
+2024-01-26 19:35:59,475 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonUtils
+2024-01-26 19:35:59,475 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+isEncryptionEnabled
+e
+
+2024-01-26 19:35:59,476 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:59,476 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+isEncryptionEnabled
+ro14
+e
+
+2024-01-26 19:35:59,478 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybfalse
+2024-01-26 19:35:59,478 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonUtils
+rj
+e
+
+2024-01-26 19:35:59,479 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonUtils
+2024-01-26 19:35:59,479 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+getPythonAuthSocketTimeout
+e
+
+2024-01-26 19:35:59,480 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:59,480 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+getPythonAuthSocketTimeout
+ro14
+e
+
+2024-01-26 19:35:59,480 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yL15
+2024-01-26 19:35:59,481 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+PythonUtils
+rj
+e
+
+2024-01-26 19:35:59,481 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.api.python.PythonUtils
+2024-01-26 19:35:59,481 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.api.python.PythonUtils
+getSparkBufferSize
+e
+
+2024-01-26 19:35:59,482 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:59,482 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.api.python.PythonUtils
+getSparkBufferSize
+ro14
+e
+
+2024-01-26 19:35:59,483 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yi65536
+2024-01-26 19:35:59,483 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org
+rj
+e
+
+2024-01-26 19:35:59,484 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,485 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache
+rj
+e
+
+2024-01-26 19:35:59,485 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,485 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark
+rj
+e
+
+2024-01-26 19:35:59,486 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,486 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.SparkFiles
+rj
+e
+
+2024-01-26 19:35:59,487 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.SparkFiles
+2024-01-26 19:35:59,487 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.SparkFiles
+getRootDirectory
+e
+
+2024-01-26 19:35:59,487 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:59,488 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.SparkFiles
+getRootDirectory
+e
+
+2024-01-26 19:35:59,489 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys/tmp/spark-1146e22c-c828-44b0-b794-67d6764d0286/userFiles-0607a3f6-d4f6-4186-9794-2398713133b2
+2024-01-26 19:35:59,489 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o16
+get
+sspark.submit.pyFiles
+s
+e
+
+2024-01-26 19:35:59,490 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys
+2024-01-26 19:35:59,490 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org
+rj
+e
+
+2024-01-26 19:35:59,491 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,492 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache
+rj
+e
+
+2024-01-26 19:35:59,493 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,493 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark
+rj
+e
+
+2024-01-26 19:35:59,494 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,494 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util
+rj
+e
+
+2024-01-26 19:35:59,495 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,495 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util.Utils
+rj
+e
+
+2024-01-26 19:35:59,497 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.util.Utils
+2024-01-26 19:35:59,498 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.util.Utils
+getLocalDir
+e
+
+2024-01-26 19:35:59,500 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:59,501 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:59,501 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro19
+2024-01-26 19:35:59,502 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o19
+conf
+e
+
+2024-01-26 19:35:59,502 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro20
+2024-01-26 19:35:59,503 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.util.Utils
+getLocalDir
+ro20
+e
+
+2024-01-26 19:35:59,504 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys/tmp/spark-1146e22c-c828-44b0-b794-67d6764d0286
+2024-01-26 19:35:59,504 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org
+rj
+e
+
+2024-01-26 19:35:59,505 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,506 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache
+rj
+e
+
+2024-01-26 19:35:59,507 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,507 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark
+rj
+e
+
+2024-01-26 19:35:59,508 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,508 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util
+rj
+e
+
+2024-01-26 19:35:59,509 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yp
+2024-01-26 19:35:59,509 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+u
+org.apache.spark.util.Utils
+rj
+e
+
+2024-01-26 19:35:59,510 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ycorg.apache.spark.util.Utils
+2024-01-26 19:35:59,510 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: r
+m
+org.apache.spark.util.Utils
+createTempDir
+e
+
+2024-01-26 19:35:59,511 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ym
+2024-01-26 19:35:59,512 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+z:org.apache.spark.util.Utils
+createTempDir
+s/tmp/spark-1146e22c-c828-44b0-b794-67d6764d0286
+spyspark
+e
+
+2024-01-26 19:35:59,512 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro21
+2024-01-26 19:35:59,513 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o21
+getAbsolutePath
+e
+
+2024-01-26 19:35:59,513 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys/tmp/spark-1146e22c-c828-44b0-b794-67d6764d0286/pyspark-f434e498-5936-4b47-bdfe-638071b6aab8
+2024-01-26 19:35:59,514 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o16
+get
+sspark.python.profile
+sfalse
+e
+
+2024-01-26 19:35:59,515 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysfalse
+2024-01-26 19:35:59,515 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o16
+get
+sspark.python.profile.memory
+sfalse
+e
+
+2024-01-26 19:35:59,516 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ysfalse
+2024-01-26 19:35:59,520 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+sc
+e
+
+2024-01-26 19:35:59,521 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro22
+2024-01-26 19:35:59,521 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o22
+uiWebUrl
+e
+
+2024-01-26 19:35:59,522 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yro23
+2024-01-26 19:35:59,522 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o23
+nonEmpty
+e
+
+2024-01-26 19:35:59,523 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ybtrue
+2024-01-26 19:35:59,523 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o23
+get
+e
+
+2024-01-26 19:35:59,524 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yshttp://192.168.1.18:4040
+2024-01-26 19:35:59,524 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: c
+o14
+version
+e
+
+2024-01-26 19:35:59,525 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !ys3.5.0
+2024-01-26 19:35:59,756 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: A
+6a63e8646a70d80a7391927bebc8d671f65be693a545d26d925ed489655c7658
+
+2024-01-26 19:35:59,756 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,757 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o1
+e
+
+2024-01-26 19:35:59,757 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,757 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o2
+e
+
+2024-01-26 19:35:59,758 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,758 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o3
+e
+
+2024-01-26 19:35:59,758 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,758 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o4
+e
+
+2024-01-26 19:35:59,759 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,759 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o5
+e
+
+2024-01-26 19:35:59,759 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,759 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o7
+e
+
+2024-01-26 19:35:59,760 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,760 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o8
+e
+
+2024-01-26 19:35:59,760 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,760 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o9
+e
+
+2024-01-26 19:35:59,760 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,761 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o10
+e
+
+2024-01-26 19:35:59,761 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,761 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o11
+e
+
+2024-01-26 19:35:59,761 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,762 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o12
+e
+
+2024-01-26 19:35:59,762 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,762 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o13
+e
+
+2024-01-26 19:35:59,762 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,763 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o15
+e
+
+2024-01-26 19:35:59,763 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,764 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o18
+e
+
+2024-01-26 19:35:59,764 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,764 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o19
+e
+
+2024-01-26 19:35:59,765 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,765 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o20
+e
+
+2024-01-26 19:35:59,765 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,766 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o21
+e
+
+2024-01-26 19:35:59,766 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,767 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o22
+e
+
+2024-01-26 19:35:59,767 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,768 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o23
+e
+
+2024-01-26 19:35:59,768 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,768 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o6
+e
+
+2024-01-26 19:35:59,769 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv
+2024-01-26 19:35:59,769 - py4j.clientserver - DEBUG - clientserver : 501 - Command to send: m
+d
+o0
+e
+
+2024-01-26 19:35:59,769 - py4j.clientserver - DEBUG - clientserver : 512 - Answer received: !yv

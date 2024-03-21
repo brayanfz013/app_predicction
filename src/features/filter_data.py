@@ -15,7 +15,6 @@ from src.features.features_redis import HandleRedis
 
 handler_redis = HandleRedis()
 
-
 class Subject:
     '''The `Subject` class allows objects to attach, detach, and notify
        observers of changes in its state.
@@ -165,7 +164,6 @@ class AlertaPorTiempoDeVentaBajo(Alertas):
           end_date: The `end_date` parameter represents the date when the sales period ends.
           item: The 'item' parameter represents the name or identifier of the product being evaluated.
         """
-        print("Esta mierda porque no responde")
         # Convierte las fechas de inicio y fin a objetos datetime
         if not isinstance(data.index[0], datetime.date):
             init_date = dtime.strptime(data.index[0], '%Y-%m-%d')

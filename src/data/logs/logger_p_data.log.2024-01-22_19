@@ -1,0 +1,34 @@
+2024-01-22 18:54:18,194 - datasource - INFO - features_postgres : 151 - Archivo no válido: /home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/config/config.yaml. Sólo se permiten archivos .ini o .yaml.
+2024-01-22 18:54:18,194 - datasource - INFO - features_postgres : 151 - Archivo no válido: /home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/config/config.yaml. Sólo se permiten archivos .ini o .yaml.
+2024-01-22 18:58:56,236 - root - INFO - features_postgres : 117 - Archivo de configuracion: /home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/config/config.yaml
+2024-01-22 18:58:56,238 - datasource - INFO - features_postgres : 156 - Archivo no válido: /home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/config/config.yaml. Sólo se permiten archivos .ini o .yaml.
+2024-01-22 18:58:56,238 - datasource - INFO - features_postgres : 156 - Archivo no válido: /home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/config/config.yaml. Sólo se permiten archivos .ini o .yaml.
+2024-01-22 18:59:14,794 - root - INFO - features_postgres : 117 - Archivo de configuracion: /home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/config/config.yaml
+2024-01-22 19:04:57,061 - datasource - INFO - features_postgres : 149 - Query de verificacion de conexion de base de datos
+2024-01-22 19:04:57,061 - datasource - INFO - features_postgres : 149 - Query de verificacion de conexion de base de datos
+2024-01-22 19:41:07,048 - datasource - ERROR - features_postgres : 289 - syntax error at end of input
+LINE 5:     
+            ^
+
+2024-01-22 19:41:07,048 - datasource - ERROR - features_postgres : 289 - syntax error at end of input
+LINE 5:     
+            ^
+
+2024-01-22 19:41:07,048 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-22 19:41:07,048 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-22 19:42:43,732 - datasource - ERROR - features_postgres : 289 - connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "predicciones.HardDrive" does not exist
+
+2024-01-22 19:42:43,732 - datasource - ERROR - features_postgres : 289 - connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "predicciones.HardDrive" does not exist
+
+2024-01-22 19:42:43,736 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-22 19:42:43,736 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-22 19:43:41,268 - datasource - INFO - features_postgres : 151 - connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "predicciones.HardDrive" does not exist
+
+2024-01-22 19:43:41,268 - datasource - INFO - features_postgres : 151 - connection to server at "localhost" (::1), port 5432 failed: FATAL:  database "predicciones.HardDrive" does not exist
+
+2024-01-22 19:54:26,294 - datasource - INFO - features_postgres : 151 - connection to server at "localhost" (::1), port 5432 failed: FATAL:  -c search_path requires a value
+
+2024-01-22 19:54:26,294 - datasource - INFO - features_postgres : 151 - connection to server at "localhost" (::1), port 5432 failed: FATAL:  -c search_path requires a value
+
+2024-01-22 19:54:52,261 - datasource - INFO - features_postgres : 149 - Query de verificacion de conexion de base de datos
+2024-01-22 19:54:52,261 - datasource - INFO - features_postgres : 149 - Query de verificacion de conexion de base de datos

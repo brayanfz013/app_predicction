@@ -1,0 +1,296 @@
+2024-01-02 12:03:04,635 - predict - DEBUG - run_predict : 49 - Inciando secuencia de entrenamiento
+2024-01-02 12:03:04,635 - predict - DEBUG - run_predict : 49 - Inciando secuencia de entrenamiento
+2024-01-02 12:03:04,638 - predict - DEBUG - run_predict : 57 - Archivo de configuraciones cargado
+2024-01-02 12:03:04,638 - predict - DEBUG - run_predict : 57 - Archivo de configuraciones cargado
+2024-01-02 12:03:04,638 - predict - DEBUG - run_predict : 65 - verficando si existe data cache
+2024-01-02 12:03:04,638 - predict - DEBUG - run_predict : 65 - verficando si existe data cache
+2024-01-02 12:03:05,108 - predict - DEBUG - run_predict : 73 - Existe data en cache
+2024-01-02 12:03:05,108 - predict - DEBUG - run_predict : 73 - Existe data en cache
+2024-01-02 12:03:05,109 - predict - DEBUG - run_predict : 82 - Realizando peticion a la fuente de datos
+2024-01-02 12:03:05,109 - predict - DEBUG - run_predict : 82 - Realizando peticion a la fuente de datos
+2024-01-02 12:03:06,587 - predict - DEBUG - run_predict : 98 - Actualizando cache en redis
+2024-01-02 12:03:06,587 - predict - DEBUG - run_predict : 98 - Actualizando cache en redis
+2024-01-02 12:03:06,676 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:03:06,676 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:03:07,023 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:03:07,023 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:03:08,593 - predict - DEBUG - run_predict : 105 - Actualizacion completa de datos en redis
+2024-01-02 12:03:08,593 - predict - DEBUG - run_predict : 105 - Actualizacion completa de datos en redis
+2024-01-02 12:03:08,611 - predict - DEBUG - run_predict : 176 - Realizando imputacion de datos
+2024-01-02 12:03:08,611 - predict - DEBUG - run_predict : 176 - Realizando imputacion de datos
+2024-01-02 12:03:09,007 - predict - DEBUG - run_predict : 182 - Filtrando informacion para seleccionar modelos
+2024-01-02 12:03:09,007 - predict - DEBUG - run_predict : 182 - Filtrando informacion para seleccionar modelos
+2024-01-02 12:03:09,007 - predict - DEBUG - run_predict : 189 - Filtrado terminado
+2024-01-02 12:03:09,007 - predict - DEBUG - run_predict : 189 - Filtrado terminado
+2024-01-02 12:03:09,009 - predict - DEBUG - run_predict : 200 - removiendo outliners : SMP8-5
+2024-01-02 12:03:09,009 - predict - DEBUG - run_predict : 200 - removiendo outliners : SMP8-5
+2024-01-02 12:03:09,323 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:03:09,323 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:03:09,344 - predict - DEBUG - run_predict : 221 - Cargando modelo: SMP8-5
+2024-01-02 12:03:09,344 - predict - DEBUG - run_predict : 221 - Cargando modelo: SMP8-5
+2024-01-02 12:03:12,719 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SMP8-5
+2024-01-02 12:03:12,719 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SMP8-5
+2024-01-02 12:03:12,719 - root - DEBUG - run_predict : 409 - Error en las prediccioens
+2024-01-02 12:03:12,719 - root - ERROR - run_predict : 410 - Timestamp must be between 2015-01-11 00:00:00 and 2023-07-16 00:00:00
+2024-01-02 12:03:12,723 - predict - DEBUG - run_predict : 200 - removiendo outliners : SME8-90
+2024-01-02 12:03:12,723 - predict - DEBUG - run_predict : 200 - removiendo outliners : SME8-90
+2024-01-02 12:03:12,931 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:03:12,931 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:03:12,945 - predict - DEBUG - run_predict : 221 - Cargando modelo: SME8-90
+2024-01-02 12:03:12,945 - predict - DEBUG - run_predict : 221 - Cargando modelo: SME8-90
+2024-01-02 12:03:14,087 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SME8-90
+2024-01-02 12:03:14,087 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SME8-90
+2024-01-02 12:03:14,088 - root - DEBUG - run_predict : 409 - Error en las prediccioens
+2024-01-02 12:03:14,088 - root - ERROR - run_predict : 410 - Timestamp must be between 2015-01-11 00:00:00 and 2023-07-16 00:00:00
+2024-01-02 12:03:14,092 - predict - DEBUG - run_predict : 200 - removiendo outliners : SME10-90
+2024-01-02 12:03:14,092 - predict - DEBUG - run_predict : 200 - removiendo outliners : SME10-90
+2024-01-02 12:03:14,291 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:03:14,291 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:03:14,304 - predict - DEBUG - run_predict : 221 - Cargando modelo: SME10-90
+2024-01-02 12:03:14,304 - predict - DEBUG - run_predict : 221 - Cargando modelo: SME10-90
+2024-01-02 12:03:15,212 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SME10-90
+2024-01-02 12:03:15,212 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SME10-90
+2024-01-02 12:03:15,213 - root - DEBUG - run_predict : 409 - Error en las prediccioens
+2024-01-02 12:03:15,213 - root - ERROR - run_predict : 410 - Timestamp must be between 2015-01-11 00:00:00 and 2023-07-16 00:00:00
+2024-01-02 12:03:15,216 - predict - DEBUG - run_predict : 200 - removiendo outliners : EG0810
+2024-01-02 12:03:15,216 - predict - DEBUG - run_predict : 200 - removiendo outliners : EG0810
+2024-01-02 12:03:15,419 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : EG0810
+2024-01-02 12:03:15,419 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : EG0810
+2024-01-02 12:03:15,433 - predict - DEBUG - run_predict : 221 - Cargando modelo: EG0810
+2024-01-02 12:03:15,433 - predict - DEBUG - run_predict : 221 - Cargando modelo: EG0810
+2024-01-02 12:03:15,825 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : EG0810
+2024-01-02 12:03:15,825 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : EG0810
+2024-01-02 12:03:15,826 - root - DEBUG - run_predict : 409 - Error en las prediccioens
+2024-01-02 12:03:15,826 - root - ERROR - run_predict : 410 - Timestamp must be between 2015-01-11 00:00:00 and 2023-07-16 00:00:00
+2024-01-02 12:03:15,829 - predict - DEBUG - run_predict : 200 - removiendo outliners : SME6-90
+2024-01-02 12:03:15,829 - predict - DEBUG - run_predict : 200 - removiendo outliners : SME6-90
+2024-01-02 12:03:16,032 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:03:16,032 - predict - DEBUG - run_predict : 206 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:03:16,045 - predict - DEBUG - run_predict : 221 - Cargando modelo: SME6-90
+2024-01-02 12:03:16,045 - predict - DEBUG - run_predict : 221 - Cargando modelo: SME6-90
+2024-01-02 12:03:17,077 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SME6-90
+2024-01-02 12:03:17,077 - predict - DEBUG - run_predict : 241 - Ejecutando predicciones para el modelo : SME6-90
+2024-01-02 12:03:17,078 - root - DEBUG - run_predict : 409 - Error en las prediccioens
+2024-01-02 12:03:17,078 - root - ERROR - run_predict : 410 - Timestamp must be between 2015-01-11 00:00:00 and 2023-07-16 00:00:00
+2024-01-02 12:03:55,968 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-01-02 12:03:55,968 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-01-02 12:03:55,973 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-01-02 12:03:55,973 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-01-02 12:03:55,973 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-01-02 12:03:55,973 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-01-02 12:03:56,438 - train - DEBUG - run_train : 67 - Existe data en cache
+2024-01-02 12:03:56,438 - train - DEBUG - run_train : 67 - Existe data en cache
+2024-01-02 12:03:56,438 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2024-01-02 12:03:56,438 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2024-01-02 12:03:56,468 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2024-01-02 12:03:56,468 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2024-01-02 12:03:56,536 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:03:56,536 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:03:56,892 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:03:56,892 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:03:58,299 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2024-01-02 12:03:58,299 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2024-01-02 12:03:58,299 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-01-02 12:03:58,299 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-01-02 12:03:58,890 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-01-02 12:03:58,890 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-01-02 12:03:59,087 - train - DEBUG - run_train : 200 - Filtrado terminado
+2024-01-02 12:03:59,087 - train - DEBUG - run_train : 200 - Filtrado terminado
+2024-01-02 12:03:59,087 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2024-01-02 12:03:59,087 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2024-01-02 12:03:59,087 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2024-01-02 12:03:59,087 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2024-01-02 12:03:59,291 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:03:59,291 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:03:59,307 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2024-01-02 12:03:59,307 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2024-01-02 12:04:29,435 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2024-01-02 12:04:29,435 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2024-01-02 12:04:29,435 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2024-01-02 12:04:29,435 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2024-01-02 12:04:29,435 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2024-01-02 12:04:29,435 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2024-01-02 12:04:29,646 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:04:29,646 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:04:29,663 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2024-01-02 12:04:29,663 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2024-01-02 12:05:00,549 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2024-01-02 12:05:00,549 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2024-01-02 12:05:00,549 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2024-01-02 12:05:00,549 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2024-01-02 12:05:00,549 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2024-01-02 12:05:00,549 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2024-01-02 12:05:00,896 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:05:00,896 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:05:00,942 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2024-01-02 12:05:00,942 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2024-01-02 12:05:30,390 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2024-01-02 12:05:30,390 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2024-01-02 12:05:30,390 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2024-01-02 12:05:30,390 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2024-01-02 12:05:30,390 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2024-01-02 12:05:30,390 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2024-01-02 12:05:30,608 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2024-01-02 12:05:30,608 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2024-01-02 12:05:30,625 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2024-01-02 12:05:30,625 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2024-01-02 12:05:56,678 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2024-01-02 12:05:56,678 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2024-01-02 12:05:56,679 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2024-01-02 12:05:56,679 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2024-01-02 12:05:56,679 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2024-01-02 12:05:56,679 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2024-01-02 12:05:56,904 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:05:56,904 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:05:56,922 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2024-01-02 12:05:56,922 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2024-01-02 12:06:23,336 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2024-01-02 12:06:23,336 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2024-01-02 12:28:13,317 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-01-02 12:28:13,317 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-01-02 12:28:13,320 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-01-02 12:28:13,320 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-01-02 12:28:13,320 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-01-02 12:28:13,320 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-01-02 12:28:13,803 - train - DEBUG - run_train : 67 - Existe data en cache
+2024-01-02 12:28:13,803 - train - DEBUG - run_train : 67 - Existe data en cache
+2024-01-02 12:28:13,803 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2024-01-02 12:28:13,803 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2024-01-02 12:28:13,831 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2024-01-02 12:28:13,831 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2024-01-02 12:28:13,938 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:28:13,938 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:28:14,529 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:28:14,529 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:28:17,183 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2024-01-02 12:28:17,183 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2024-01-02 12:28:17,183 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-01-02 12:28:17,183 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-01-02 12:28:18,085 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-01-02 12:28:18,085 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-01-02 12:28:18,314 - train - DEBUG - run_train : 200 - Filtrado terminado
+2024-01-02 12:28:18,314 - train - DEBUG - run_train : 200 - Filtrado terminado
+2024-01-02 12:28:18,314 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2024-01-02 12:28:18,314 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2024-01-02 12:28:18,315 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2024-01-02 12:28:18,315 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2024-01-02 12:28:18,665 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:28:18,665 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:28:18,711 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2024-01-02 12:28:18,711 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2024-01-02 12:28:54,043 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2024-01-02 12:28:54,043 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2024-01-02 12:28:54,044 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2024-01-02 12:28:54,044 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2024-01-02 12:28:54,045 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2024-01-02 12:28:54,045 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2024-01-02 12:28:54,410 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:28:54,410 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:28:54,457 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2024-01-02 12:28:54,457 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2024-01-02 12:29:27,793 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2024-01-02 12:29:27,793 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2024-01-02 12:29:27,794 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2024-01-02 12:29:27,794 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2024-01-02 12:29:27,794 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2024-01-02 12:29:27,794 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2024-01-02 12:29:28,140 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:29:28,140 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:29:28,188 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2024-01-02 12:29:28,188 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2024-01-02 12:29:56,146 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2024-01-02 12:29:56,146 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2024-01-02 12:29:56,146 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2024-01-02 12:29:56,146 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2024-01-02 12:29:56,147 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2024-01-02 12:29:56,147 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2024-01-02 12:29:56,365 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2024-01-02 12:29:56,365 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2024-01-02 12:29:56,383 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2024-01-02 12:29:56,383 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2024-01-02 12:30:25,945 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2024-01-02 12:30:25,945 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2024-01-02 12:30:25,945 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2024-01-02 12:30:25,945 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2024-01-02 12:30:25,945 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2024-01-02 12:30:25,945 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2024-01-02 12:30:26,163 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:30:26,163 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:30:26,181 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2024-01-02 12:30:26,181 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2024-01-02 12:30:52,852 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2024-01-02 12:30:52,852 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2024-01-02 12:39:34,288 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-01-02 12:39:34,288 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-01-02 12:39:34,293 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-01-02 12:39:34,293 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-01-02 12:39:34,294 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-01-02 12:39:34,294 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-01-02 12:39:34,981 - train - DEBUG - run_train : 67 - Existe data en cache
+2024-01-02 12:39:34,981 - train - DEBUG - run_train : 67 - Existe data en cache
+2024-01-02 12:39:34,981 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2024-01-02 12:39:34,981 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2024-01-02 12:39:35,011 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2024-01-02 12:39:35,011 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2024-01-02 12:39:35,114 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:39:35,114 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2024-01-02 12:39:35,674 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:39:35,674 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2024-01-02 12:39:38,237 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2024-01-02 12:39:38,237 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2024-01-02 12:39:38,238 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-01-02 12:39:38,238 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-01-02 12:39:39,130 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-01-02 12:39:39,130 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-01-02 12:39:39,358 - train - DEBUG - run_train : 200 - Filtrado terminado
+2024-01-02 12:39:39,358 - train - DEBUG - run_train : 200 - Filtrado terminado
+2024-01-02 12:39:39,359 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2024-01-02 12:39:39,359 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2024-01-02 12:39:39,359 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2024-01-02 12:39:39,359 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2024-01-02 12:39:39,715 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:39:39,715 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2024-01-02 12:39:39,762 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2024-01-02 12:39:39,762 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2024-01-02 12:40:16,196 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2024-01-02 12:40:16,196 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2024-01-02 12:40:16,197 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2024-01-02 12:40:16,197 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2024-01-02 12:40:16,197 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2024-01-02 12:40:16,197 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2024-01-02 12:40:16,539 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:40:16,539 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2024-01-02 12:40:16,584 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2024-01-02 12:40:16,584 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2024-01-02 12:40:43,311 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2024-01-02 12:40:43,311 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2024-01-02 12:40:43,311 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2024-01-02 12:40:43,311 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2024-01-02 12:40:43,311 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2024-01-02 12:40:43,311 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2024-01-02 12:40:43,654 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:40:43,654 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2024-01-02 12:40:43,700 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2024-01-02 12:40:43,700 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2024-01-02 12:41:16,814 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2024-01-02 12:41:16,814 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2024-01-02 12:41:16,814 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2024-01-02 12:41:16,814 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2024-01-02 12:41:16,814 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2024-01-02 12:41:16,814 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2024-01-02 12:41:17,028 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2024-01-02 12:41:17,028 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2024-01-02 12:41:17,046 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2024-01-02 12:41:17,046 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2024-01-02 12:41:43,176 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2024-01-02 12:41:43,176 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2024-01-02 12:41:43,176 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2024-01-02 12:41:43,176 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2024-01-02 12:41:43,176 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2024-01-02 12:41:43,176 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2024-01-02 12:41:43,387 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:41:43,387 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2024-01-02 12:41:43,404 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2024-01-02 12:41:43,404 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2024-01-02 12:42:09,916 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2024-01-02 12:42:09,916 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5

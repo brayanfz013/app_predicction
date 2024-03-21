@@ -67,6 +67,43 @@ try:
             hash_name=parametros.query_template['table'],
             config=parametros.connection_data_source
             )
+
+    # Condicional para actualizar datos en caso de existan datos en redis
+    if data is not None:
+        logger.debug('Existe data en cache')
+
+        # Secuencia de codigo para perdir nuevos datos a la base de datos
+        date_col_query = parameters['query_template']['columns']['0']
+        LAST_DAY = str(data.iloc[-1][0])
+        parameters['query_template']['where'] = f' "{date_col_query}" > \'{LAST_DAY}\''
+        parameters['query_template']['order'] = ''.join(
+            ['"' + columna + '"' for columna in [date_col_query]])
+
+        logger.debug('Realizando peticion a la fuente de datos')
+        # #Peticion de la API
+        # url  = 'http://192.168.115.99:3333/getinvoices'
+        # response = requests.get(url)
+
+        # if response.status_code == 200:
+        #     invoices  = response.json()
+        # else:
+        #     logger.debug(response.status_code)
+        # logger.debug('Generando Union de datos')
+        # new = pd.DataFrame(invoices)
+        # filter_cols = list(parameters['query_template']['columns'].values())
+        # new = new[filter_cols]
+
+        #Extraccion de la nueva data para actualizar
+        new = get_data(SQLDataSourceFactory(**parameters))
+        logger.debug('Actualizando cache en redis')
+        data = handler_redis.set_cache_data(
+            hash_name=parametros.query_template['table'],
+            old_dataframe=data,
+            new_dataframe=new,
+            exp_time=parametros.exp_time_cache,
+            config=parametros.connection_data_source)
+        logger.debug('Actualizacion completa de datos en redis')
+
     # Verificar que existieran datos en cache
     if data is None:
         logger.debug("No existen datos en cache")
@@ -148,6 +185,7 @@ items = []
 for folder in  Path(MODEL_FOLDERS).iterdir() :
     if folder.is_dir() and folder.name != '__pycache__' :
         items.append(folder.name)
+
 items = items[0:5]
 logger.debug('Filtrado terminado')
 
@@ -271,7 +309,7 @@ for item in items:
         filter_date.rename({'predicion':'real'},axis='columns',inplace=True)
         filter_date.rename(str.lower,axis='columns',inplace=True)
 
-        parameters['query_template_write']['table'] = 'modeloreal'
+        parameters['query_template_write']['table'] = 'public.modeloreal'
         parameters['query_template_write']['columns']['1'] = 'real'
         parameters['query_template_write']['columns']['2'] = 'code'
         parameters['type_data_out'] = {'fecha': 'date',
@@ -319,7 +357,7 @@ for item in items:
                         }
 
         fix_data_dict = {
-            'table': 'metric_predict',
+            'table': 'public.metric_predict',
             'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
             'order': 'index',
             'where': 'posicion > 1'
@@ -354,7 +392,7 @@ for item in items:
         original['product'] = '/'.join(value_product)
 
         fix_data_dict = {
-            'table': 'metric_data',
+            'table': 'public.metric_data',
             'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
             'order': 'index',
             'where': 'posicion > 1'

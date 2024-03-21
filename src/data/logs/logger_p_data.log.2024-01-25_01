@@ -1,0 +1,148 @@
+2024-01-25 00:54:45,802 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""COPY harddrive.smart255 FROM ""
+LINE 1: "COPY harddrive.smart255 FROM "date" DATE,
+        ^
+
+2024-01-25 00:54:45,802 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""COPY harddrive.smart255 FROM ""
+LINE 1: "COPY harddrive.smart255 FROM "date" DATE,
+        ^
+
+2024-01-25 00:54:45,803 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:54:45,803 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:55:37,884 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""date""
+LINE 1: COPY harddrive.smart255 FROM "date" DATE,
+                                     ^
+
+2024-01-25 00:55:37,884 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""date""
+LINE 1: COPY harddrive.smart255 FROM "date" DATE,
+                                     ^
+
+2024-01-25 00:55:37,886 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:55:37,886 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:56:21,205 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""date""
+LINE 1: COPY harddrive.smart255 FROM "date" ,
+                                     ^
+
+2024-01-25 00:56:21,205 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""date""
+LINE 1: COPY harddrive.smart255 FROM "date" ,
+                                     ^
+
+2024-01-25 00:56:21,206 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:56:21,206 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:58:16,870 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 00:58:16,870 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 00:58:16,872 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:58:16,872 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:58:40,085 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""/mnt/data extra/DATASET/HARD_DRIVE_DATA/months/dataset_2021_01.csv""
+LINE 515: "smart_255_raw" ) FROM "/mnt/data extra/DATASET/HARD_DRIVE_D...
+                                 ^
+
+2024-01-25 00:58:40,085 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""/mnt/data extra/DATASET/HARD_DRIVE_DATA/months/dataset_2021_01.csv""
+LINE 515: "smart_255_raw" ) FROM "/mnt/data extra/DATASET/HARD_DRIVE_D...
+                                 ^
+
+2024-01-25 00:58:40,086 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 00:58:40,086 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:01:58,969 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 01:01:58,969 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 01:01:58,970 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:01:58,970 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:02:33,866 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 01:02:33,866 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 01:02:33,868 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:02:33,868 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:02:55,197 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: '"home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql"'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: '"home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql"'
+2024-01-25 01:02:55,197 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: '"home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql"'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: '"home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql"'
+2024-01-25 01:03:06,623 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+2024-01-25 01:03:06,623 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+2024-01-25 01:03:14,512 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+2024-01-25 01:03:14,512 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+2024-01-25 01:03:19,709 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+2024-01-25 01:03:19,709 - datasource - ERROR - features_postgres : 255 - [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+Traceback (most recent call last):
+  File "/home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/features/features_postgres.py", line 235, in prepare_query_replace_value
+    with open(sql_file, encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'home/bdebian/Documents/Projects/MantenimientoPredictivo/app_mantenimiento/src/data/querys/copy_data.sql'
+2024-01-25 01:03:50,473 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 01:03:50,473 - datasource - ERROR - features_postgres : 305 - syntax error at or near "/"
+LINE 515: "smart_255_raw" ) FROM /mnt/data extra/DATASET/HARD_DRIVE_DA...
+                                 ^
+
+2024-01-25 01:03:50,475 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:03:50,475 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:05:42,705 - datasource - ERROR - features_postgres : 305 - syntax error at or near "" /mnt/data extra/DATASET/HARD_DRIVE_DATA/months/dataset_2021_01.csv ""
+LINE 515: "smart_255_raw" ) FROM " /mnt/data extra/DATASET/HARD_DRIVE_...
+                                 ^
+
+2024-01-25 01:05:42,705 - datasource - ERROR - features_postgres : 305 - syntax error at or near "" /mnt/data extra/DATASET/HARD_DRIVE_DATA/months/dataset_2021_01.csv ""
+LINE 515: "smart_255_raw" ) FROM " /mnt/data extra/DATASET/HARD_DRIVE_...
+                                 ^
+
+2024-01-25 01:05:42,706 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:05:42,706 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:09:52,373 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""/mnt/data extra/DATASET/HARD_DRIVE_DATA/months/dataset_2021_01.csv""
+LINE 1: COPY harddrive.smart255  FROM  "/mnt/data extra/DATASET/HARD...
+                                       ^
+
+2024-01-25 01:09:52,373 - datasource - ERROR - features_postgres : 305 - syntax error at or near ""/mnt/data extra/DATASET/HARD_DRIVE_DATA/months/dataset_2021_01.csv""
+LINE 1: COPY harddrive.smart255  FROM  "/mnt/data extra/DATASET/HARD...
+                                       ^
+
+2024-01-25 01:09:52,374 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:09:52,374 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:54:46,083 - datasource - ERROR - features_postgres : 305 - invalid input syntax for type integer: "2021-01-01"
+CONTEXT:  COPY smart255, line 2, column index: "2021-01-01"
+
+2024-01-25 01:54:46,083 - datasource - ERROR - features_postgres : 305 - invalid input syntax for type integer: "2021-01-01"
+CONTEXT:  COPY smart255, line 2, column index: "2021-01-01"
+
+2024-01-25 01:54:46,084 - datasource - DEBUG - features_postgres : 314 - Finalizacion query
+2024-01-25 01:54:46,084 - datasource - DEBUG - features_postgres : 314 - Finalizacion query

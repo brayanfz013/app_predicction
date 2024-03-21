@@ -19,14 +19,13 @@ try:
 except ImportError as error:
     print(error)
     PATH_FOLDER = str(Path(os.path.dirname(__file__)).parents)
-    omitir = ''
 
     def search_subfolders(path: str):
         '''Funcion para agregar rutas al path de ejecucion'''
         folder = []
         for root, dirs, _ in os.walk(path, topdown=False):
             for name in dirs:
-                if name == omitir:
+                if name == '':
                     print(f"[INFO] carpeta omitida: {name}")
                 else:
                     folder.append(os.path.join(root, name))

@@ -1,0 +1,432 @@
+2023-09-26 11:27:48,050 - filter - DEBUG - alerts_predict : 56 - Inciando secuencia de entrenamiento
+2023-09-26 11:27:48,050 - filter - DEBUG - alerts_predict : 56 - Inciando secuencia de entrenamiento
+2023-09-26 11:27:48,053 - filter - DEBUG - alerts_predict : 65 - Probando el estacion de datos de sql
+2023-09-26 11:27:48,053 - filter - DEBUG - alerts_predict : 65 - Probando el estacion de datos de sql
+2023-09-26 11:27:48,674 - datasource - ERROR - features_postgres : 460 - relation "modelopredicciones" does not exist
+LINE 1: SELECT "fecha", "predicion", "code" FROM modelopredicciones ...
+                                                 ^
+
+2023-09-26 11:27:48,674 - datasource - ERROR - features_postgres : 460 - relation "modelopredicciones" does not exist
+LINE 1: SELECT "fecha", "predicion", "code" FROM modelopredicciones ...
+                                                 ^
+
+2023-09-26 11:27:48,701 - datasource - ERROR - features_postgres : 460 - relation "metric_data" does not exist
+LINE 1: ...bsoluta", "init_date", "end_date", "product" FROM metric_dat...
+                                                             ^
+
+2023-09-26 11:27:48,701 - datasource - ERROR - features_postgres : 460 - relation "metric_data" does not exist
+LINE 1: ...bsoluta", "init_date", "end_date", "product" FROM metric_dat...
+                                                             ^
+
+2023-09-26 11:28:09,076 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2023-09-26 11:28:09,076 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2023-09-26 11:28:09,079 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2023-09-26 11:28:09,079 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2023-09-26 11:28:09,079 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2023-09-26 11:28:09,079 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2023-09-26 11:28:09,525 - train - DEBUG - run_train : 67 - Existe data en cache
+2023-09-26 11:28:09,525 - train - DEBUG - run_train : 67 - Existe data en cache
+2023-09-26 11:28:09,525 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2023-09-26 11:28:09,525 - train - DEBUG - run_train : 76 - Realizando peticion a la fuente de datos
+2023-09-26 11:28:11,221 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2023-09-26 11:28:11,221 - train - DEBUG - run_train : 92 - Actualizando cache en redis
+2023-09-26 11:28:11,284 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2023-09-26 11:28:11,284 - datasource - DEBUG - features_redis : 370 - Recuperando data existente
+2023-09-26 11:28:11,635 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2023-09-26 11:28:11,635 - datasource - DEBUG - features_redis : 386 - Verificacion si existe nueva informacion
+2023-09-26 11:28:13,137 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2023-09-26 11:28:13,137 - train - DEBUG - run_train : 99 - Actualizacion completa de datos en redis
+2023-09-26 11:28:13,137 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2023-09-26 11:28:13,137 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2023-09-26 11:28:13,768 - train - DEBUG - run_train : 179 - Filtrando informacion
+2023-09-26 11:28:13,768 - train - DEBUG - run_train : 179 - Filtrando informacion
+2023-09-26 11:28:13,949 - train - DEBUG - run_train : 200 - Filtrado terminado
+2023-09-26 11:28:13,949 - train - DEBUG - run_train : 200 - Filtrado terminado
+2023-09-26 11:28:13,949 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2023-09-26 11:28:13,949 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME8-90
+2023-09-26 11:28:13,949 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2023-09-26 11:28:13,949 - train - DEBUG - run_train : 206 - removiendo outliners : SME8-90
+2023-09-26 11:28:14,190 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2023-09-26 11:28:14,190 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME8-90
+2023-09-26 11:28:14,209 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2023-09-26 11:28:14,209 - train - DEBUG - run_train : 237 - Entrenando modelo : SME8-90
+2023-09-26 11:28:43,428 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2023-09-26 11:28:43,428 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME8-90
+2023-09-26 11:28:43,429 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2023-09-26 11:28:43,429 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME10-90
+2023-09-26 11:28:43,429 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2023-09-26 11:28:43,429 - train - DEBUG - run_train : 206 - removiendo outliners : SME10-90
+2023-09-26 11:28:43,653 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2023-09-26 11:28:43,653 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME10-90
+2023-09-26 11:28:43,672 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2023-09-26 11:28:43,672 - train - DEBUG - run_train : 237 - Entrenando modelo : SME10-90
+2023-09-26 11:29:11,922 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2023-09-26 11:29:11,922 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME10-90
+2023-09-26 11:29:11,922 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2023-09-26 11:29:11,922 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SME6-90
+2023-09-26 11:29:11,923 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2023-09-26 11:29:11,923 - train - DEBUG - run_train : 206 - removiendo outliners : SME6-90
+2023-09-26 11:29:12,147 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2023-09-26 11:29:12,147 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SME6-90
+2023-09-26 11:29:12,165 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2023-09-26 11:29:12,165 - train - DEBUG - run_train : 237 - Entrenando modelo : SME6-90
+2023-09-26 11:29:38,507 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2023-09-26 11:29:38,507 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SME6-90
+2023-09-26 11:29:38,507 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2023-09-26 11:29:38,507 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : EG0810
+2023-09-26 11:29:38,508 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2023-09-26 11:29:38,508 - train - DEBUG - run_train : 206 - removiendo outliners : EG0810
+2023-09-26 11:29:38,738 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2023-09-26 11:29:38,738 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : EG0810
+2023-09-26 11:29:38,761 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2023-09-26 11:29:38,761 - train - DEBUG - run_train : 237 - Entrenando modelo : EG0810
+2023-09-26 11:30:04,902 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2023-09-26 11:30:04,902 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : EG0810
+2023-09-26 11:30:04,902 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2023-09-26 11:30:04,902 - train - DEBUG - run_train : 203 - Iniciando entrenamiento de : SMP8-5
+2023-09-26 11:30:04,903 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2023-09-26 11:30:04,903 - train - DEBUG - run_train : 206 - removiendo outliners : SMP8-5
+2023-09-26 11:30:05,129 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2023-09-26 11:30:05,129 - train - DEBUG - run_train : 215 - Preparando datos para el modelo : SMP8-5
+2023-09-26 11:30:05,147 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2023-09-26 11:30:05,147 - train - DEBUG - run_train : 237 - Entrenando modelo : SMP8-5
+2023-09-26 11:30:34,448 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2023-09-26 11:30:34,448 - train - DEBUG - run_train : 249 - Finalizando entrenamiento de : SMP8-5
+2023-09-26 11:36:20,138 - predict - DEBUG - run_predict : 49 - Inciando secuencia de entrenamiento
+2023-09-26 11:36:20,138 - predict - DEBUG - run_predict : 49 - Inciando secuencia de entrenamiento
+2023-09-26 11:36:20,143 - predict - DEBUG - run_predict : 57 - Archivo de configuraciones cargado
+2023-09-26 11:36:20,143 - predict - DEBUG - run_predict : 57 - Archivo de configuraciones cargado
+2023-09-26 11:36:20,143 - predict - DEBUG - run_predict : 65 - verficando si existe data cache
+2023-09-26 11:36:20,143 - predict - DEBUG - run_predict : 65 - verficando si existe data cache
+2023-09-26 11:36:20,622 - predict - DEBUG - run_predict : 139 - Realizando imputacion de datos
+2023-09-26 11:36:20,622 - predict - DEBUG - run_predict : 139 - Realizando imputacion de datos
+2023-09-26 11:36:21,019 - predict - DEBUG - run_predict : 145 - Filtrando informacion para seleccionar modelos
+2023-09-26 11:36:21,019 - predict - DEBUG - run_predict : 145 - Filtrando informacion para seleccionar modelos
+2023-09-26 11:36:21,019 - predict - DEBUG - run_predict : 152 - Filtrado terminado
+2023-09-26 11:36:21,019 - predict - DEBUG - run_predict : 152 - Filtrado terminado
+2023-09-26 11:36:21,022 - predict - DEBUG - run_predict : 163 - removiendo outliners : SMP8-5
+2023-09-26 11:36:21,022 - predict - DEBUG - run_predict : 163 - removiendo outliners : SMP8-5
+2023-09-26 11:36:21,272 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SMP8-5
+2023-09-26 11:36:21,272 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SMP8-5
+2023-09-26 11:36:21,287 - predict - DEBUG - run_predict : 184 - Cargando modelo: SMP8-5
+2023-09-26 11:36:21,287 - predict - DEBUG - run_predict : 184 - Cargando modelo: SMP8-5
+2023-09-26 11:36:21,679 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SMP8-5
+2023-09-26 11:36:21,679 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SMP8-5
+2023-09-26 11:36:22,041 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SMP8-5
+2023-09-26 11:36:22,041 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SMP8-5
+2023-09-26 11:36:22,043 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SMP8-5
+2023-09-26 11:36:22,043 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SMP8-5
+2023-09-26 11:36:22,046 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:22,046 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:23,384 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,384 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,385 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,385 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,385 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SMP8-5
+2023-09-26 11:36:23,385 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SMP8-5
+2023-09-26 11:36:23,417 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,417 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,417 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SMP8-5
+2023-09-26 11:36:23,417 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SMP8-5
+2023-09-26 11:36:23,419 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:23,419 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:23,506 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,506 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,506 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,506 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,507 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SMP8-5
+2023-09-26 11:36:23,507 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SMP8-5
+2023-09-26 11:36:23,517 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,517 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,518 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SMP8-5
+2023-09-26 11:36:23,518 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SMP8-5
+2023-09-26 11:36:23,518 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:23,518 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:23,607 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,607 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,607 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,607 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,607 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SMP8-5
+2023-09-26 11:36:23,607 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SMP8-5
+2023-09-26 11:36:23,618 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,618 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,618 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SMP8-5
+2023-09-26 11:36:23,618 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SMP8-5
+2023-09-26 11:36:23,621 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:23,621 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:23,763 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,763 - datasource - DEBUG - features_postgres : 278 - Query enviada
+2023-09-26 11:36:23,764 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,764 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:23,767 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SMP8-5
+2023-09-26 11:36:23,767 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SMP8-5
+2023-09-26 11:36:23,796 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,796 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:23,799 - predict - DEBUG - run_predict : 163 - removiendo outliners : SME8-90
+2023-09-26 11:36:23,799 - predict - DEBUG - run_predict : 163 - removiendo outliners : SME8-90
+2023-09-26 11:36:24,018 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SME8-90
+2023-09-26 11:36:24,018 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SME8-90
+2023-09-26 11:36:24,032 - predict - DEBUG - run_predict : 184 - Cargando modelo: SME8-90
+2023-09-26 11:36:24,032 - predict - DEBUG - run_predict : 184 - Cargando modelo: SME8-90
+2023-09-26 11:36:24,204 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,204 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,234 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SME8-90
+2023-09-26 11:36:24,234 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SME8-90
+2023-09-26 11:36:24,237 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SME8-90
+2023-09-26 11:36:24,237 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SME8-90
+2023-09-26 11:36:24,239 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:24,239 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:24,247 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:24,247 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:24,247 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,247 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,247 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,247 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,307 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,307 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,308 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,308 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,310 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:24,310 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:24,425 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:24,425 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:24,426 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,426 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,426 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SME8-90
+2023-09-26 11:36:24,426 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SME8-90
+2023-09-26 11:36:24,474 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,474 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,475 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SME8-90
+2023-09-26 11:36:24,475 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SME8-90
+2023-09-26 11:36:24,475 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:24,475 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:24,483 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:24,483 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:24,483 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,483 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,484 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,484 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SME8-90
+2023-09-26 11:36:24,497 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,497 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,497 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SME8-90
+2023-09-26 11:36:24,497 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SME8-90
+2023-09-26 11:36:24,501 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:24,501 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:24,509 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:24,509 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:24,509 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,509 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:24,510 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SME8-90
+2023-09-26 11:36:24,510 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SME8-90
+2023-09-26 11:36:24,530 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,530 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:24,536 - predict - DEBUG - run_predict : 163 - removiendo outliners : SME10-90
+2023-09-26 11:36:24,536 - predict - DEBUG - run_predict : 163 - removiendo outliners : SME10-90
+2023-09-26 11:36:24,877 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SME10-90
+2023-09-26 11:36:24,877 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SME10-90
+2023-09-26 11:36:24,915 - predict - DEBUG - run_predict : 184 - Cargando modelo: SME10-90
+2023-09-26 11:36:24,915 - predict - DEBUG - run_predict : 184 - Cargando modelo: SME10-90
+2023-09-26 11:36:25,085 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,085 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,148 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SME10-90
+2023-09-26 11:36:25,148 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SME10-90
+2023-09-26 11:36:25,152 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SME10-90
+2023-09-26 11:36:25,152 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SME10-90
+2023-09-26 11:36:25,156 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:25,156 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:25,163 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:25,163 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:25,164 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,164 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,164 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,164 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,175 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,175 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,175 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,175 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,176 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:25,176 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:25,181 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:25,181 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:25,181 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,181 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,181 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SME10-90
+2023-09-26 11:36:25,181 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SME10-90
+2023-09-26 11:36:25,197 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,197 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,197 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SME10-90
+2023-09-26 11:36:25,197 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SME10-90
+2023-09-26 11:36:25,198 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:25,198 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:25,203 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:25,203 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:25,203 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,203 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,204 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,204 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SME10-90
+2023-09-26 11:36:25,219 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,219 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,220 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SME10-90
+2023-09-26 11:36:25,220 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SME10-90
+2023-09-26 11:36:25,222 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:25,222 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:25,228 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:25,228 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:25,228 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,228 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,228 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SME10-90
+2023-09-26 11:36:25,228 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SME10-90
+2023-09-26 11:36:25,242 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,242 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,245 - predict - DEBUG - run_predict : 163 - removiendo outliners : EG0810
+2023-09-26 11:36:25,245 - predict - DEBUG - run_predict : 163 - removiendo outliners : EG0810
+2023-09-26 11:36:25,460 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : EG0810
+2023-09-26 11:36:25,460 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : EG0810
+2023-09-26 11:36:25,474 - predict - DEBUG - run_predict : 184 - Cargando modelo: EG0810
+2023-09-26 11:36:25,474 - predict - DEBUG - run_predict : 184 - Cargando modelo: EG0810
+2023-09-26 11:36:25,557 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : EG0810
+2023-09-26 11:36:25,557 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : EG0810
+2023-09-26 11:36:25,588 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : EG0810
+2023-09-26 11:36:25,588 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : EG0810
+2023-09-26 11:36:25,590 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : EG0810
+2023-09-26 11:36:25,590 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : EG0810
+2023-09-26 11:36:25,593 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:25,593 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:25,625 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:25,625 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:25,626 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,626 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,626 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : EG0810
+2023-09-26 11:36:25,626 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : EG0810
+2023-09-26 11:36:25,675 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,675 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,676 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : EG0810
+2023-09-26 11:36:25,676 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : EG0810
+2023-09-26 11:36:25,677 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:25,677 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:25,706 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:25,706 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:25,706 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,706 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,706 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : EG0810
+2023-09-26 11:36:25,706 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : EG0810
+2023-09-26 11:36:25,742 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,742 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,743 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : EG0810
+2023-09-26 11:36:25,743 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : EG0810
+2023-09-26 11:36:25,743 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:25,743 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:25,751 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:25,751 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:25,751 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,751 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,752 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : EG0810
+2023-09-26 11:36:25,752 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : EG0810
+2023-09-26 11:36:25,764 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,764 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,765 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : EG0810
+2023-09-26 11:36:25,765 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : EG0810
+2023-09-26 11:36:25,769 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:25,769 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:25,777 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:25,777 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:25,777 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,777 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:25,778 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : EG0810
+2023-09-26 11:36:25,778 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : EG0810
+2023-09-26 11:36:25,798 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,798 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:25,804 - predict - DEBUG - run_predict : 163 - removiendo outliners : SME6-90
+2023-09-26 11:36:25,804 - predict - DEBUG - run_predict : 163 - removiendo outliners : SME6-90
+2023-09-26 11:36:26,160 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SME6-90
+2023-09-26 11:36:26,160 - predict - DEBUG - run_predict : 169 - Preparando datos para el modelo : SME6-90
+2023-09-26 11:36:26,200 - predict - DEBUG - run_predict : 184 - Cargando modelo: SME6-90
+2023-09-26 11:36:26,200 - predict - DEBUG - run_predict : 184 - Cargando modelo: SME6-90
+2023-09-26 11:36:26,382 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,382 - predict - DEBUG - run_predict : 204 - Ejecutando predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,443 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SME6-90
+2023-09-26 11:36:26,443 - predict - DEBUG - run_predict : 210 - Escalando datos para el modelo : SME6-90
+2023-09-26 11:36:26,447 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SME6-90
+2023-09-26 11:36:26,447 - predict - DEBUG - run_predict : 228 - Generando metricas para el modelo : SME6-90
+2023-09-26 11:36:26,451 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:26,451 - predict - DEBUG - run_predict : 253 - Creando tabla de predicciones caso de ser necesario
+2023-09-26 11:36:26,459 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:26,459 - datasource - ERROR - features_postgres : 280 - relation "modelopredicciones" already exists
+
+2023-09-26 11:36:26,459 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,459 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,459 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,459 - predict - DEBUG - run_predict : 257 - Insertando metricas de predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,476 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:26,476 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:26,476 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,476 - predict - DEBUG - run_predict : 263 - Agrupando datos reales por perido de tiempo a las predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,478 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:26,478 - predict - DEBUG - run_predict : 282 - Creando tabla agrupacion de datos reales semanales caso de ser necesario
+2023-09-26 11:36:26,485 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:26,485 - datasource - ERROR - features_postgres : 280 - relation "modeloreal" already exists
+
+2023-09-26 11:36:26,485 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,485 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,485 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SME6-90
+2023-09-26 11:36:26,485 - predict - DEBUG - run_predict : 286 - agruando informacion temporal para el modelo : SME6-90
+2023-09-26 11:36:26,498 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:26,498 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:26,498 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SME6-90
+2023-09-26 11:36:26,498 - predict - DEBUG - run_predict : 292 - Generando metricas de las prediccioens del modelo : SME6-90
+2023-09-26 11:36:26,499 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:26,499 - predict - DEBUG - run_predict : 330 - Creando tabla de metrica de predicciones caso de ser necesario
+2023-09-26 11:36:26,505 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:26,505 - datasource - ERROR - features_postgres : 280 - relation "metric_predict" already exists
+
+2023-09-26 11:36:26,505 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,505 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,506 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,506 - predict - DEBUG - run_predict : 333 - Insertando metricas de las predicciones para el modelo : SME6-90
+2023-09-26 11:36:26,521 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:26,521 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:26,521 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SME6-90
+2023-09-26 11:36:26,521 - predict - DEBUG - run_predict : 340 - Generando metricas para los datos de reales del modelo : SME6-90
+2023-09-26 11:36:26,523 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:26,523 - predict - DEBUG - run_predict : 365 - Creando tabla de metricas original en caso de ser necesario
+2023-09-26 11:36:26,529 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:26,529 - datasource - ERROR - features_postgres : 280 - relation "metric_data" already exists
+
+2023-09-26 11:36:26,529 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,529 - datasource - DEBUG - features_postgres : 284 - Finalizacion query
+2023-09-26 11:36:26,530 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SME6-90
+2023-09-26 11:36:26,530 - predict - DEBUG - run_predict : 368 - Insertando metricas de datos reales para el modelo : SME6-90
+2023-09-26 11:36:26,543 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:26,543 - datasource - INFO - features_postgres : 352 - Query de insercion de archivo csv finalizada
+2023-09-26 11:36:47,747 - filter - DEBUG - alerts_predict : 56 - Inciando secuencia de entrenamiento
+2023-09-26 11:36:47,747 - filter - DEBUG - alerts_predict : 56 - Inciando secuencia de entrenamiento
+2023-09-26 11:36:47,753 - filter - DEBUG - alerts_predict : 65 - Probando el estacion de datos de sql
+2023-09-26 11:36:47,753 - filter - DEBUG - alerts_predict : 65 - Probando el estacion de datos de sql

@@ -1,0 +1,24 @@
+2024-01-23 17:07:05,237 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 17:07:05,237 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 17:07:05,238 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 17:07:05,238 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 17:07:24,949 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 17:07:24,949 - datasource - ERROR - features_postgres : 289 - schema "harddrive" does not exist
+LINE 1: CREATE TABLE IF NOT EXISTS HardDrive.SMART255 (     index se...
+                                   ^
+
+2024-01-23 17:07:24,950 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 17:07:24,950 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 17:07:39,475 - datasource - DEBUG - features_postgres : 287 - Query enviada
+2024-01-23 17:07:39,475 - datasource - DEBUG - features_postgres : 287 - Query enviada
+2024-01-23 17:07:39,477 - datasource - DEBUG - features_postgres : 293 - Finalizacion query
+2024-01-23 17:07:39,477 - datasource - DEBUG - features_postgres : 293 - Finalizacion query

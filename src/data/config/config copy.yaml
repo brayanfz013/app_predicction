@@ -14,6 +14,13 @@ connection_data_source:
     port: 5432
   # engine: psycopg2
 
+  # postgresql:
+  #   host: 192.168.115.175
+  #   database: postgres
+  #   user: postgres
+  #   password: syncboxdev
+  #   port: 5432
+
   redis:
     host: 127.0.0.1
     db: 1
@@ -27,12 +34,12 @@ connection_data_source:
     password: 0913PASSword!
 
 query_template:
-  table: public.sales_history
+  table: custom_invoices
   columns:
-    "0": created_at #Fecha +
-    "1": product #iteam para+
-    "2": quantity
-    "3": customer
+    "0": CREATDDT #Fecha +
+    "1": ITEMNMBR #iteam para+
+    "2": QUANTITY
+    "3": CUSTNMBR
   order: #index
   where: #posicion > 1
 
@@ -43,12 +50,12 @@ type_data:
   column3: string
 
 query_template_write:
-  table: public.modelopredicciones
+  table: modelopredicciones
   columns:
     "0": fecha
     "1": predicion
     # "2": real
-    "2": producto
+    "2": ITEMNMBR
     # "3": CUSTNMBR
   order:
   where:
@@ -61,13 +68,13 @@ type_data_out:
   # column3: string
 
 filter_data:
-  date_column: created_at
-  predict_column: quantity
-  filter_1_column: product
-  filter_1_feature: 90000S
+  date_column: CREATDDT
+  predict_column: QUANTITY
+  filter_1_column: ITEMNMBR
+  filter_1_feature: SME4-90
   # filter_2_column: CUSTNMBR
   # filter_2_feature: F00575
-  group_frequecy: M
+  group_frequecy: W
 
 scale: True
 first_train: True

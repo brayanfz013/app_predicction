@@ -1,0 +1,28 @@
+2024-03-11 10:52:58,908 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-03-11 10:52:58,908 - train - DEBUG - run_train : 43 - Inciando secuencia de entrenamiento
+2024-03-11 10:52:58,913 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-03-11 10:52:58,913 - train - DEBUG - run_train : 52 - Archivo de configuraciones cargado
+2024-03-11 10:52:58,913 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-03-11 10:52:58,913 - train - DEBUG - run_train : 60 - verficando si existe data cache
+2024-03-11 10:52:58,988 - datasource - DEBUG - features_redis : 333 - No hay datos en cache
+2024-03-11 10:52:58,988 - datasource - DEBUG - features_redis : 333 - No hay datos en cache
+2024-03-11 10:52:58,988 - train - DEBUG - run_train : 103 - No existe cache de datos
+2024-03-11 10:52:58,988 - train - DEBUG - run_train : 103 - No existe cache de datos
+2024-03-11 10:52:59,015 - datasource - ERROR - features_postgres : 460 - column "CREATDDT" does not exist
+LINE 1: SELECT "CREATDDT", "ITEMNMBR", "QUANTITY", "CUSTNMBR" FROM p...
+               ^
+
+2024-03-11 10:52:59,015 - datasource - ERROR - features_postgres : 460 - column "CREATDDT" does not exist
+LINE 1: SELECT "CREATDDT", "ITEMNMBR", "QUANTITY", "CUSTNMBR" FROM p...
+               ^
+
+2024-03-11 10:52:59,016 - train - DEBUG - run_train : 118 - Insertando datos de cache en redis
+2024-03-11 10:52:59,016 - train - DEBUG - run_train : 118 - Insertando datos de cache en redis
+2024-03-11 10:52:59,017 - datasource - DEBUG - features_redis : 379 - No hay datos en cache
+2024-03-11 10:52:59,017 - datasource - DEBUG - features_redis : 379 - No hay datos en cache
+2024-03-11 10:52:59,017 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-03-11 10:52:59,017 - train - DEBUG - run_train : 171 - Realizando imputacion de datos
+2024-03-11 10:52:59,094 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-03-11 10:52:59,094 - train - DEBUG - run_train : 179 - Filtrando informacion
+2024-03-11 10:52:59,137 - train - DEBUG - run_train : 200 - Filtrado terminado
+2024-03-11 10:52:59,137 - train - DEBUG - run_train : 200 - Filtrado terminado

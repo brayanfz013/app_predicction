@@ -191,12 +191,13 @@ for item in items:
     filter_item = handler_data.dataframe[parameters['filter_data']
                                          ['filter_1_column']] == item
     data = handler_data.dataframe[filter_item]
-
+    if data.empty:
+        continue
     # Creacion de alertas para gene
     alerta_baja_cantidad = AlertaPorBajaCantidad(
         # alerts_parameters['alerta_bajacantidad']['cantidadbaja'],
         cantidad=250,
-        item=item,
+        item="Alerta:"+item,
         column='predicion',
         config=parametros.connection_data_source)
     observer_baja_cantidad = AlertaObserver(alerta_baja_cantidad)
@@ -204,33 +205,33 @@ for item in items:
     alerta_tiempo_de_venta_bajo = AlertaPorTiempoDeVentaBajo(
         # alerts_parameters['alerta_tiempodeventabajo']['min_dias'],
         min_dias_venta=10,
-        item=item,
+        item="Alerta:"+item,
         config=parametros.connection_data_source)
     observer_tiempo_de_venta_bajo = AlertaObserver(alerta_tiempo_de_venta_bajo)
 
     alerta_cambio_ventas = AlertaPorCambiosBruscosEnLasVentas(
         umbral_varianza=alerts_parameters['alerta_cambiosbruscos']['umbral_varianza'],
         umbral_desviacion_estandar=alerts_parameters['alerta_cambiosbruscos']['umbral_desviacion'],
-        item=item,
+        item="Alerta:"+item,
         config=parametros.connection_data_source)
     observer_cambio_ventas = AlertaObserver(alerta_cambio_ventas)
 
     alerta_inventario_inactivo = AlertaPorInventarioInactivo(
         max_dias_inactivo=alerts_parameters['alerta_inventarioinactivo']['max_dias_inactivo'],
-        item=item,
+        item="Alerta:"+item,
         previus_val=alerts_parameters['alerta_inventarioinactivo']['valor_anterior_inventario'],
         config=parametros.connection_data_source)
     observer_inventario_inactivo = AlertaObserver(alerta_inventario_inactivo)
 
     alerta_seguimiento_tendencias = AlertaPorSeguimientoTendencias(
         threshold=alerts_parameters['alerta_seguimientotendencias']['threshold'],
-        item=item,
+        item="Alerta:"+item,
         config=parametros.connection_data_source)
     observer_seguimiento_tendencias = AlertaObserver(
         alerta_seguimiento_tendencias)
 
     alerta_demanda_estacional = AlertaPorDemandaEstacional(
-        item=item,
+        item="Alerta:"+item,
         threshold=alerts_parameters['alerta_demandaestacional']['threshold'],
         column_time='fecha',
         column_value='predicion',
@@ -243,6 +244,8 @@ for item in items:
     # Linea temporal para eliminar repetidos en la serie de tiempo
     data = data.reset_index().drop_duplicates(
         subset='fecha', keep='first').set_index('fecha')
+
+    print(data)
 
     # Metodo para administrar alertas y observadores
     inventario_historic = Inventario(data)
@@ -264,3 +267,4 @@ for item in items:
     alerts_parameters['alerta_inventarioinactivo']['valor_anterior_inventario'] = float(
         alerta_inventario_inactivo.previus_stock)
     handler_load.save_yaml(datafile=alerts_parameters, savepath=PARAM_ALARM)
+    print("  ")
