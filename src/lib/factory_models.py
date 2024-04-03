@@ -6,26 +6,28 @@ from pathlib import Path
 
 import darts
 import pandas as pd
-from darts.models import (
-    FFT,
-    BlockRNNModel,
-    DLinearModel,
-    ExponentialSmoothing,
-    NBEATSModel,
-    NLinearModel,
-    RNNModel,
-    TCNModel,
-    TFTModel,
-    TransformerModel,
-)
+from darts.metrics import mape, r2_score, smape
+
+# from darts.models import (
+#     FFT,
+#     BlockRNNModel,
+#     DLinearModel,
+#     ExponentialSmoothing,
+#     NBEATSModel,
+#     NLinearModel,
+#     RNNModel,
+#     TCNModel,
+#     TFTModel,
+#     TransformerModel,
+# )
 
 try:
-    from src.models.args_data_model import Parameters
+    # from src.models.args_data_model import Parameters
     from src.data.save_models import SAVE_DIR
     from src.lib.class_load import LoadFiles
     from src.models.DP_model import ModelHyperparameters, Modelos
 except ImportError:
-    from args_data_model import Parameters
+    # from args_data_model import Parameters
     from class_load import LoadFiles
     from DP_model import ModelHyperparameters, Modelos
     from save_models import SAVE_DIR
@@ -73,6 +75,7 @@ class ModelContext(Model):
         self.handle_loader = LoadFiles()
         self.save_path = Path(SAVE_DIR)
         self.parameters = parameters
+        self.best_model: dict = {}
 
         for filter_list in parameters["filter_data"]:
             if "feature" in filter_list:
@@ -87,11 +90,53 @@ class ModelContext(Model):
             raise ValueError(f"Modelo no soportado: {model_name}")
         else:
             print(f"Modelo importado {model_name}")
+
+        encoder_future = {"cyclic": {"future": ["weekofyear", "month"]}}
         self.tunne_parameter = ModelHyperparameters(model_name, data, split, covarianze)
+        self.tunne_parameter.model_used_parameters["add_encoders"] = encoder_future
 
     def train(self):
         """Ejecutar entrenamiento"""
         model = self.tunne_parameter.build_fit_model()
+
+        # Prediccion de los datos pasados
+        pred_series = model.historical_forecasts(
+            series=self.tunne_parameter.data,
+            start=self.tunne_parameter.split_value,
+            past_covariates=self.tunne_parameter.covarianze,
+            forecast_horizon=self.tunne_parameter.model_used_parameters["output_chunk_length"],
+            retrain=False,
+            verbose=False,
+        )
+
+        # Definir las métricas
+        metricas = {
+            "MAPE": lambda pred, actual: mape(pred, actual),
+            "SMAPE": lambda pred, actual: smape(pred, actual),
+            "R2": lambda pred, actual: r2_score(pred, actual),
+        }
+
+        # Calcular las métricas
+        resultados = {}
+        for nombre, metrica in metricas.items():
+            resultados[nombre] = metrica(pred_series, self.tunne_parameter.data)
+
+        try:
+            self.best_model = self.handle_loader.load_json(
+                json_file_name="train_metrics", path_to_read=self.save_path.as_posix()
+            )
+        except FileNotFoundError as no_file:
+            print(f"No parameter File, {no_file}")
+
+        self.best_model[self.tunne_parameter.model_name] = {
+            self.tunne_parameter.model_name: resultados
+        }
+
+        self.handle_loader.save_dict_to_json(
+            file_name="train_metrics",
+            dict_data=self.best_model,
+            path_to_save=self.save_path.as_posix(),
+        )
         return model
 
     def predict(self, model: str, data: darts.TimeSeries, horizont: int):
@@ -130,8 +175,8 @@ class ModelContext(Model):
 
     def optimize(self):
         """Metodo para generar optimizacion de datos"""
-        optimizer = self.tunne_parameter.optimize()
-        self.tunne_parameter.update_parameters(optimizer)
+        optimizer = self.tunne_parameter.retrain()
+        self.tunne_parameter.update_parameters(study=optimizer)
         model = self.tunne_parameter.build_fit_model()
         return model
 
@@ -139,25 +184,31 @@ class ModelContext(Model):
     #     '''Metodo para cargar los parametros de entrenamiento'''
     #     self.tunne_parameter.update_parameters()
 
-    def save(self, model: darts.models, scaler):
+    def save(self, model: darts.models, scaler, scaler_name="scaler"):
         """Guardar modelo en ruta"""
 
         last_train = {
             "last_date_pred": self.tunne_parameter.last_value.strftime("%Y-%m-%d")
             # La linea inferior se usa cuando se quiere hacer predicciones sobre data anterior
-            # 'last_date_pred': self.tunne_parameter.split_value.strftime('%Y-%m-%d')
         }
+        # #Eliminar parametro que no se puede serializar
+        if (
+            self.tunne_parameter.model_name == "TFTModel"
+            and self.tunne_parameter.model_used_parameters.get("likelihood")
+        ):
+            print(self.tunne_parameter.model_used_parameters)
+            del self.tunne_parameter.model_used_parameters["likelihood"]
 
         # Guardar la ultima prediccion
         self.handle_loader.save_dict_to_json(last_train, self.save_path, "previus")
 
         # Guardar el escalizador del modelo
-        scaler_save_folder = self.save_path.joinpath("scaler").with_suffix(".pkl")
+        scaler_save_folder = self.save_path.joinpath(scaler_name).with_suffix(".pkl")
         self.handle_loader.save_scaler(scaler, scaler_save_folder)
 
         # Guardar los parametros de entrenamiento
         self.handle_loader.save_dict_to_json(
-            file_name="parametros",
+            file_name="parametros_" + self.tunne_parameter.model_name,
             dict_data=self.tunne_parameter.model_used_parameters,
             path_to_save=self.save_path.as_posix(),
         )
@@ -170,7 +221,9 @@ class ModelContext(Model):
         )
 
         # Guardar el modelo
-        model.save(str(self.save_path.joinpath("model").with_suffix(".pt")))
+        if model is not None:
+            save_model_train = "model_" + self.tunne_parameter.model_name
+            model.save(str(self.save_path.joinpath(save_model_train).with_suffix(".pt")))
 
     def load_dirmodel(self):
         """Cargar el listado de datos de archivos generados en el entrenamiento"""

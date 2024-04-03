@@ -11,10 +11,12 @@ import re
 
 try:
     from src.features.features_fix_data import PrepareData
-    from src.lib.class_load import LoadFiles
+
+    # from src.lib.class_load import LoadFiles
 except ImportError:
     from features_fix_data import PrepareData  # pylint: disable=E0401
-    from class_load import LoadFiles
+
+    # from class_load import LoadFiles
 
 
 # Definir la interfaz de la estrategia
@@ -104,9 +106,7 @@ class OutliersToIQRMean(DataCleaningStrategy):
             column for column in select_filter if re.match(r"filter_\d+_column", column)
         ]
         filter_feature = [
-            column
-            for column in select_filter
-            if re.match(r"filter_\d+_feature", column)
+            column for column in select_filter if re.match(r"filter_\d+_feature", column)
         ]
 
         for columns, feature in zip(filter_columns, filter_feature):

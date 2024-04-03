@@ -106,9 +106,9 @@ class ModelRNN:
     model_name: Optional[str] = "model_version_ModelRNN"
     model: str = "LSTM"
     hidden_dim: int = 20
-    dropout: float = 0
+    dropout: float = 0.1
     batch_size: int = 16
-    n_epochs: int = 300
+    n_epochs: int = 300  # 2
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     log_tensorboard: bool = True
     random_state: int = 42
@@ -124,12 +124,12 @@ class ModelBlockRNN:
 
     model_name: Optional[str] = "model_version_ModelBlockRNN"
     model: str = "GRU"
-    input_chunk_length: int = 24
-    output_chunk_length: int = 4
+    input_chunk_length: int = 4
+    output_chunk_length: int = 1
     hidden_dim: int = 10
     n_rnn_layers: int = 1
     batch_size: int = 32
-    n_epochs: int = 200
+    n_epochs: int = 200  # 2
     dropout: float = 0.1
     nr_epochs_val_period: int = 1
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
@@ -151,11 +151,11 @@ class ModelTCNModel:
     """Parametros iniciales para el modelo TCNModel"""
 
     model_name: Optional[str] = "model_version_ModelTCNModel"
-    input_chunk_length: int = 20
-    output_chunk_length: int = 4
+    input_chunk_length: int = 4
+    output_chunk_length: int = 1
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
-    n_epochs: int = 200
-    dropout: int = 0
+    n_epochs: int = 200  # 2
+    dropout: float = 0.1
     dilation_base: int = 2
     weight_norm: int = True
     kernel_size: int = 3
@@ -179,11 +179,11 @@ class ModelTransformerModel:
     """Parametros iniciales para el modelo Transformer"""
 
     model_name: Optional[str] = "model_version_ModelTransformerModel"
-    input_chunk_length: int = 12
+    input_chunk_length: int = 4
     output_chunk_length: int = 1
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     batch_size: int = 32
-    n_epochs: int = 200
+    n_epochs: int = 200  # 2
     nr_epochs_val_period: int = 10
     d_model: int = 16
     nhead: int = 8
@@ -202,15 +202,15 @@ class ModelNBEATSModel:
     """Parametros para el modelo NBeats"""
 
     model_name: Optional[str] = "model_version_ModelNBEATSModel"
-    input_chunk_length: int = 10
-    output_chunk_length: int = 4
+    input_chunk_length: int = 4
+    output_chunk_length: int = 1
     generic_architecture: bool = True
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     num_stacks: int = 10
     num_blocks: int = 2
     num_layers: int = 3
     layer_widths: int = 256
-    n_epochs: int = 300
+    n_epochs: int = 300  # 2
     nr_epochs_val_period: int = 10
     batch_size: int = 1024
     force_reset: bool = True
@@ -222,15 +222,15 @@ class ModelTFTModel:
     """Parametros iniciales para modelo TFT"""
 
     model_name: Optional[str] = "model_version_ModelTFTModel"
-    input_chunk_length: int = 36
-    output_chunk_length: int = 7
+    input_chunk_length: int = 4
+    output_chunk_length: int = 1
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     hidden_size: int = 64
     lstm_layers: int = 1
     num_attention_heads: int = 4
-    dropout: int = 0.1
+    dropout: float = 0.1
     batch_size: int = 16
-    n_epochs: int = 300
+    n_epochs: int = 300  # 2
     add_relative_index: bool = False
     add_encoders: bool = default_field({"cyclic": {"future": ["weekofyear", "month"]}})
     likelihood: int = QuantileRegression(
@@ -247,15 +247,15 @@ class ModelDLinearModel:
     """Parametros iniciales para modelo Dlinear"""
 
     model_name: Optional[str] = "model_version_ModelDLinearModel"
-    input_chunk_length: int = 30
-    output_chunk_length: int = 7
+    input_chunk_length: int = 4
+    output_chunk_length: int = 1
     shared_weights: bool = False
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     # kernel_size:int= 7
     const_init: bool = True
     use_static_covariates: bool = True
     batch_size: int = 16
-    n_epochs: int = 300
+    n_epochs: int = 300  # 2
     force_reset: bool = True
     save_checkpoints: bool = True
     random_state: int = 42
@@ -266,15 +266,15 @@ class ModelNlinearModel:
     """Parametros iniciales para model Nlinear"""
 
     model_name: Optional[str] = "model_version_ModelNLinearModel"
-    input_chunk_length: int = 30
-    output_chunk_length: int = 7
+    input_chunk_length: int = 4
+    output_chunk_length: int = 1
     shared_weights: bool = False
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     # kernel_size:int = 7
     const_init: bool = True
     use_static_covariates: bool = True
     batch_size: int = 16
-    n_epochs: int = 300
+    n_epochs: int = 300  # 2
     force_reset: bool = True
     save_checkpoints: bool = True
     random_state: int = 42

@@ -1,4 +1,15 @@
-"""Codigo para la ejecucion  y llamando para hacer predicciones en los modelos"""
+# -*- coding: utf-8 -*-
+# =============================================================================
+__author__ = "Brayan Felipe Zapata "
+__copyright__ = "Copyright 2007, The Cogent Project"
+__license__ = "GPL"
+__version__ = "1.0.0"
+__maintainer__ = "Brayan Felipe Zapata"
+__email__ = "bzapata@smgsoftware.com"
+__status__ = "Production"
+# =============================================================================
+"""Codigo para ejecutar un entrenamiento completo de una base de datos """
+# =============================================================================
 
 import json
 import os
@@ -6,40 +17,102 @@ import os
 import numpy as np
 import pandas as pd
 import yaml
+import logging
 from scipy import stats
+
+from scipy import signal
 
 from src.lib.class_load import LoadFiles
 from src.lib.factory_data import SQLDataSourceFactory, get_data
+from src.features.features_redis import HandleRedis
 from src.lib.factory_models import ModelContext
-from src.lib.factory_prepare_data import DataCleaner, DataModel, MeanImputation, OutliersToIQRMean
-
-# from src.models.DP_model import Modelos
+from src.lib.factory_prepare_data import (
+    DataCleaner,
+    DataModel,
+    MeanImputation,
+    OutliersToIQRMean,
+    PrepareDtypeColumns,
+)
+from src.features.features_fix_data import PrepareData
+from src.models.args_data_model import Parameters
+from src.data.logs import LOGS_DIR
 
 handler_load = LoadFiles()
+handler_redis = HandleRedis()
 ruta_actual = os.path.dirname(__file__)
-# =================================================================
-#             Cargar datos de la fuente de datos
-# =================================================================
 
+# =================================================================
+#             Configuracion Logger
+# =================================================================
+# Configura un logger personalizado en lugar de usar el logger raíz
+logfile = ruta_actual + "/src/data/config/logging.conf"
+logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
+logger = logging.getLogger("train")
+logger.debug("Inciando secuencia de entrenamiento")
+
+# =================================================================
+#             Cargar los parametros
+# =================================================================
 CONFIG_FILE = ruta_actual + "/src/data/config/config.yaml"
 with open(CONFIG_FILE, "r", encoding="utf-8") as file:
     parameters = yaml.safe_load(file)
 
+logger.debug("Archivo de configuraciones cargado")
+parametros = Parameters(**parameters)
+# =================================================================
+#             Cargar datos de la fuente de datos
+# =================================================================
+# Interacion para hacer un cache de los datos en redis
+try:
+    logger.debug("verficando si existe data cache")
+    data = handler_redis.get_cache_data(
+        hash_name=parametros.query_template["table"],
+        config=parametros.connection_data_source,
+    )
+    # Condicional para actualizar datos en caso de existan datos en redis
+    if data is not None:
+        logger.debug("Existe data en cache")
 
-# #Peticion de la API
-# url  = 'http://192.168.115.99:3333/getinvoices'
-# response = requests.get(url)
+        # Secuencia de codigo para perdir nuevos datos a la base de datos
+        date_col_query = parameters["query_template"]["columns"]["0"]
+        LAST_DAY = str(data.iloc[-1][0])
+        parameters["query_template"]["where"] = f" \"{date_col_query}\" > '{LAST_DAY}'"
+        parameters["query_template"]["order"] = "".join(
+            ['"' + columna + '"' for columna in [date_col_query]]
+        )
 
-# if response.status_code == 200:
-#     invoices  = response.json()
-# else:
-#     print(response.status_code)
+        logger.debug("Realizando peticion a la fuente de datos")
 
-# data = pd.DataFrame(invoices)
-# filter_cols = list(parameters['query_template']['columns'].values())
-# data = data[filter_cols]
+        # Extraccion de la nueva data para actualizar
+        new = get_data(SQLDataSourceFactory(**parameters))
+        logger.debug("Actualizando cache en redis")
+        data = handler_redis.set_cache_data(
+            hash_name=parametros.query_template["table"],
+            old_dataframe=data,
+            new_dataframe=new,
+            exp_time=parametros.exp_time_cache,
+            config=parametros.connection_data_source,
+        )
+        logger.debug("Actualizacion completa de datos en redis")
 
-data = get_data(SQLDataSourceFactory(**parameters))
+    # Verificar que existieran datos en cache
+    if data is None:
+        logger.debug("No existe cache de datos")
+
+        data = get_data(SQLDataSourceFactory(**parameters))
+        logger.debug("Insertando datos de cache en redis")
+        data = handler_redis.set_cache_data(
+            hash_name=parametros.query_template["table"],
+            old_dataframe=data,
+            new_dataframe=None,
+            exp_time=parametros.exp_time_cache,
+            config=parametros.connection_data_source,
+        )
+
+except ValueError as error:
+    logger.debug("[ERROR] No se puede hacer un cache de la fuente de datos")
+    logger.debug(error)
+    exit()
 
 # =================================================================
 #             Limpieza de datos
@@ -54,7 +127,6 @@ base = {
 }
 
 for dtypo in parameters["type_data"].values():
-    # print(dtypo)
     new_types.append(base[dtypo])
 
 # metodo para transformar los tipo de datos
@@ -66,49 +138,106 @@ replace = {
     float: lambda x: float(x.replace(",", "")),
     object: lambda x: x.strip(),
 }
+# =================================================================
 
-# Imputacion de los datos
-imputation = MeanImputation(
+update_dtype_columns = PrepareDtypeColumns(
     replace_dtypes=new_types,
     strategy_imputation=strategy,
     preprocess_function=replace,
-    **parameters
+    **parameters,
 )
-# Remocion de outliners y seleccion de columnas
+
+# Ejecucion de fabrica para aplicar y ordenar los tipos de datos y los valores
+cleaner = DataCleaner()
+cleaner.strategy = update_dtype_columns
+data_ = cleaner.clean(data)
+
+# Condicion de filtrado para informacion segun los valores
+filter_label: str = parameters["filter_data"]["filter_1_feature"]
+filter_col: str = parameters["filter_data"]["filter_1_column"]
+filter_product = data_.dataframe[filter_col] == filter_label
+filter_data = data_.dataframe[filter_product].sort_values(by="created_at")
+
+# Seleccion de agrupacion de tiempo
+# parameters["filter_data"]["group_frequecy"] = "M"
+# parameters["filter_data"]["filter_1_feature"] = filter_label
+
+# # Datos de validacion
+# validate_data = filter_data.set_index(time_series_col)["2023-12-01":].reset_index()
+
+# # Datos de entrenamiento
+# filter_data = filter_data.set_index(time_series_col)[:"2023-11-30"].reset_index()
+
 outliners = OutliersToIQRMean(**parameters)
-
-# Preparacion de los dato para el modelos escalizado y filtrado
-data_for_model = DataModel(**parameters)
-
-# Patron de diseno de seleecio=n de estrategia
-cleaner = DataCleaner(imputation)
-data_imputation = cleaner.clean(data)
-
-# Cambio de estrategia para remover outliners
 cleaner.strategy = outliners
-data_filled = cleaner.clean(data_imputation.dataframe)
+outlines_data = cleaner.clean(filter_data)
+# validate_outlines = cleaner.clean(validate_data)
 
-# Cambio de estrategia para preparar los datos para modelo
+# Filtrado de datos para eliminar valores negativos
+filter_values = outlines_data["quantity"] <= 0
+outlines_data[filter_values] = 0.1
+
+# =================================================================
+#             Filtro pasabajos
+# =================================================================
+fs = 1 / 24 / 3600  # 1 day in Hz (sampling frequency)
+
+nyquist = fs / 0.5  # 2 # 0.5 times the sampling frequency
+cutoff = 0.5  # 0.1 fraction of nyquist frequency, here  it is 5 days
+# print("cutoff= ", 1 / cutoff * nyquist * 24 * 3600, " days")  # cutoff=  4.999999999999999  days
+b, a = signal.butter(5, cutoff, btype="lowpass")  # low pass filter
+
+dUfilt = signal.filtfilt(b, a, outlines_data["quantity"])
+dUfilt = np.array(dUfilt)
+dUfilt = dUfilt.transpose()
+outlines_data["low_past"] = dUfilt
+
+# =================================================================
+#             Preparacion de datos para el modelo
+# =================================================================
+data_for_model = DataModel(**parameters)
 cleaner.strategy = data_for_model
-data_ready, scaler_data = cleaner.clean(data_filled)
+data_ready, scaler_data = cleaner.clean(outlines_data)
 
-if not parameters["scale"]:
-    data_ready = scaler_data.inverse_transform(data_ready)
+# Creacion del dataframe para del filtro pasa bajo para los datos
+low_pass_data = outlines_data["low_past"]
+low_pass_data = low_pass_data.to_frame()
+low_pass_data.rename(columns={"low_past": "quantity"}, inplace=True)
+data_ready_lp, scaler_data_lp = cleaner.clean(low_pass_data)
+
 # =================================================================
 #            Preparacion de modelo
 # =================================================================
+modelos_list = [
+    # "BlockRNNModel",
+    # "NBeatsModel",
+    # "TCNModel",
+    # "TransformerModel",
+    "TFTModel",
+    "DLinealModel",
+    "NLinearModel",
+]
 
-MODE_USED = "NBeatsModel"
-modelo = ModelContext(model_name=MODE_USED, data=data_ready, split=83, **parameters)
+metric_eval = {}
 
-# Entrenar el modelo
-model_trained = modelo.train()
+for selected_model in modelos_list:
+    MODE_USED = selected_model
+    print(f"Entrenando {selected_model}")
 
-# Optimizar los parametros del modelo
-if parameters["optimize"]:
-    model_trained = modelo.optimize()
+    modelo = ModelContext(
+        model_name=MODE_USED, data=data_ready, split=80, covarianze=data_ready_lp, **parameters
+    )
 
-# Guargar los modelos entrenados
-modelo.save(model_trained, scaler=scaler_data)
+    # Entrenar el modelo
+    model_trained = modelo.train()
 
-print("metodo finalizado")
+    # Optimizar los parametros del modelo
+    if parameters["optimize"]:
+        print("Optimizando parametros del modelo")
+        model_trained = modelo.optimize()
+
+    # Guargar los modelos entrenados
+    modelo.save(model_trained, scaler=scaler_data, scaler_name="scaler")
+    modelo.save(None, scaler=scaler_data_lp, scaler_name="scaler_lp")
+
+    print("metodo finalizado")

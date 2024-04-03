@@ -2,14 +2,15 @@ import numpy as np
 import optuna
 import pandas as pd
 import torch
-import tqdm
-from pathlib import Path
-from darts.metrics import mape, mase, mse, r2_score, rho_risk, rmse, smape
+
+# import tqdm
+# from pathlib import Path
+from darts.metrics import mape, r2_score, smape
 from darts.models import (
-    FFT,
+    # FFT,
     BlockRNNModel,
     DLinearModel,
-    ExponentialSmoothing,
+    # ExponentialSmoothing,
     NBEATSModel,
     NLinearModel,
     RNNModel,
@@ -22,14 +23,14 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from darts.timeseries import TimeSeries
 
 try:
-    from src.features.features_fix_data import PrepareData
-    from src.lib.class_load import LoadFiles
-    from src.data.save_models import SAVE_DIR
+    # from src.features.features_fix_data import PrepareData
+    # from src.lib.class_load import LoadFiles
+    # from src.data.save_models import SAVE_DIR
     from src.models.args_data_model import (
         ModelBlockRNN,
         ModelDLinearModel,
-        ModelExponentialSmoothing,
-        ModelFFT,
+        # ModelExponentialSmoothing,
+        # ModelFFT,
         ModelNBEATSModel,
         ModelNlinearModel,
         ModelRNN,
@@ -41,8 +42,8 @@ except ImportError:
     from args_data_model import (
         ModelBlockRNN,
         ModelDLinearModel,
-        ModelExponentialSmoothing,
-        ModelFFT,
+        # ModelExponentialSmoothing,
+        # ModelFFT,
         ModelNBEATSModel,
         ModelNlinearModel,
         ModelRNN,
@@ -50,9 +51,10 @@ except ImportError:
         ModelTFTModel,
         ModelTransformerModel,
     )
-    from class_load import LoadFiles
-    from features_fix_data import PrepareData
-    from save_models import SAVE_DIR
+
+    # from class_load import LoadFiles
+    # from features_fix_data import PrepareData
+    # from save_models import SAVE_DIR
 
 Modelos = {
     "RNNModel": RNNModel,
@@ -79,6 +81,16 @@ Parameters_model = {
     # 'ExponentialSmoothing':ModelExponentialSmoothing,
     # 'FFT':ModelFFT
 }
+
+modelos_list = [
+    "BlockRNNModel",  # Complejo
+    "NBeatsModel",
+    "TCNModel",  # Muchos datos detalles
+    "TransformerModel",
+    "TFTModel",  # Correciones
+    "DLinealModel",
+    "NLinearModel",
+]
 
 
 class ModelHyperparameters:
@@ -201,7 +213,7 @@ class ModelHyperparameters:
             )
 
         # save_parameters
-        # model_prepare = inst_model.load_from_checkpoint(self.model_used_parameters['model_name'])
+        # model_prepare = model_prepare.load_from_checkpoint(self.model_used_parameters['model_name'])
 
         # save_dir = Path(SAVE_DIR).joinpath('model').with_suffix('.pk')
         # model_prepare.save(save_dir)
@@ -229,53 +241,98 @@ class ModelHyperparameters:
         callback = [PyTorchLightningPruningCallback(trial, monitor="val_loss")]
         # self.model_used_parameters['pl_trainer_kwargs']['callbacks'] = callback
 
-        # parametros de busqueda Nbeats
         self.model_used_parameters["input_chunk_length"] = trial.suggest_int(
-            "input_chunk_length", 5, 30
+            "input_chunk_length", 4, 12
         )
         self.model_used_parameters["output_chunk_length"] = trial.suggest_int(
-            "output_chunk_length", 1, 10
+            "output_chunk_length", 1, 4
         )
-        self.model_used_parameters["num_blocks"] = trial.suggest_int("num_blocks", 1, 10)
-        self.model_used_parameters["num_stacks"] = trial.suggest_int("num_stacks", 1, 15)
-        self.model_used_parameters["layer_widths"] = trial.suggest_categorical(
-            "layer_widths", [128, 256, 512]
-        )
-        self.model_used_parameters["generic_architecture"] = trial.suggest_categorical(
-            "generic_architecture", [False, True]
-        )
-        self.model_used_parameters["dropout"] = trial.suggest_float("dropout", 0.0, 0.4)
+        # self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
         self.model_used_parameters["optimizer_kwargs"]["lr"] = trial.suggest_float(
             "lr", 5e-5, 1e-3, log=True
         )
 
-        # self.model_used_parameters['num_layers']  = trial.suggest_int("num_layers", 1, 5) #CUIDADO CON ESTE PARAMETROS
-        # self.model_used_parameters['kernel_size']  = trial.suggest_int("kernel_size", 5, 25)
-        # self.model_used_parameters['num_filters'] = trial.suggest_int("num_filters", 5, 25)
-        # self.model_used_parameters['kernel_size']  = trial.suggest_int("kernel_size", 5, 25)
-        # self.model_used_parameters['num_filters'] = trial.suggest_int("num_filters", 5, 25)
-        # self.model_used_parameters['weight_norm'] = trial.suggest_categorical("weight_norm", [False, True])
-        # self.model_used_parameters['dilation_base'] = trial.suggest_int("dilation_base", 2, 4)
-        # self.model_used_parameters['include_dayofweek'] = trial.suggest_categorical("dayofweek", [False, True])
+        if self.model_name == "NBeatsModel":
+            # parametros de busqueda Nbeats
+            self.model_used_parameters["num_blocks"] = trial.suggest_int("num_blocks", 1, 10)
+            self.model_used_parameters["num_stacks"] = trial.suggest_int("num_stacks", 1, 15)
+            self.model_used_parameters["layer_widths"] = trial.suggest_categorical(
+                "layer_widths", [128, 256, 512]
+            )
+            self.model_used_parameters["generic_architecture"] = trial.suggest_categorical(
+                "generic_architecture", [False, True]
+            )
+            self.model_used_parameters["dropout"] = trial.suggest_float("dropout", 0.0, 0.4)
+            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
 
+        elif self.model_name == "TCNModel":
+            # Parmaetros de busqueda  TCNModel:
+            self.model_used_parameters["dilation_base"] = trial.suggest_int("dilation_base", 2, 4)
+            self.model_used_parameters["weight_norm"] = trial.suggest_categorical(
+                "weight_norm", [False, True]
+            )
+            self.model_used_parameters["kernel_size"] = trial.suggest_int(
+                "kernel_size", 3, self.model_used_parameters["input_chunk_length"] - 1
+            )
+            self.model_used_parameters["num_filters"] = trial.suggest_int("num_filters", 6, 12)
+
+        elif self.model_name == "BlockRNNModel":
+            # Parmaetros de busqueda  BlockRNNModel:
+            self.model_used_parameters["hidden_dim"] = trial.suggest_int("hidden_dim", 1, 15)
+            self.model_used_parameters["n_rnn_layers"] = trial.suggest_int("n_rnn_layers", 1, 15)
+            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+
+        elif self.model_name == "TransformerModel":
+            # Parmaetros de busqueda  TransformerModel:
+            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+            # self.model_used_parameters['d_model'] = trial.suggest_int("d_model", 4, 32)
+            # self.model_used_parameters['nhead'] = trial.suggest_int("nhead", 4, 16)
+            self.model_used_parameters["num_encoder_layers"] = trial.suggest_int(
+                "num_encoder_layers", 1, 12
+            )
+            self.model_used_parameters["num_decoder_layers"] = self.model_used_parameters[
+                "num_encoder_layers"
+            ]
+            self.model_used_parameters["dim_feedforward"] = trial.suggest_int(
+                "dim_feedforward", 1, 256
+            )
+
+        elif self.model_name == "TFTModel":
+            # Parmaetros de busqueda  TFTModel:
+            self.model_used_parameters["hidden_size"] = trial.suggest_int("hidden_size", 1, 256)
+            self.model_used_parameters["lstm_layers"] = trial.suggest_int("lstm_layers", 1, 5)
+            self.model_used_parameters["num_attention_heads"] = trial.suggest_int(
+                "num_attention_heads", 1, 8
+            )
+            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+
+        elif self.model_name == "DLinealModel" or self.model_name == "NLinearModel":
+            # Parmaetros de busqueda  DLinealModel o NLinearModel:
+            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+
+        # =======================Entrenamiento del modelo=====================================
         model = self.build_fit_model(enable_callback=True)
 
         # Evaluate how good it is on the validation set
-        preds = model.predict(series=self.train, n=len(self.val))
+        # preds = model.predict(series=self.train, n=len(self.val))
+        # =====================Validate Error=================================================
+        preds = model.predict(
+            series=self.train,
+            n=self.model_used_parameters["output_chunk_length"],
+            past_covariates=self.train_cov,
+        )
 
-        # preds = model.historical_forecasts(self.train,
-        #                             start = self.split_value,
-        #                             past_covariates= self.train,
-        #                             forecast_horizon=4,
-        #                             stride=1,
-        #                             retrain=False,
-        #                             verbose=True,
-        #                             overlap_end = False
-        #                                 )
+        smapes = smape(self.val, preds, n_jobs=-1, verbose=True)
+        smape_val = np.mean(smapes)
+        mapes = mape(self.val, preds, n_jobs=-1, verbose=True)
+        # r2_scores = r2_score(actual_series=self.val, pred_series=preds)
 
-        r2_scores = r2_score(actual_series=self.val, pred_series=preds)
+        # print(f"r2_score: {r2_score}")
+        print(f"mape :{mapes}")
+        print(f"smapes: {smapes}")
 
-        return r2_scores if r2_scores != np.nan else float("inf")
+        # return r2_scores if r2_scores != np.nan else float("inf")
+        return smape_val if smape_val != np.nan else float("inf")
 
     def print_callback(self, study, trial):
         """Metodo para mostrar los valores de entrenamiento"""
@@ -285,10 +342,21 @@ class ModelHyperparameters:
     def retrain(self):
         """metodo para reentrenar un modelo"""
 
-        study = optuna.create_study(direction="maximize")
-        study.optimize(self.optimize, timeout=6000, callbacks=[self.print_callback])
+        # study = optuna.create_study(direction="maximize")
+        study = optuna.create_study(
+            sampler=optuna.samplers.QMCSampler(), direction="minimize"  # PartialFixedSampler
+        )
 
-        # study.optimize(objective, n_trials=100, callbacks=[print_callback])
+        # optimizacion por diferencia de tiempo
+        # study.optimize(self.optimize, timeout=6000, callbacks=[self.print_callback])
+
+        # optimizacion por numero de intentos
+        study.optimize(
+            self.optimize,
+            n_trials=2,
+            # n_jobs=-1,
+            callbacks=[self.print_callback],
+        )
 
         # Finally, print the best value and best hyperparameters:
         print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
@@ -296,7 +364,6 @@ class ModelHyperparameters:
 
     def update_parameters(self, study):
         """update_parameters Metodo para actulizar parametros despues del entrenamiento
-
         Args:
             study (_type_): _description_
         """

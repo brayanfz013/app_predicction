@@ -8,7 +8,7 @@ __maintainer__ = "Brayan Felipe Zapata"
 __email__ = "bzapata@smgsoftware.com"
 __status__ = "Production"
 # =============================================================================
-'''Codigo base para hacer predicciones sobre toda la base de datos  '''
+"""Codigo base para hacer predicciones sobre toda la base de datos  """
 # =============================================================================
 
 import os
@@ -20,19 +20,20 @@ import requests
 from scipy import stats
 from pathlib import Path
 from src.lib.class_load import LoadFiles
+
 # from src.features.features_fix_data import PrepareData
-from src.lib.factory_data import SQLDataSourceFactory, get_data, create_table, set_data,HandleRedis
+from src.lib.factory_data import SQLDataSourceFactory, get_data, create_table, set_data
 from src.lib.factory_models import ModelContext
-from src.lib.factory_prepare_data import (DataCleaner, DataModel,
-                                          MeanImputation, OutliersToIQRMean)
+from src.lib.factory_prepare_data import DataCleaner, DataModel, MeanImputation, OutliersToIQRMean
 from src.models.DP_model import Modelos
 from src.features.features_postgres import HandleDBpsql
+from src.features.features_redis import HandleRedis
 from src.models.args_data_model import Parameters
 from src.data.logs import LOGS_DIR
 import logging
 
 path_folder = os.path.dirname(__file__)
-folder_model = Path(path_folder).joinpath('scr/data/save_models')
+folder_model = Path(path_folder).joinpath("scr/data/save_models")
 
 handler_load = LoadFiles()
 ruta_actual = os.path.dirname(__file__)
@@ -43,18 +44,18 @@ data_source = HandleDBpsql()
 #             Configuracion Logger
 # =================================================================
 # Configura un logger personalizado en lugar de usar el logger raíz
-logfile=ruta_actual+'/src/data/config/logging.conf'
+logfile = ruta_actual + "/src/data/config/logging.conf"
 logging.config.fileConfig(os.path.join(LOGS_DIR, logfile))
-logger = logging.getLogger('predict')
-logger.debug('Inciando secuencia de entrenamiento')
+logger = logging.getLogger("predict")
+logger.debug("Inciando secuencia de entrenamiento")
 
 # =================================================================
 #             Cargar los parametros
 # =================================================================
-CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
-with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
+CONFIG_FILE = ruta_actual + "/src/data/config/config.yaml"
+with open(CONFIG_FILE, "r", encoding="utf-8") as file:
     parameters = yaml.safe_load(file)
-logger.debug('Archivo de configuraciones cargado')
+logger.debug("Archivo de configuraciones cargado")
 parametros = Parameters(**parameters)
 
 # =================================================================
@@ -62,24 +63,24 @@ parametros = Parameters(**parameters)
 # =================================================================
 # Interacion para hacer un cache de los datos en redis
 try:
-    logger.debug('verficando si existe data cache')
+    logger.debug("verficando si existe data cache")
     data = handler_redis.get_cache_data(
-            hash_name=parametros.query_template['table'],
-            config=parametros.connection_data_source
-            )
+        hash_name=parametros.query_template["table"], config=parametros.connection_data_source
+    )
 
     # Condicional para actualizar datos en caso de existan datos en redis
     if data is not None:
-        logger.debug('Existe data en cache')
+        logger.debug("Existe data en cache")
 
         # Secuencia de codigo para perdir nuevos datos a la base de datos
-        date_col_query = parameters['query_template']['columns']['0']
+        date_col_query = parameters["query_template"]["columns"]["0"]
         LAST_DAY = str(data.iloc[-1][0])
-        parameters['query_template']['where'] = f' "{date_col_query}" > \'{LAST_DAY}\''
-        parameters['query_template']['order'] = ''.join(
-            ['"' + columna + '"' for columna in [date_col_query]])
+        parameters["query_template"]["where"] = f" \"{date_col_query}\" > '{LAST_DAY}'"
+        parameters["query_template"]["order"] = "".join(
+            ['"' + columna + '"' for columna in [date_col_query]]
+        )
 
-        logger.debug('Realizando peticion a la fuente de datos')
+        logger.debug("Realizando peticion a la fuente de datos")
         # #Peticion de la API
         # url  = 'http://192.168.115.99:3333/getinvoices'
         # response = requests.get(url)
@@ -93,43 +94,44 @@ try:
         # filter_cols = list(parameters['query_template']['columns'].values())
         # new = new[filter_cols]
 
-        #Extraccion de la nueva data para actualizar
+        # Extraccion de la nueva data para actualizar
         new = get_data(SQLDataSourceFactory(**parameters))
-        logger.debug('Actualizando cache en redis')
+        logger.debug("Actualizando cache en redis")
         data = handler_redis.set_cache_data(
-            hash_name=parametros.query_template['table'],
+            hash_name=parametros.query_template["table"],
             old_dataframe=data,
             new_dataframe=new,
             exp_time=parametros.exp_time_cache,
-            config=parametros.connection_data_source)
-        logger.debug('Actualizacion completa de datos en redis')
+            config=parametros.connection_data_source,
+        )
+        logger.debug("Actualizacion completa de datos en redis")
 
     # Verificar que existieran datos en cache
     if data is None:
         logger.debug("No existen datos en cache")
-    #     #Peticion de la API
-    #     url  = 'http://192.168.115.99:3333/getinvoices'
-    #     response = requests.get(url)
+        #     #Peticion de la API
+        #     url  = 'http://192.168.115.99:3333/getinvoices'
+        #     response = requests.get(url)
 
-    #     if response.status_code == 200:
-    #         invoices  = response.json()
-    #     else:
-    #         print(response.status_code)
+        #     if response.status_code == 200:
+        #         invoices  = response.json()
+        #     else:
+        #         print(response.status_code)
 
-    #     data = pd.DataFrame(invoices)
-    #     filter_cols = list(parameters['query_template']['columns'].values())
-    #     data = data[filter_cols]
+        #     data = pd.DataFrame(invoices)
+        #     filter_cols = list(parameters['query_template']['columns'].values())
+        #     data = data[filter_cols]
 
-        #Si no existen datos buscar en la base de datos y meterlos al cache
-        logger.debug('Extrayendo datos de la fuente de datos')
+        # Si no existen datos buscar en la base de datos y meterlos al cache
+        logger.debug("Extrayendo datos de la fuente de datos")
         data = get_data(SQLDataSourceFactory(**parameters))
 
         data = handler_redis.set_cache_data(
-            hash_name=parametros.query_template['table'],
+            hash_name=parametros.query_template["table"],
             old_dataframe=data,
             new_dataframe=None,
             exp_time=parametros.exp_time_cache,
-            config=parametros.connection_data_source
+            config=parametros.connection_data_source,
         )
 except ValueError as error:
     logger.debug("No se puede hacer un cache de la fuente de datos")
@@ -141,28 +143,24 @@ except ValueError as error:
 
 new_types = []
 base = {
-    'date': np.datetime64,
-    'integer': int,
-    'float': float,
-    'string': 'object',
+    "date": np.datetime64,
+    "integer": int,
+    "float": float,
+    "string": "object",
 }
 
-for dtypo in parameters['type_data'].values():
+for dtypo in parameters["type_data"].values():
     # print(dtypo)
     new_types.append(base[dtypo])
 
 # metodo para transformar los tipo de datos
-strategy = {
-    int: np.mean,
-    float: np.mean,
-    object: stats.mode
-}
+strategy = {int: np.mean, float: np.mean, object: stats.mode}
 
 # Estrategias para imputar los datos faltantes de NA
 replace = {
-    int: lambda x: int(float(x.replace(',', ''))),
-    float: lambda x: float(x.replace(',', '')),
-    object: lambda x: x.strip()
+    int: lambda x: int(float(x.replace(",", ""))),
+    float: lambda x: float(x.replace(",", "")),
+    object: lambda x: x.strip(),
 }
 
 
@@ -171,40 +169,40 @@ imputation = MeanImputation(
     replace_dtypes=new_types,
     strategy_imputation=strategy,
     preprocess_function=replace,
-    **parameters
+    **parameters,
 )
-logger.debug('Realizando imputacion de datos')
+logger.debug("Realizando imputacion de datos")
 
 # Patron de diseno de seleecion de estrategia
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
 
-logger.debug('Filtrando informacion para seleccionar modelos')
-MODEL_FOLDERS = Path(ruta_actual).joinpath('src/data/save_models').as_posix()
+logger.debug("Filtrando informacion para seleccionar modelos")
+MODEL_FOLDERS = Path(ruta_actual).joinpath("src/data/save_models").as_posix()
 items = []
-for folder in  Path(MODEL_FOLDERS).iterdir() :
-    if folder.is_dir() and folder.name != '__pycache__' :
+for folder in Path(MODEL_FOLDERS).iterdir():
+    if folder.is_dir() and folder.name != "__pycache__":
         items.append(folder.name)
 
 items = items[0:5]
-logger.debug('Filtrado terminado')
+logger.debug("Filtrado terminado")
 
 for item in items:
-    CONFIG_FILE = ruta_actual+'/src/data/config/config.yaml'
-    with open(CONFIG_FILE, 'r', encoding='utf-8') as file:
+    CONFIG_FILE = ruta_actual + "/src/data/config/config.yaml"
+    with open(CONFIG_FILE, "r", encoding="utf-8") as file:
         parameters = yaml.safe_load(file)
     try:
-        parameters['filter_data']['filter_1_feature'] = item
+        parameters["filter_data"]["filter_1_feature"] = item
 
         # =================================================================
         # Remocion de outliners y seleccion de columnas
-        logger.debug("removiendo outliners : %s",item)
+        logger.debug("removiendo outliners : %s", item)
         outliners = OutliersToIQRMean(**parameters)
 
         # Cambio de estrategia para remover outliners
         cleaner.strategy = outliners
         data_filled = cleaner.clean(data_imputation.dataframe)
-        logger.debug('Preparando datos para el modelo : %s',item)
+        logger.debug("Preparando datos para el modelo : %s", item)
         # =================================================================
         # Preparacion de los dato para el modelos escalizado y filtrado
         data_for_model = DataModel(**parameters)
@@ -213,39 +211,36 @@ for item in items:
         cleaner.strategy = data_for_model
         data_ready, scaler_data = cleaner.clean(data_filled)
         # =================================================================
-        if not parameters['scale']:
+        if not parameters["scale"]:
             data_ready = scaler_data.inverse_transform(data_ready)
 
-        #=================================================================
+        # =================================================================
         #           Preparacion de modelo
-        #=================================================================
-        logger.debug('Cargando modelo: %s', item)
-        MODE_USED = 'NBeatsModel'
-        modelo = ModelContext(model_name=MODE_USED,
-                            data=data_ready,
-                            split=83,
-                            **parameters)
+        # =================================================================
+        logger.debug("Cargando modelo: %s", item)
+        MODE_USED = "NBeatsModel"
+        modelo = ModelContext(model_name=MODE_USED, data=data_ready, split=83, **parameters)
 
         # Rutas de los parametros para predicciones
-        model_train = modelo.save_path.joinpath('model').with_suffix('.pt').as_posix()
-        scaler = modelo.save_path.joinpath('scaler').with_suffix('.pkl').as_posix()
-        last_pred = modelo.save_path.joinpath('previus').with_suffix('.json').as_posix()
-        parameters_model = modelo.save_path.joinpath('parametros').with_suffix('.json').as_posix()
+        model_train = modelo.save_path.joinpath("model").with_suffix(".pt").as_posix()
+        scaler = modelo.save_path.joinpath("scaler").with_suffix(".pkl").as_posix()
+        last_pred = modelo.save_path.joinpath("previus").with_suffix(".json").as_posix()
+        parameters_model = modelo.save_path.joinpath("parametros").with_suffix(".json").as_posix()
 
         # Cargar escaler
         scaler = handler_load.load_scaler(scaler)
 
         # Cargar modelo para hacer las predicciones
-        MODE_USED = 'NBeatsModel'
+        MODE_USED = "NBeatsModel"
         IntModel = Modelos[MODE_USED]
         model_trained = IntModel.load(model_train)
-        logger.debug('Ejecutando predicciones para el modelo : %s',item)
+        logger.debug("Ejecutando predicciones para el modelo : %s", item)
         pred_series = modelo.predict(
             model=model_trained,
             data=modelo.tunne_parameter.data,
-            horizont=parameters['forecast_val']
+            horizont=parameters["forecast_val"],
         )
-        logger.debug('Escalando datos para el modelo : %s',item)
+        logger.debug("Escalando datos para el modelo : %s", item)
         # Invertir predicciones escaler de entrenamietno
         pred_scale = scaler.inverse_transform(pred_series)
 
@@ -255,7 +250,9 @@ for item in items:
         data_frame_predicciones = pred_scale.pd_dataframe()
         column_field = list(data_frame_predicciones.columns)
         data_frame_predicciones.reset_index(inplace=True)
-        data_frame_predicciones[parameters['filter_data']['predict_column']].clip(lower=0, inplace=True)
+        data_frame_predicciones[parameters["filter_data"]["predict_column"]].clip(
+            lower=0, inplace=True
+        )
 
         # ===============================================================================================
         #                               METRICAS PREDICCIONES
@@ -263,149 +260,159 @@ for item in items:
         # Esta parte tiene un ToDo importante: Tiene que ordenarse y optimizarce para se escalable
         # De momento funciona de manera estatica para ciertas cosas sobre todo el tema de la escritura
         # en postgres, ademas de tener codigo copiado de funciones internas ya ordenadas
-        logger.debug('Generando metricas para el modelo : %s',item)
+        logger.debug("Generando metricas para el modelo : %s", item)
         # Cuantificar metricas de la columan de predicciones
         metric_columns_pred = data_imputation.metrics_column(
-            data_frame_predicciones[parameters['filter_data']['predict_column']]
+            data_frame_predicciones[parameters["filter_data"]["predict_column"]]
         )
         # Seleccion de columans para generar el dataframe de salida para la base de datos
         filter_temp = []
-        for filter_list in parameters['filter_data']:
-            if 'feature' in filter_list:
-                filter_temp.append(parameters['filter_data'][filter_list])
+        for filter_list in parameters["filter_data"]:
+            if "feature" in filter_list:
+                filter_temp.append(parameters["filter_data"][filter_list])
 
-        #agregar la columnas de filtrado de forma dinamica
+        # agregar la columnas de filtrado de forma dinamica
         for adding_data in filter_temp:
             data_frame_predicciones[str(adding_data)] = adding_data
 
-        new_names = list(parameters['query_template_write']['columns'].values())
+        new_names = list(parameters["query_template_write"]["columns"].values())
         rename = {x: y for x, y in zip(list(data_frame_predicciones.columns), new_names)}
         data_frame_predicciones.rename(columns=rename, inplace=True)
-        data_frame_predicciones.rename(str.lower,axis='columns',inplace=True)
+        data_frame_predicciones.rename(str.lower, axis="columns", inplace=True)
 
-        parameters['type_data_out'] = dict((k.lower(), v.lower()) for k,v in parameters['type_data_out'].items())
-        parameters['query_template_write']['columns'] = dict((k.lower(), v.lower()) for k,v in parameters['query_template_write']['columns'].items())
-        parameters['query_template_write']['columns']['2'] = 'code'
-        parameters['type_data_out'] = {'fecha': 'date', 'predicion': 'float', 'code': 'string'}
+        parameters["type_data_out"] = dict(
+            (k.lower(), v.lower()) for k, v in parameters["type_data_out"].items()
+        )
+        parameters["query_template_write"]["columns"] = dict(
+            (k.lower(), v.lower()) for k, v in parameters["query_template_write"]["columns"].items()
+        )
+        parameters["query_template_write"]["columns"]["2"] = "code"
+        parameters["type_data_out"] = {"fecha": "date", "predicion": "float", "code": "string"}
         # Crear tabla para guardas la informacion
-        logger.debug('Creando tabla de predicciones caso de ser necesario')
+        logger.debug("Creando tabla de predicciones caso de ser necesario")
         create_table(SQLDataSourceFactory(**parameters))
 
         # Ingresar los datos a la base de datos
-        logger.debug('Insertando metricas de predicciones para el modelo : %s',item)
+        logger.debug("Insertando metricas de predicciones para el modelo : %s", item)
         set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
 
         # ===============================================================================================
         #                             DATOS REALES SEMANALES
         # ===============================================================================================
-        logger.debug('Agrupando datos reales por perido de tiempo a las predicciones para el modelo : %s',item)
+        logger.debug(
+            "Agrupando datos reales por perido de tiempo a las predicciones para el modelo : %s",
+            item,
+        )
         data_filled.reset_index(inplace=True)
-        filter_date = data_filled.iloc[-parameters['forecast_val']:]
+        filter_date = data_filled.iloc[-parameters["forecast_val"] :]
 
         for adding_data in filter_temp:
             filter_date[str(adding_data)] = adding_data
 
         filter_date.rename(columns=rename, inplace=True)
-        filter_date.rename({'predicion':'real'},axis='columns',inplace=True)
-        filter_date.rename(str.lower,axis='columns',inplace=True)
+        filter_date.rename({"predicion": "real"}, axis="columns", inplace=True)
+        filter_date.rename(str.lower, axis="columns", inplace=True)
 
-        parameters['query_template_write']['table'] = 'public.modeloreal'
-        parameters['query_template_write']['columns']['1'] = 'real'
-        parameters['query_template_write']['columns']['2'] = 'code'
-        parameters['type_data_out'] = {'fecha': 'date',
-                                        'real': 'float',
-                                        'code': 'string'}
+        parameters["query_template_write"]["table"] = "public.modeloreal"
+        parameters["query_template_write"]["columns"]["1"] = "real"
+        parameters["query_template_write"]["columns"]["2"] = "code"
+        parameters["type_data_out"] = {"fecha": "date", "real": "float", "code": "string"}
 
         # Crear tabla para guardas la informacion
-        logger.debug('Creando tabla agrupacion de datos reales semanales caso de ser necesario')
+        logger.debug("Creando tabla agrupacion de datos reales semanales caso de ser necesario")
         create_table(SQLDataSourceFactory(**parameters))
 
         # Ingresar los datos a la base de datos
-        logger.debug('agruando informacion temporal para el modelo : %s',item)
+        logger.debug("agruando informacion temporal para el modelo : %s", item)
         set_data(SQLDataSourceFactory(**parameters), filter_date)
 
         # ===============================================================================================
         #                            METRICAS
         # ===============================================================================================
-        logger.debug('Generando metricas de las prediccioens del modelo : %s',item)
-        filter_columns = [column for column in parameters['filter_data'] if re.match(
-            r'filter_\d+_column', column)]
-        filter_feature = [column for column in parameters['filter_data'] if re.match(
-            r'filter_\d+_feature', column)]
+        logger.debug("Generando metricas de las prediccioens del modelo : %s", item)
+        filter_columns = [
+            column for column in parameters["filter_data"] if re.match(r"filter_\d+_column", column)
+        ]
+        filter_feature = [
+            column
+            for column in parameters["filter_data"]
+            if re.match(r"filter_\d+_feature", column)
+        ]
 
         value_product = []
         for i in filter_feature:
-            value_product.append(parameters['filter_data'][i])
-        fecha = parameters['query_template_write']['columns']['0']
+            value_product.append(parameters["filter_data"][i])
+        fecha = parameters["query_template_write"]["columns"]["0"]
         min_date = data_frame_predicciones[fecha].min()
         max_data = data_frame_predicciones[fecha].max()
-        metric_columns_pred['init_date'] = data_frame_predicciones[fecha].min()
-        metric_columns_pred['end_date'] = data_frame_predicciones[fecha].max()
-        metric_columns_pred['product'] = '/'.join(value_product)
+        metric_columns_pred["init_date"] = data_frame_predicciones[fecha].min()
+        metric_columns_pred["end_date"] = data_frame_predicciones[fecha].max()
+        metric_columns_pred["product"] = "/".join(value_product)
 
-        type_data_out = {'rango': 'float',
-                        'varianza': 'float',
-                        'desviacion_estandar': 'float',
-                        'coeficiente_varianza': 'float',
-                        'quantile_q1': 'float',
-                        'quantile_q3': 'float',
-                        'interquantile': 'float',
-                        'desviacion_media_absoluta': 'float',
-                        'init_date': 'date',
-                        'end_date': 'date',
-                        'product': 'string'
-                        }
-
-        fix_data_dict = {
-            'table': 'public.metric_predict',
-            'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
-            'order': 'index',
-            'where': 'posicion > 1'
+        type_data_out = {
+            "rango": "float",
+            "varianza": "float",
+            "desviacion_estandar": "float",
+            "coeficiente_varianza": "float",
+            "quantile_q1": "float",
+            "quantile_q3": "float",
+            "interquantile": "float",
+            "desviacion_media_absoluta": "float",
+            "init_date": "date",
+            "end_date": "date",
+            "product": "string",
         }
 
-        parameters['query_template_write'] = fix_data_dict
-        parameters['type_data_out'] = type_data_out
-        logger.debug('Creando tabla de metrica de predicciones caso de ser necesario')
+        fix_data_dict = {
+            "table": "public.metric_predict",
+            "columns": {str(index): key for index, key in enumerate(type_data_out.keys())},
+            "order": "index",
+            "where": "posicion > 1",
+        }
+
+        parameters["query_template_write"] = fix_data_dict
+        parameters["type_data_out"] = type_data_out
+        logger.debug("Creando tabla de metrica de predicciones caso de ser necesario")
         create_table(SQLDataSourceFactory(**parameters))
         send_metrics = pd.DataFrame([metric_columns_pred])
-        logger.debug('Insertando metricas de las predicciones para el modelo : %s',item)
+        logger.debug("Insertando metricas de las predicciones para el modelo : %s", item)
         set_data(SQLDataSourceFactory(**parameters), send_metrics)
 
         # ===============================================================================================
         #                          METRICAS  ORIGINAL DATA
         # ===============================================================================================
         # data_filled.reset_index(inplace=True)
-        logger.debug('Generando metricas para los datos de reales del modelo : %s',item)
-        date_col = parameters['filter_data']['date_column']
-        data_col = parameters['filter_data']['predict_column']
+        logger.debug("Generando metricas para los datos de reales del modelo : %s", item)
+        date_col = parameters["filter_data"]["date_column"]
+        data_col = parameters["filter_data"]["predict_column"]
 
         # Filtrar data por tiempo
         # filter_date = data_filled[(data_filled[date_col] >= metric_columns_pred['init_date']) & (
         #     data_filled[date_col] <= metric_columns_pred['end_date'])]
 
-        filter_date_metric = data_filled.iloc[-parameters['forecast_val']:]
+        filter_date_metric = data_filled.iloc[-parameters["forecast_val"] :]
         original = data_imputation.metrics_column(filter_date_metric[data_col])
 
-        original['init_date'] = filter_date[fecha].min()
-        original['end_date'] = filter_date[fecha].max()
+        original["init_date"] = filter_date[fecha].min()
+        original["end_date"] = filter_date[fecha].max()
 
-        original['product'] = '/'.join(value_product)
+        original["product"] = "/".join(value_product)
 
         fix_data_dict = {
-            'table': 'public.metric_data',
-            'columns': {str(index): key for index, key in enumerate(type_data_out.keys())},
-            'order': 'index',
-            'where': 'posicion > 1'
+            "table": "public.metric_data",
+            "columns": {str(index): key for index, key in enumerate(type_data_out.keys())},
+            "order": "index",
+            "where": "posicion > 1",
         }
 
-        parameters['query_template_write'] = fix_data_dict
-        parameters['type_data_out'] = type_data_out
-        logger.debug('Creando tabla de metricas original en caso de ser necesario')
+        parameters["query_template_write"] = fix_data_dict
+        parameters["type_data_out"] = type_data_out
+        logger.debug("Creando tabla de metricas original en caso de ser necesario")
         create_table(SQLDataSourceFactory(**parameters))
         send_metrics = pd.DataFrame([original])
-        logger.debug('Insertando metricas de datos reales para el modelo : %s',item)
+        logger.debug("Insertando metricas de datos reales para el modelo : %s", item)
         set_data(SQLDataSourceFactory(**parameters), send_metrics)
 
-    except (ValueError,Exception) as error_predict:
+    except (ValueError, Exception) as error_predict:
         logging.debug("Error en las prediccioens")
         logging.error(error_predict)

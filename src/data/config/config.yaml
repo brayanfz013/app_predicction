@@ -71,6 +71,6 @@ filter_data:
 
 scale: True
 first_train: True
-optimize: False
+optimize: True
 forecast_val: 4
 exp_time_cache: 8600000

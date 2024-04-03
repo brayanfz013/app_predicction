@@ -184,6 +184,13 @@ class LoadFiles(object):
 
         return value
 
+    def load_json(self, json_file_name: str, path_to_read: str) -> dict:
+        json_file = Path(os.path.join(path_to_read, json_file_name)).with_suffix(".json")
+        with open(json_file, "r", encoding="utf-8") as file:
+            data: dict = json.load(file)
+
+        return data
+
     def json_to_dict(self, json_file: str) -> Union[dict, list]:
         """
         Lee los archivos de una carpeta y retorna una lista con la ruta completa del archivo

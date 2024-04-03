@@ -21,7 +21,8 @@ import requests
 from pathlib import Path
 from scipy import stats
 from src.lib.class_load import LoadFiles
-from src.lib.factory_data import HandleRedis, SQLDataSourceFactory, get_data
+from src.lib.factory_data import SQLDataSourceFactory, get_data
+from src.features.features_redis import HandleRedis
 from src.lib.factory_models import ModelContext
 from src.lib.factory_prepare_data import (
     DataCleaner,
@@ -134,7 +135,7 @@ except ValueError as error:
     logger.debug("[ERROR] No se puede hacer un cache de la fuente de datos")
     logger.debug(error)
     exit()
-# 910051 rows x 4 columns
+
 
 # =================================================================
 #             Limpieza de datos
@@ -181,7 +182,7 @@ logger.debug("Filtrando informacion")
 # Segmento de filtrado de datos para simplificar la cantidad de modelos
 # Filtrado por fecha reciente del ultimo ano
 filter = data_imputation.dataframe[parameters["filter_data"]["date_column"]] >= pd.Timestamp(
-    "2023-01-01"
+    "2000-01-01"
 )
 # Seleccion de los datos mas recientes en el dataframe
 last_values_filter = (
