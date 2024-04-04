@@ -11,9 +11,11 @@ __pycache__/
 *.pt
 *.ckpt
 *.pkl
-.vscode
-.mypy_cache
+/.vscode
+/.mypy_cache
 *.log.*
+logger_p_data.log.*
+
 
 # Distribution / packaging
 /src/data/logs/*
@@ -91,7 +93,7 @@ docs/_build/
 target/
 
 # Jupyter Notebook
-.ipynb_checkpoints
+/.ipynb_checkpoints
 notebooks/*
 notebooks/
 # IPython
