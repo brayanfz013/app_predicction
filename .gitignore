@@ -11,8 +11,9 @@ __pycache__/
 *.pt
 *.ckpt
 *.pkl
-
-
+.vscode
+.mypy_cache
+*.log.*
 
 # Distribution / packaging
 /src/data/logs/*
