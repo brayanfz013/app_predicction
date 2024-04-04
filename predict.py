@@ -401,15 +401,16 @@ else:
 logger.debug("Calculando metricas de datos reales")
 type_data_out = {
     "rango": "float",
-    "varianza": "float",
-    "desviacion_estandar": "float",
-    "coeficiente_varianza": "float",
+    "mean": "float",
+    # "varianza": "float",
+    # "desviacion_estandar": "float",
+    # "coeficiente_varianza": "float",
     "quantile_q0": "float",
     "quantile_q1": "float",
     "quantile_q3": "float",
     "quantile_q4": "float",
     "interquantile": "float",
-    "desviacion_media_absoluta": "float",
+    # "desviacion_media_absoluta": "float",
     "init_date": "date",
     "end_date": "date",
     "product": "string",
@@ -441,7 +442,6 @@ data_original_metricas = get_data(SQLDataSourceFactory(**parameters))
 if data_original_metricas.empty:
 
     df = data_.dataframe
-
     # Convertir la columna 'created_at' a tipo datetime
     df['created_at'] = pd.to_datetime(df['created_at'])
 
@@ -452,15 +452,16 @@ if data_original_metricas.empty:
     # Calcular estadísticas por mes
     monthly_stats = df.groupby(['year', 'month']).agg(
         rango=('quantity', lambda x: x.max() - x.min()),
-        varianza=('quantity', 'var'),
-        desviacion_estandar=('quantity', 'std'),
-        coeficiente_varianza=('quantity', lambda x: x.std() / x.mean()),
+        # varianza=('quantity', 'var'),
+        # desviacion_estandar=('quantity', 'std'),
+        # coeficiente_varianza=('quantity', lambda x: x.std() / x.mean()),
+        mean=('quantity', 'mean'),
         quantile_q0=('quantity', lambda x: x.quantile(0)),
         quantile_q1=('quantity', lambda x: x.quantile(0.25)),
         quantile_q3=('quantity', lambda x: x.quantile(0.75)),
         quantile_q4=('quantity', lambda x: x.quantile(1)),
         interquantile=('quantity', lambda x: x.quantile(0.75) - x.quantile(0.25)),
-        desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
+        # desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
     ).reset_index()
 
     # Convertir año y mes a fecha inicial y final del mes
@@ -476,20 +477,22 @@ if data_original_metricas.empty:
 
     # Reordenar las columnas según el tipo de datos
     monthly_stats = monthly_stats[['rango',
-                                   'varianza',
-                                   'desviacion_estandar',
-                                   'coeficiente_varianza',
+                                   'mean',
+                                   #    'varianza',
+                                   #    'desviacion_estandar',
+                                   #    'coeficiente_varianza',
                                    'quantile_q0',
                                    'quantile_q1',
                                    'quantile_q3',
                                    'quantile_q4',
                                    'interquantile',
-                                   'desviacion_media_absoluta',
+                                   #    'desviacion_media_absoluta',
                                    'init_date',
                                    'end_date',
                                    'product']]
 
     set_data(SQLDataSourceFactory(**parameters), monthly_stats)
+
 
 else:
 
@@ -507,13 +510,14 @@ else:
         rango=('quantity', lambda x: x.max() - x.min()),
         # varianza=('quantity', 'var'),
         # desviacion_estandar=('quantity', 'std'),
-        coeficiente_varianza=('quantity', lambda x: x.std() / x.mean()),
+        # coeficiente_varianza=('quantity', lambda x: x.std() / x.mean()),
+        mean=('quantity', 'mean'),
         quantile_q0=('quantity', lambda x: x.quantile(0)),
         quantile_q1=('quantity', lambda x: x.quantile(0.25)),
         quantile_q3=('quantity', lambda x: x.quantile(0.75)),
         quantile_q4=('quantity', lambda x: x.quantile(1)),
         interquantile=('quantity', lambda x: x.quantile(0.75) - x.quantile(0.25)),
-        desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
+        # desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
     ).reset_index()
 
     # Convertir año y mes a fecha inicial y final del mes
@@ -529,15 +533,16 @@ else:
 
     # Reordenar las columnas según el tipo de datos
     monthly_stats = monthly_stats[['rango',
+                                   'mean',
                                    #    'varianza',
                                    #    'desviacion_estandar',
-                                   'coeficiente_varianza',
+                                   #    'coeficiente_varianza',
                                    'quantile_q0',
                                    'quantile_q1',
                                    'quantile_q3',
                                    'quantile_q4',
                                    'interquantile',
-                                   'desviacion_media_absoluta',
+                                   #    'desviacion_media_absoluta',
                                    'init_date',
                                    'end_date',
                                    'product']]
