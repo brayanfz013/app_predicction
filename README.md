@@ -10,26 +10,26 @@ Listado de modelos pendiente para prediccion de datos
 - Deep space state model DSSM
 - DeepAR
 
-![Pasted image 20230621163227.png](Pasted_image_20230621163227.png)
+![Pasted image 20230621163227.png](doc/Pasted_image_20230621163227.png)
 
 ## Codigo
 
-- [Data](Data.md)
-- [Features](Features.md)
-- [Lib](Lib.md)
-- [Models](Models.md)
+- [Data](doc/Data.md)
+- [Features](doc/Features.md)
+- [Lib](doc/Lib.md)
+- [Models](doc/Models.md)
 
 ## Guias y Proceso
 
-- [Descripcion General del código](Descripcion%20General%20del%20codigo.md)
-- [Funcionamiento](Funcionamiento.md)
+- [Descripcion General del código](doc/Descripcion%20General%20del%20codigo.md)
+- [Funcionamiento](doc/Funcionamiento.md)
 - [[Alertas]]
 
 ## Instalacion
 
-- [Configuracion de python](Configuracion%20de%20python.md)
-- [Configuración de CUDA](Configuracion%20de%20CUDA.md)
-- [Configurar base de datos](Configurar%20base%20de%20datos.md)
+- [Configuracion de python](doc/Configuracion%20de%20python.md)
+- [Configuración de CUDA](doc/Configuracion%20de%20CUDA.md)
+- [Configurar base de datos](doc/Configurar%20base%20de%20datos.md)
 
 ## To Do
 
