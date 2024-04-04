@@ -15,7 +15,7 @@ __pycache__/
 /.mypy_cache
 *.log.*
 logger_p_data.log.*
-
+__pycache__/
 
 # Distribution / packaging
 /src/data/logs/*
