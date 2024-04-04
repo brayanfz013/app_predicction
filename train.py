@@ -10,16 +10,11 @@ __status__ = "Production"
 # =============================================================================
 """Codigo para ejecutar un entrenamiento completo de una base de datos """
 # =============================================================================
-
-import json
 import os
-
 import numpy as np
-import pandas as pd
 import yaml
 import logging
 from scipy import stats
-
 from scipy import signal
 
 from src.lib.class_load import LoadFiles
@@ -32,9 +27,9 @@ from src.lib.factory_prepare_data import (
     MeanImputation,
     OutliersToIQRMean,
     PrepareDtypeColumns,
+    base_dtypes
 )
-from src.features.features_fix_data import PrepareData
-from src.models.args_data_model import Parameters
+from src.models.args_data_model import Parameters, modelos_list_used
 from src.data.logs import LOGS_DIR
 
 handler_load = LoadFiles()
@@ -78,8 +73,7 @@ try:
         LAST_DAY = str(data.iloc[-1][0])
         parameters["query_template"]["where"] = f" \"{date_col_query}\" > '{LAST_DAY}'"
         parameters["query_template"]["order"] = "".join(
-            ['"' + columna + '"' for columna in [date_col_query]]
-        )
+            ['"' + columna + '"' for columna in [date_col_query]])
 
         logger.debug("Realizando peticion a la fuente de datos")
 
@@ -119,15 +113,9 @@ except ValueError as error:
 # =================================================================
 # Nuevos datos para reemplazar en las columnas
 new_types = []
-base = {
-    "date": np.datetime64,
-    "integer": int,
-    "float": float,
-    "string": object,
-}
 
 for dtypo in parameters["type_data"].values():
-    new_types.append(base[dtypo])
+    new_types.append(base_dtypes[dtypo])
 
 # metodo para transformar los tipo de datos
 strategy = {int: np.mean, float: np.mean, object: stats.mode}
@@ -156,7 +144,8 @@ data_ = cleaner.clean(data)
 filter_label: str = parameters["filter_data"]["filter_1_feature"]
 filter_col: str = parameters["filter_data"]["filter_1_column"]
 filter_product = data_.dataframe[filter_col] == filter_label
-filter_data = data_.dataframe[filter_product].sort_values(by="created_at")
+filter_data = data_.dataframe[filter_product].sort_values(
+    by=parameters["filter_data"]["date_column"])
 
 # Seleccion de agrupacion de tiempo
 # parameters["filter_data"]["group_frequecy"] = "M"
@@ -184,7 +173,8 @@ fs = 1 / 24 / 3600  # 1 day in Hz (sampling frequency)
 
 nyquist = fs / 0.5  # 2 # 0.5 times the sampling frequency
 cutoff = 0.5  # 0.1 fraction of nyquist frequency, here  it is 5 days
-# print("cutoff= ", 1 / cutoff * nyquist * 24 * 3600, " days")  # cutoff=  4.999999999999999  days
+# print("cutoff= ", 1 / cutoff * nyquist * 24 * 3600, " days")
+# cutoff=  4.999999999999999  days
 b, a = signal.butter(5, cutoff, btype="lowpass")  # low pass filter
 
 dUfilt = signal.filtfilt(b, a, outlines_data["quantity"])
@@ -208,24 +198,19 @@ data_ready_lp, scaler_data_lp = cleaner.clean(low_pass_data)
 # =================================================================
 #            Preparacion de modelo
 # =================================================================
-modelos_list = [
-    # "BlockRNNModel",
-    # "NBeatsModel",
-    # "TCNModel",
-    # "TransformerModel",
-    "TFTModel",
-    "DLinealModel",
-    "NLinearModel",
-]
 
-metric_eval = {}
+metric_eval: dict = {}
 
-for selected_model in modelos_list:
+for selected_model in modelos_list_used:
     MODE_USED = selected_model
     print(f"Entrenando {selected_model}")
 
     modelo = ModelContext(
-        model_name=MODE_USED, data=data_ready, split=80, covarianze=data_ready_lp, **parameters
+        model_name=MODE_USED,
+        data=data_ready,
+        split=80,
+        covarianze=data_ready_lp,
+        **parameters
     )
 
     # Entrenar el modelo

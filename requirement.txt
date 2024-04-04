@@ -5,3 +5,6 @@ darts
 torch
 redis
 psycopg2-binary
+optuna
+optuna-integration
+lightning

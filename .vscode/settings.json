@@ -5,7 +5,7 @@
     "docwriter.progress.trackMethods": true,
     "docwriter.progress.trackFunctions": true,
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.defaultFormatter": "ms-python.autopep8",
         "editor.formatOnSave": true
       },
       "python.formatting.provider": "autopep8"

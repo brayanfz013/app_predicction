@@ -8,10 +8,10 @@ data_source:
 connection_data_source:
   postgresql:
     host: localhost
-    database: predicciones
-    user: bdebian
-    password: 0913..
-    port: 5432
+    database: personal
+    user: postgres
+    password: postgres
+    port: 5434
   # engine: psycopg2
 
   redis:
@@ -43,12 +43,12 @@ type_data:
   column3: string
 
 query_template_write:
-  table: public.modelopredicciones
+  table: public.predicciones_modelo
   columns:
     "0": fecha
     "1": predicion
     # "2": real
-    "2": producto
+    "2": product
     # "3": CUSTNMBR
   order:
   where:
@@ -57,7 +57,7 @@ type_data_out:
   fecha: date
   predicion: float
   # column2: float
-  ITEMNMBR: string
+  product: string
   # column3: string
 
 filter_data:
@@ -67,10 +67,10 @@ filter_data:
   filter_1_feature: 90000S
   # filter_2_column: CUSTNMBR
   # filter_2_feature: F00575
-  group_frequecy: M
+  group_frequecy: ME
 
 scale: True
 first_train: True
 optimize: True
-forecast_val: 4
+forecast_val: 1
 exp_time_cache: 8600000

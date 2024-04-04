@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"docwriter.style": "Google",
+		"docwriter.progress.trackClasses": true,
+		"docwriter.progress.trackTypes": true,
+		"docwriter.progress.trackMethods": true,
+		"docwriter.progress.trackFunctions": true
+	}
+}

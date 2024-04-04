@@ -1,4 +1,5 @@
-import cv2
+from pathlib import Path
+import json
 import os
 import numpy as np
 
@@ -27,64 +28,6 @@ def regla_de_3(y_0: int, x_1: int, y_1: int):
     return float((y_0*x_1)/y_1)
 
 
-def image_cut_percentage(file: np.array, value: float, path_save: str, save: bool = False, box: bool = False, fix_size: bool = False, fix_y: float = None, fix_x: float = None):
-    '''ImageCutPercentage Funcion para cortar en % lo margenes de una imagen
-
-    Args:
-        file (str): matris cargada con los valores de la imagen
-        value (_type_): porcentaje de corte de la imagen 
-        save (bool, optional): Banderas para determianr si se guarda la imagen
-        box (bool, optional): Retorna la imagen junto con los valores de corte y la caja de dimensiones
-        fix_size (bool, optional): _description_. Defaults to False.
-        fix_y (_type_, optional): _description_. Defaults to None.
-        fix_x (_type_, optional): _description_. Defaults to None.
-
-    Returns:
-        _type_: _description_
-    '''
-
-    height, width, _ = file.shape
-
-    init = (value/2)/100
-    end = 1 - init
-
-    if fix_size and (fix_x is not None or fix_y is not None):
-
-        if fix_y is not None and fix_x is None:
-            ymin = int(height * abs(init+fix_y))
-            ymax = int(height * abs(end-fix_y))
-            xmin = int(width * init)
-            xmax = int(width * end)
-
-        if fix_x is not None and fix_y is None:
-            xmin = int(width * abs(init+fix_x))
-            xmax = int(width * abs(end-fix_x))
-            ymin = int(height * init)
-            ymax = int(height * end)
-
-        if fix_x is not None and fix_y is not None:
-            xmin = int(width * abs(init+fix_x))
-            xmax = int(width * abs(end-fix_x))
-            ymin = int(height * abs(init+fix_y))
-            ymax = int(height * abs(end-fix_y))
-
-    else:
-
-        xmin = int(width * init)
-        xmax = int(width * end)
-        ymin = int(height * init)
-        ymax = int(height * end)
-
-    image_croped = file[ymin:ymax, xmin:xmax]
-
-    if save:
-        cv2.imwrite(path_save, image_croped)
-    if box:
-        return image_croped, xmin, xmax, ymin, ymax
-
-    return image_croped
-
-
 def instruction_per_cores(list_instruction: list, core: int = os.cpu_count()):
     '''instruction_per_cores Funcion para separa una lista en multiples sublista
     usado para cuando se necesita hacer procesamiento con todos los nucleos
@@ -104,3 +47,50 @@ def instruction_per_cores(list_instruction: list, core: int = os.cpu_count()):
         end = core + init
         result.append(list_instruction[init:end])
     return result
+
+
+def select_best_model(file: str | Path):
+    """
+    The function `select_best_model` reads model metrics from a JSON file and selects the model with the
+    lowest total error based on MAPE, SMAPE, and R2 metrics.
+
+    Args:
+      file (str | Path): The `file` parameter in the `select_best_model` function is expected to be a
+    string or a `Path` object representing the path to a JSON file containing model metrics data. The
+    function reads this file, extracts the model metrics, calculates the total error for each model
+    based on MAPE,
+
+    Returns:
+      The function `select_best_model` returns the best model based on the total error calculated from
+    the error metrics (MAPE, SMAPE, R2) in the provided data file.
+    """
+
+    with open(file, "r", encoding="utf-8") as file_json:
+        data_metric: dict = json.load(file_json)
+
+    best_model = None
+    min_error = float('inf')  # Initialize with a very large number
+
+    models: dict = {}
+    for key, val in data_metric.items():
+        models[key] = val[key]
+
+    for model in models:
+        mape = models[model]['MAPE']
+        smape = models[model]['SMAPE']
+        r2 = models[model]['R2']
+
+        # Calculate absolute values for error metrics
+        abs_mape = abs(mape)
+        abs_smape = abs(smape)
+        abs_r2 = abs(r2)
+
+        # Calculate total error
+        total_error = abs_mape + abs_smape + abs_r2
+
+        # Update best model if the total error is lower
+        if total_error < min_error:
+            min_error = total_error
+            best_model = model
+
+    return best_model

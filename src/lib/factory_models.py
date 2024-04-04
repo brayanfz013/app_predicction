@@ -21,16 +21,10 @@ from darts.metrics import mape, r2_score, smape
 #     TransformerModel,
 # )
 
-try:
-    # from src.models.args_data_model import Parameters
-    from src.data.save_models import SAVE_DIR
-    from src.lib.class_load import LoadFiles
-    from src.models.DP_model import ModelHyperparameters, Modelos
-except ImportError:
-    # from args_data_model import Parameters
-    from class_load import LoadFiles
-    from DP_model import ModelHyperparameters, Modelos
-    from save_models import SAVE_DIR
+
+from src.data.save_models import SAVE_DIR
+from src.lib.class_load import LoadFiles
+from src.models.DP_model import ModelHyperparameters, Modelos
 
 
 class Model(ABC):
@@ -92,7 +86,8 @@ class ModelContext(Model):
             print(f"Modelo importado {model_name}")
 
         encoder_future = {"cyclic": {"future": ["weekofyear", "month"]}}
-        self.tunne_parameter = ModelHyperparameters(model_name, data, split, covarianze)
+        self.tunne_parameter = ModelHyperparameters(
+            model_name, data, split, covarianze)
         self.tunne_parameter.model_used_parameters["add_encoders"] = encoder_future
 
     def train(self):
@@ -119,7 +114,8 @@ class ModelContext(Model):
         # Calcular las métricas
         resultados = {}
         for nombre, metrica in metricas.items():
-            resultados[nombre] = metrica(pred_series, self.tunne_parameter.data)
+            resultados[nombre] = metrica(
+                pred_series, self.tunne_parameter.data)
 
         try:
             self.best_model = self.handle_loader.load_json(
@@ -139,16 +135,21 @@ class ModelContext(Model):
         )
         return model
 
-    def predict(self, model: str, data: darts.TimeSeries, horizont: int):
+    def predict(self, model: darts.models, data: darts.TimeSeries, horizont: int):
         """Ejecutar una prediccion"""
 
         # Carga la ultima fecha de prediccion
         last_train = self.handle_loader.json_to_dict(
-            self.save_path.joinpath("previus").with_suffix(".json")
+            self.save_path.joinpath("previus").with_suffix(".json").as_posix()
         )[0]
 
-        # Parter los datos en funcion de la ultima fecha de prediccion
-        past, _ = data.split_after(split_point=pd.Timestamp(last_train["last_date_pred"]))
+        if data == None:
+            # Parter los datos en funcion de la ultima fecha de prediccion
+            past, _ = self.tunne_parameter.data.split_after(
+                split_point=pd.Timestamp(last_train["last_date_pred"]))
+        else:
+            past = data
+
         # Parte los datos de la covarianza filtrada en la ultima fecha
         past_cov, _ = self.tunne_parameter.covarianze.split_after(
             split_point=pd.Timestamp(last_train["last_date_pred"])
@@ -168,8 +169,9 @@ class ModelContext(Model):
         last_train = {
             "last_date_pred": pd.Timestamp(filter_data.tail(1).values[0]).strftime("%Y-%m-%d")
         }
-        # Guardar la ultima prediccion
-        self.handle_loader.save_dict_to_json(last_train, self.save_path, "previus")
+        # # Guardar la ultima prediccion
+        # self.handle_loader.save_dict_to_json(
+        #     last_train, self.save_path.as_posix(), "previus")
 
         return pred_series
 
@@ -188,7 +190,8 @@ class ModelContext(Model):
         """Guardar modelo en ruta"""
 
         last_train = {
-            "last_date_pred": self.tunne_parameter.last_value.strftime("%Y-%m-%d")
+            "last_date_pred": self.tunne_parameter.last_value.strftime("%Y-%m-%d"),
+            # "firts_pred": 0
             # La linea inferior se usa cuando se quiere hacer predicciones sobre data anterior
         }
         # #Eliminar parametro que no se puede serializar
@@ -200,10 +203,12 @@ class ModelContext(Model):
             del self.tunne_parameter.model_used_parameters["likelihood"]
 
         # Guardar la ultima prediccion
-        self.handle_loader.save_dict_to_json(last_train, self.save_path, "previus")
+        self.handle_loader.save_dict_to_json(
+            last_train, self.save_path.as_posix(), "previus")
 
         # Guardar el escalizador del modelo
-        scaler_save_folder = self.save_path.joinpath(scaler_name).with_suffix(".pkl")
+        scaler_save_folder = self.save_path.joinpath(
+            scaler_name).with_suffix(".pkl")
         self.handle_loader.save_scaler(scaler, scaler_save_folder)
 
         # Guardar los parametros de entrenamiento
@@ -217,13 +222,15 @@ class ModelContext(Model):
         file_name = self.parameters["filter_data"]["filter_1_feature"]
         self.handle_loader.save_yaml(
             self.parameters,
-            self.save_path.joinpath("config_" + file_name).with_suffix(".yaml").as_posix(),
+            self.save_path.joinpath(
+                "config_" + file_name).with_suffix(".yaml").as_posix(),
         )
 
         # Guardar el modelo
         if model is not None:
             save_model_train = "model_" + self.tunne_parameter.model_name
-            model.save(str(self.save_path.joinpath(save_model_train).with_suffix(".pt")))
+            model.save(str(self.save_path.joinpath(
+                save_model_train).with_suffix(".pt")))
 
     def load_dirmodel(self):
         """Cargar el listado de datos de archivos generados en el entrenamiento"""

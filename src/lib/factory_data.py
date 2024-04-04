@@ -7,14 +7,11 @@ Codigo usado para extraer la informacion para la predicciones de la informacion
 from pathlib import Path
 import pandas as pd
 
-try:
-    # from src.features.features_redis import HandleRedis
-    from src.features.features_postgres import HandleDBpsql
-    from src.models.args_data_model import Parameters  # ParamsPostgres, Parameters
-except ImportError as Error:
-    # from features_redis import HandleRedis
-    from features_postgres import HandleDBpsqu
-    from args_data_model import Parameters
+
+from src.features.features_redis import HandleRedis
+from src.features.features_postgres import HandleDBpsql
+from src.models.args_data_model import Parameters  # ParamsPostgres, Parameters
+
 
 from abc import ABC, abstractmethod
 
@@ -45,9 +42,12 @@ class SQLPostgres(DataSource):
         _file_path = Path(__file__).parents[2]
         self.parametro = Parameters(**parametros)
         self.data_source = HandleDBpsql()
-        self.query_read = _file_path.joinpath("src/data/querys/get_table.sql").as_posix()
-        self.query_write = _file_path.joinpath("src/data/querys/insert_data.sql").as_posix()
-        self.query_create = _file_path.joinpath("src/data/querys/new_table.sql").as_posix()
+        self.query_read = _file_path.joinpath(
+            "src/data/querys/get_table.sql").as_posix()
+        self.query_write = _file_path.joinpath(
+            "src/data/querys/insert_data.sql").as_posix()
+        self.query_create = _file_path.joinpath(
+            "src/data/querys/new_table.sql").as_posix()
 
     def read(self):
         """
@@ -234,19 +234,19 @@ class NoSQLDataSourceFactory(AbstractDataSourceFactory):
 
 
 # Usando la fábrica
-def get_data(factory: AbstractDataSourceFactory) -> None:
+def get_data(factory: AbstractDataSourceFactory):
     """Metodo para hacer la lectura de la infomacion"""
     data_source = factory.create_data_source()
     return data_source.read()
 
 
-def set_data(factotory: AbstractDataSourceFactory, data) -> None:
+def set_data(factotory: AbstractDataSourceFactory, data):
     """Metodo para hacer la escritura en la base de datos"""
     data_source = factotory.create_data_source()
     return data_source.write(data)
 
 
-def create_table(factory: AbstractDataSourceFactory) -> None:
+def create_table(factory: AbstractDataSourceFactory):
     """Metodo para hacer la lectura de la infomacion"""
     data_source = factory.create_data_source()
     return data_source.create()

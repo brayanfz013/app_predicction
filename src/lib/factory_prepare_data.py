@@ -9,17 +9,23 @@ from abc import ABC, abstractmethod
 import pandas as pd
 import re
 
-try:
-    from src.features.features_fix_data import PrepareData
+# try:
+from src.features.features_fix_data import PrepareData
+# from src.lib.class_load import LoadFiles
+# except ImportError:
+#     from features_fix_data import PrepareData  # pylint: disable=E0401
+#     # from class_load import LoadFiles
 
-    # from src.lib.class_load import LoadFiles
-except ImportError:
-    from features_fix_data import PrepareData  # pylint: disable=E0401
-
-    # from class_load import LoadFiles
-
+base_dtypes: dict = {
+    "date": 'datetime64[ns]',
+    "integer": int,
+    "float": float,
+    "string": object,
+}
 
 # Definir la interfaz de la estrategia
+
+
 class DataCleaningStrategy(ABC):
     # @abstractmethod
     # def __init__(self,parameters) -> None:
@@ -46,7 +52,8 @@ class PrepareDtypeColumns(DataCleaningStrategy):
 
     def clean(self, data):
         handle_data = PrepareData(data, **self.parameters["query_template"])
-        _, trans_col = handle_data.get_dtypes_columns_update(self.replace_dtypes)
+        _, trans_col = handle_data.get_dtypes_columns_update(
+            self.replace_dtypes)
         handle_data.apply_transformations(trans_col, self.preprocess_function)
         handle_data.update_dtypes(trans_col)
         return handle_data
@@ -75,7 +82,8 @@ class MeanImputation(DataCleaningStrategy):
 
     def clean(self, data):
         handle_data = PrepareData(data, **self.parameters["query_template"])
-        _, trans_col = handle_data.get_dtypes_columns_update(self.replace_dtypes)
+        _, trans_col = handle_data.get_dtypes_columns_update(
+            self.replace_dtypes)
         handle_data.apply_transformations(trans_col, self.preprocess_function)
         handle_data.fill_na_columns(self.strategy_imputation)
         handle_data.update_dtypes(trans_col)
@@ -114,7 +122,8 @@ class OutliersToIQRMean(DataCleaningStrategy):
             handle_data.filter_column(
                 self.parameters_filter[columns],
                 self.parameters_filter[feature],
-                string_filter=all(isinstance(item, str) for item in column_check),
+                string_filter=all(isinstance(item, str)
+                                  for item in column_check),
             )
 
         handle_data.get_expand_date(self.parameters_filter["date_column"])

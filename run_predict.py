@@ -173,7 +173,7 @@ imputation = MeanImputation(
 )
 logger.debug("Realizando imputacion de datos")
 
-# Patron de diseno de seleecion de estrategia
+# Patron de diseno de selecion de estrategia
 cleaner = DataCleaner(imputation)
 data_imputation = cleaner.clean(data)
 
@@ -219,16 +219,20 @@ for item in items:
         # =================================================================
         logger.debug("Cargando modelo: %s", item)
         MODE_USED = "NBeatsModel"
-        modelo = ModelContext(model_name=MODE_USED, data=data_ready, split=83, **parameters)
+        modelo = ModelContext(model_name=MODE_USED,
+                              data=data_ready,
+                              split=83,
+                              **parameters
+                              )
 
         # Rutas de los parametros para predicciones
         model_train = modelo.save_path.joinpath("model").with_suffix(".pt").as_posix()
-        scaler = modelo.save_path.joinpath("scaler").with_suffix(".pkl").as_posix()
+        scaler_ = modelo.save_path.joinpath("scaler").with_suffix(".pkl").as_posix()
         last_pred = modelo.save_path.joinpath("previus").with_suffix(".json").as_posix()
         parameters_model = modelo.save_path.joinpath("parametros").with_suffix(".json").as_posix()
 
         # Cargar escaler
-        scaler = handler_load.load_scaler(scaler)
+        scaler = handler_load.load_scaler(scaler_)
 
         # Cargar modelo para hacer las predicciones
         MODE_USED = "NBeatsModel"
@@ -304,7 +308,7 @@ for item in items:
             item,
         )
         data_filled.reset_index(inplace=True)
-        filter_date = data_filled.iloc[-parameters["forecast_val"] :]
+        filter_date = data_filled.iloc[-parameters["forecast_val"]:]
 
         for adding_data in filter_temp:
             filter_date[str(adding_data)] = adding_data
@@ -390,7 +394,7 @@ for item in items:
         # filter_date = data_filled[(data_filled[date_col] >= metric_columns_pred['init_date']) & (
         #     data_filled[date_col] <= metric_columns_pred['end_date'])]
 
-        filter_date_metric = data_filled.iloc[-parameters["forecast_val"] :]
+        filter_date_metric = data_filled.iloc[-parameters["forecast_val"]:]
         original = data_imputation.metrics_column(filter_date_metric[data_col])
 
         original["init_date"] = filter_date[fecha].min()

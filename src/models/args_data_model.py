@@ -16,6 +16,16 @@ def default_field(obj):
     return field(default_factory=lambda: copy.copy(obj))
 
 
+modelos_list_used = [
+    "BlockRNNModel",
+    "NBeatsModel",
+    "TCNModel",
+    "TransformerModel",
+    "TFTModel",
+    "DLinealModel",
+    "NLinearModel",
+]
+
 quantiles = [
     0.01,
     0.05,
@@ -78,10 +88,10 @@ class Parameters:
     type_data: dict
     type_data_out: dict
     scale: bool
-    first_train: True
-    optimize: True
-    forecast_val: int
-    exp_time_cache: int
+    first_train: bool = True
+    optimize: bool = True
+    forecast_val: int = 1
+    exp_time_cache: int = 8600000
     # model_parameters: Optional[Union[str, os.PathLike, PosixPath]]
 
 
@@ -108,7 +118,7 @@ class ModelRNN:
     hidden_dim: int = 20
     dropout: float = 0.1
     batch_size: int = 16
-    n_epochs: int = 300  # 2
+    n_epochs: int = 2  # 300  # 2
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     log_tensorboard: bool = True
     random_state: int = 42
@@ -116,6 +126,8 @@ class ModelRNN:
     input_chunk_length: int = 14
     force_reset: bool = True
     save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})
 
 
 @dataclass
@@ -129,7 +141,7 @@ class ModelBlockRNN:
     hidden_dim: int = 10
     n_rnn_layers: int = 1
     batch_size: int = 32
-    n_epochs: int = 200  # 2
+    n_epochs: int = 2  # 200  # 2
     dropout: float = 0.1
     nr_epochs_val_period: int = 1
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
@@ -137,6 +149,8 @@ class ModelBlockRNN:
     random_state: int = 42
     force_reset: bool = True
     save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})
 
 
 @dataclass
@@ -154,7 +168,7 @@ class ModelTCNModel:
     input_chunk_length: int = 4
     output_chunk_length: int = 1
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
-    n_epochs: int = 200  # 2
+    n_epochs: int = 2  # 200  # 2
     dropout: float = 0.1
     dilation_base: int = 2
     weight_norm: int = True
@@ -164,6 +178,8 @@ class ModelTCNModel:
     random_state: int = 0
     force_reset: bool = True
     save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})
 
 
 @dataclass
@@ -183,7 +199,7 @@ class ModelTransformerModel:
     output_chunk_length: int = 1
     optimizer_kwargs: dict = default_field({"lr": 1e-3})
     batch_size: int = 32
-    n_epochs: int = 200  # 2
+    n_epochs: int = 2  # 200  # 2
     nr_epochs_val_period: int = 10
     d_model: int = 16
     nhead: int = 8
@@ -195,6 +211,8 @@ class ModelTransformerModel:
     random_state: int = 42
     force_reset: bool = True
     save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})
 
 
 @dataclass
@@ -210,11 +228,13 @@ class ModelNBEATSModel:
     num_blocks: int = 2
     num_layers: int = 3
     layer_widths: int = 256
-    n_epochs: int = 300  # 2
+    n_epochs: int = 2  # 300  # 2
     nr_epochs_val_period: int = 10
     batch_size: int = 1024
     force_reset: bool = True
     save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})
 
 
 @dataclass
@@ -230,16 +250,19 @@ class ModelTFTModel:
     num_attention_heads: int = 4
     dropout: float = 0.1
     batch_size: int = 16
-    n_epochs: int = 300  # 2
+    n_epochs: int = 2  # 300  # 2
     add_relative_index: bool = False
-    add_encoders: bool = default_field({"cyclic": {"future": ["weekofyear", "month"]}})
-    likelihood: int = QuantileRegression(
+    add_encoders: bool = default_field(
+        {"cyclic": {"future": ["weekofyear", "month"]}})
+    likelihood: int = default_field(QuantileRegression(
         quantiles=quantiles
-    )  # QuantileRegression is set per default
+    ))  # QuantileRegression is set per default
     # loss_fn:int=MSELoss(),
     random_state: int = 42
     force_reset: bool = True
     save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})
 
 
 @dataclass
@@ -255,10 +278,12 @@ class ModelDLinearModel:
     const_init: bool = True
     use_static_covariates: bool = True
     batch_size: int = 16
-    n_epochs: int = 300  # 2
+    n_epochs: int = 2  # 300  # 2
     force_reset: bool = True
-    save_checkpoints: bool = True
     random_state: int = 42
+    save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})
 
 
 @dataclass
@@ -274,7 +299,9 @@ class ModelNlinearModel:
     const_init: bool = True
     use_static_covariates: bool = True
     batch_size: int = 16
-    n_epochs: int = 300  # 2
+    n_epochs: int = 2  # 300  # 2
     force_reset: bool = True
-    save_checkpoints: bool = True
     random_state: int = 42
+    save_checkpoints: bool = True
+    pl_trainer_kwargs: dict = default_field(
+        {"accelerator": "gpu", "enable_progress_bar": True})

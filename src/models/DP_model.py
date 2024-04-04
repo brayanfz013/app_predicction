@@ -254,37 +254,47 @@ class ModelHyperparameters:
 
         if self.model_name == "NBeatsModel":
             # parametros de busqueda Nbeats
-            self.model_used_parameters["num_blocks"] = trial.suggest_int("num_blocks", 1, 10)
-            self.model_used_parameters["num_stacks"] = trial.suggest_int("num_stacks", 1, 15)
+            self.model_used_parameters["num_blocks"] = trial.suggest_int(
+                "num_blocks", 1, 10)
+            self.model_used_parameters["num_stacks"] = trial.suggest_int(
+                "num_stacks", 1, 15)
             self.model_used_parameters["layer_widths"] = trial.suggest_categorical(
                 "layer_widths", [128, 256, 512]
             )
             self.model_used_parameters["generic_architecture"] = trial.suggest_categorical(
                 "generic_architecture", [False, True]
             )
-            self.model_used_parameters["dropout"] = trial.suggest_float("dropout", 0.0, 0.4)
-            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+            self.model_used_parameters["dropout"] = trial.suggest_float(
+                "dropout", 0.0, 0.4)
+            self.model_used_parameters["batch_size"] = trial.suggest_int(
+                "batch_size", 1, 1024)
 
         elif self.model_name == "TCNModel":
             # Parmaetros de busqueda  TCNModel:
-            self.model_used_parameters["dilation_base"] = trial.suggest_int("dilation_base", 2, 4)
+            self.model_used_parameters["dilation_base"] = trial.suggest_int(
+                "dilation_base", 2, 4)
             self.model_used_parameters["weight_norm"] = trial.suggest_categorical(
                 "weight_norm", [False, True]
             )
             self.model_used_parameters["kernel_size"] = trial.suggest_int(
                 "kernel_size", 3, self.model_used_parameters["input_chunk_length"] - 1
             )
-            self.model_used_parameters["num_filters"] = trial.suggest_int("num_filters", 6, 12)
+            self.model_used_parameters["num_filters"] = trial.suggest_int(
+                "num_filters", 6, 12)
 
         elif self.model_name == "BlockRNNModel":
             # Parmaetros de busqueda  BlockRNNModel:
-            self.model_used_parameters["hidden_dim"] = trial.suggest_int("hidden_dim", 1, 15)
-            self.model_used_parameters["n_rnn_layers"] = trial.suggest_int("n_rnn_layers", 1, 15)
-            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+            self.model_used_parameters["hidden_dim"] = trial.suggest_int(
+                "hidden_dim", 1, 15)
+            self.model_used_parameters["n_rnn_layers"] = trial.suggest_int(
+                "n_rnn_layers", 1, 15)
+            self.model_used_parameters["batch_size"] = trial.suggest_int(
+                "batch_size", 1, 1024)
 
         elif self.model_name == "TransformerModel":
             # Parmaetros de busqueda  TransformerModel:
-            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+            self.model_used_parameters["batch_size"] = trial.suggest_int(
+                "batch_size", 1, 1024)
             # self.model_used_parameters['d_model'] = trial.suggest_int("d_model", 4, 32)
             # self.model_used_parameters['nhead'] = trial.suggest_int("nhead", 4, 16)
             self.model_used_parameters["num_encoder_layers"] = trial.suggest_int(
@@ -299,16 +309,20 @@ class ModelHyperparameters:
 
         elif self.model_name == "TFTModel":
             # Parmaetros de busqueda  TFTModel:
-            self.model_used_parameters["hidden_size"] = trial.suggest_int("hidden_size", 1, 256)
-            self.model_used_parameters["lstm_layers"] = trial.suggest_int("lstm_layers", 1, 5)
+            self.model_used_parameters["hidden_size"] = trial.suggest_int(
+                "hidden_size", 1, 256)
+            self.model_used_parameters["lstm_layers"] = trial.suggest_int(
+                "lstm_layers", 1, 5)
             self.model_used_parameters["num_attention_heads"] = trial.suggest_int(
                 "num_attention_heads", 1, 8
             )
-            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+            self.model_used_parameters["batch_size"] = trial.suggest_int(
+                "batch_size", 1, 1024)
 
         elif self.model_name == "DLinealModel" or self.model_name == "NLinearModel":
             # Parmaetros de busqueda  DLinealModel o NLinearModel:
-            self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
+            self.model_used_parameters["batch_size"] = trial.suggest_int(
+                "batch_size", 1, 1024)
 
         # =======================Entrenamiento del modelo=====================================
         model = self.build_fit_model(enable_callback=True)
@@ -337,7 +351,8 @@ class ModelHyperparameters:
     def print_callback(self, study, trial):
         """Metodo para mostrar los valores de entrenamiento"""
         print(f"Current value: {trial.value}, Current params: {trial.params}")
-        print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
+        print(
+            f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
 
     def retrain(self):
         """metodo para reentrenar un modelo"""
@@ -359,7 +374,8 @@ class ModelHyperparameters:
         )
 
         # Finally, print the best value and best hyperparameters:
-        print(f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
+        print(
+            f"Best value: {study.best_value}, Best params: {study.best_trial.params}")
         return study
 
     def update_parameters(self, study):

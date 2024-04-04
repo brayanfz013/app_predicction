@@ -306,7 +306,7 @@ class HandleRedis(object):
         except (redis.exceptions.DataError, redis.exceptions.AuthenticationError, redis.ConnectionError) as redis_error:
             self.log.error(redis_error)
 
-    def get_cache_data(self, hash_name: str, config: str):
+    def get_cache_data(self, hash_name: str, config: dict):
         """
         The function `get_cache_data` retrieves data from a Redis cache using a given hash name and
         configuration.
@@ -334,7 +334,7 @@ class HandleRedis(object):
                 data = None
         return data
 
-    def set_cache_data(self, hash_name: str, old_dataframe: pd.DataFrame, new_dataframe: pd.DataFrame, exp_time: int, config: str):
+    def set_cache_data(self, hash_name: str, old_dataframe: pd.DataFrame, new_dataframe: pd.DataFrame, exp_time: int, config: dict):
         """
         The `set_cache_data` function is used to cache database data in Redis, allowing
         for the storage and retrieval of old and new dataframes.
@@ -406,7 +406,6 @@ class HandleRedis(object):
             search.connect(("8.8.8.8", 80))
             ip_publica = search.getsockname()[0]
         return ip_publica
-
 
 
 # if __name__ == '__main__':
