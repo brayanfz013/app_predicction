@@ -473,7 +473,7 @@ if data_original_metricas.empty:
     monthly_stats.drop(columns=['year', 'month'], inplace=True)
 
     # Agregar la columna 'product' al DataFrame resultante
-    monthly_stats['product'] = df['product'].iloc[0]
+    monthly_stats['product'] = filter_label
 
     # Reordenar las columnas según el tipo de datos
     monthly_stats = monthly_stats[['rango',
@@ -529,7 +529,7 @@ else:
     monthly_stats.drop(columns=['year', 'month'], inplace=True)
 
     # Agregar la columna 'product' al DataFrame resultante
-    monthly_stats['product'] = df['product'].iloc[0]
+    monthly_stats['product'] = filter_label
 
     # Reordenar las columnas según el tipo de datos
     monthly_stats = monthly_stats[['rango',
@@ -545,6 +545,7 @@ else:
                                    #    'desviacion_media_absoluta',
                                    'init_date',
                                    'end_date',
-                                   'product']]
+                                   'product'
+                                   ]]
 
     set_data(SQLDataSourceFactory(**parameters), monthly_stats)

@@ -11,7 +11,7 @@ __pycache__/
 *.pt
 *.ckpt
 *.pkl
-*.ipynb
+
 
 
 # Distribution / packaging
