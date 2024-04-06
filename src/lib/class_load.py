@@ -26,7 +26,7 @@ class LoadFiles(object):
             nombres.append(os.path.join(path_dir, item))
         return sorted(nombres)
 
-    def load_path_names(self, path_dir: str, extenciones: list):
+    def load_path_names(self, path_dir: str, extensions: list[str]) -> tuple[list[str], list[str]]:
         """
         Lee los archivos de una carpeta y retorna una lista con la ruta completa del archivo
         y otra con solo el nombre del archivo
@@ -37,7 +37,7 @@ class LoadFiles(object):
 
         @extenciones:
             Info: Lista de string separda por comas con las extenciones que se desean buscar en la carpeta
-            Dtype:Lista Strings ['.tiff','.jpg','.jpge','.tif','.png'load_image_path]
+            Dtype:Lista Strings ['.tiff','.jpg','.jpge','.tif','.png]
 
         @sample:
             Info: Retorna una lista con la ruta completa del las imagenes
@@ -48,9 +48,9 @@ class LoadFiles(object):
             Dtype: String
         """
 
-        extenciones = ["." + i for i in extenciones]
-        extenciones = extenciones + [i.upper() for i in extenciones]
-        extenciones = sorted(set(extenciones))
+        extensions = ["." + i for i in extensions]
+        extensions = extensions + [i.upper() for i in extensions]
+        extensions = sorted(set(extensions))
 
         data_path = Path(path_dir)
 
@@ -58,38 +58,33 @@ class LoadFiles(object):
             sample = []
             names = []
 
-            for i in extenciones:
-                t_file = "**/*" + i
+            for ext in extensions:
+                t_file = "**/*" + ext
                 if len(list(data_path.glob(t_file))) == 0:
                     continue
                 else:
-                    sample.append(list(data_path.glob(t_file)))
+                    sample.extend(list(map(str, data_path.glob(t_file))))
 
-            def flatten(lista):
-                return [item for sublist in lista for item in sublist]
-
-            sample = flatten(sample)
             sample = sorted(set(sample))
 
             if not sample:
                 print(
-                    f"\n[INFO] No hay imagenes con estas extenciones:\n\t{extenciones}\n\tEn la ruta:\n\t{path_dir}\n"
+                    f"\n[INFO] No hay imagenes con estas extensiones:\n\t{extensions}\n\tEn la ruta:\n\t{path_dir}\n"
                 )
                 return [], []
 
             else:
 
                 if len(sample) != 1:
-
-                    for name in sample:
-                        names.append(name.parts[-1])
-                    sample = np.array([str(i) for i in sample])
+                    names = [Path(p).parts[-1] for p in sample]
                     return sorted(set(sample)), sorted(set(names))
                 else:
-                    return str(sample[0]), str(sample[0].parts[-1])
-
+                    return sorted(set([sample[0]])), sorted(set([Path(sample[0]).parts[-1]]))
+        
         else:
-            return print("[INFO], la ruta no existe, favor revisar el directorio")
+            print("[INFO], la ruta no existe, favor revisar el directorio")
+            return [],[]
+
 
     def search_load_files_extencion(self, path_search: str, ext: list) -> dict:
         """search_load_files_extencion Mejora de la funcion load_path_names agregando caracteristicas de
@@ -191,7 +186,7 @@ class LoadFiles(object):
 
         return data
 
-    def json_to_dict(self, json_file: str) -> Union[dict, list]:
+    def json_to_dict(self, json_file: str) -> tuple[dict, list]:
         """
         Lee los archivos de una carpeta y retorna una lista con la ruta completa del archivo
         y otra con solo el nombre del archivo
