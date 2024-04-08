@@ -92,6 +92,7 @@ class Parameters:
     optimize: bool = True
     forecast_val: int = 1
     exp_time_cache: int = 8600000
+    validation_date: str = '2023-11-01'
     # model_parameters: Optional[Union[str, os.PathLike, PosixPath]]
 
 

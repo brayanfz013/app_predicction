@@ -155,7 +155,8 @@ filter_data = data_.dataframe[filter_product].sort_values(
 # validate_data = filter_data.set_index(time_series_col)["2023-12-01":].reset_index()
 
 # # Datos de entrenamiento
-# filter_data = filter_data.set_index(time_series_col)[:"2023-11-30"].reset_index()
+filter_data = filter_data.set_index(parameters["filter_data"]["date_column"])[
+    :"2023-11-30"].reset_index()
 
 outliners = OutliersToIQRMean(**parameters)
 cleaner.strategy = outliners

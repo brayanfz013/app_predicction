@@ -102,15 +102,25 @@ class HandleRedis(object):
 
         return load_yaml['connection_data_source'][section]
 
-    def get_config_file(self, filename: str = 'database', section: str = 'redis'):
+    def get_config_file(self, filename: str | dict = 'database', section: str = 'redis'):
         """
-        Lee el archivo de configuracion con los parametros a la base de datos
-        se tiene que seleccion el motor de base de datos.
+        This Python function retrieves configuration parameters from either an INI or YAML file or a
+        dictionary based on the specified filename and section.
 
-        Retorna un diccionario con la lectura de los parametros dentro del archivo
-        de conexion
+        Args:
+          filename (str | dict): The `filename` parameter can either be a string representing the name of
+        the configuration file (with default value 'database') or a dictionary containing configuration
+        settings. Defaults to database
+          section (str): The `section` parameter in the `get_config_file` method is used to specify the
+        section within the configuration file (specified by `filename`) from which the parameters should be
+        retrieved. Defaults to redis
 
+        Returns:
+          The function `get_config_file` returns the parameters based on the specified filename and section.
+        The parameters are retrieved from either an INI file, a YAML file, or a dictionary based on the
+        input provided.
         """
+
         if isinstance(filename, str):
             if Path(filename).suffix == '.ini':
                 parameters = self.file_ini_(filename=filename, section=section)
@@ -193,7 +203,7 @@ class HandleRedis(object):
             self.log.error(redis_error)
             # print(redis_error)
 
-    def set_single_value(self, dict_key: str, file_name: str, value: int, config: str,):
+    def set_single_value(self, dict_key: str, file_name: str, value: int, config: str | dict,):
         """
         The `set_single_value` function sets a single value in a Redis hash using the provided dictionary
         key, file name, value, and configuration.
@@ -274,7 +284,7 @@ class HandleRedis(object):
             config (str): Ruta del archivos de las configuraciones para la conexion con redis
         """
 
-        data = {hash_name: {}}
+        data: dict = {hash_name: {}}
         try:
             parameters_connection = self.get_config_file(
                 config, section='redis')

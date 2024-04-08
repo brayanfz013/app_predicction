@@ -22,39 +22,39 @@ from optuna.integration import PyTorchLightningPruningCallback
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from darts.timeseries import TimeSeries
 
-try:
-    # from src.features.features_fix_data import PrepareData
-    # from src.lib.class_load import LoadFiles
-    # from src.data.save_models import SAVE_DIR
-    from src.models.args_data_model import (
-        ModelBlockRNN,
-        ModelDLinearModel,
-        # ModelExponentialSmoothing,
-        # ModelFFT,
-        ModelNBEATSModel,
-        ModelNlinearModel,
-        ModelRNN,
-        ModelTCNModel,
-        ModelTFTModel,
-        ModelTransformerModel,
-    )
-except ImportError:
-    from args_data_model import (
-        ModelBlockRNN,
-        ModelDLinearModel,
-        # ModelExponentialSmoothing,
-        # ModelFFT,
-        ModelNBEATSModel,
-        ModelNlinearModel,
-        ModelRNN,
-        ModelTCNModel,
-        ModelTFTModel,
-        ModelTransformerModel,
-    )
+# try:
+# from src.features.features_fix_data import PrepareData
+# from src.lib.class_load import LoadFiles
+# from src.data.save_models import SAVE_DIR
+from src.models.args_data_model import (
+    ModelBlockRNN,
+    ModelDLinearModel,
+    # ModelExponentialSmoothing,
+    # ModelFFT,
+    ModelNBEATSModel,
+    ModelNlinearModel,
+    ModelRNN,
+    ModelTCNModel,
+    ModelTFTModel,
+    ModelTransformerModel,
+)
+# except ImportError:
+#     from args_data_model import (
+#         ModelBlockRNN,
+#         ModelDLinearModel,
+#         # ModelExponentialSmoothing,
+#         # ModelFFT,
+#         ModelNBEATSModel,
+#         ModelNlinearModel,
+#         ModelRNN,
+#         ModelTCNModel,
+#         ModelTFTModel,
+#         ModelTransformerModel,
+#     )
 
-    # from class_load import LoadFiles
-    # from features_fix_data import PrepareData
-    # from save_models import SAVE_DIR
+# from class_load import LoadFiles
+# from features_fix_data import PrepareData
+# from save_models import SAVE_DIR
 
 Modelos = {
     "RNNModel": RNNModel,
@@ -341,7 +341,7 @@ class ModelHyperparameters:
         mapes = mape(self.val, preds, n_jobs=-1, verbose=True)
         # r2_scores = r2_score(actual_series=self.val, pred_series=preds)
 
-        # print(f"r2_score: {r2_score}")
+        print(f"r2_score: {r2_score}")
         print(f"mape :{mapes}")
         print(f"smapes: {smapes}")
 
@@ -368,7 +368,7 @@ class ModelHyperparameters:
         # optimizacion por numero de intentos
         study.optimize(
             self.optimize,
-            n_trials=2,
+            n_trials=10,
             # n_jobs=-1,
             callbacks=[self.print_callback],
         )

@@ -12,6 +12,7 @@ connection_data_source:
     user: postgres
     password: postgres
     port: 5434
+    options: -c search_path=dbo,public
   # engine: psycopg2
 
   redis:
@@ -43,7 +44,7 @@ type_data:
   column3: string
 
 query_template_write:
-  table: public.predicciones_modelo
+  table: predicciones_modelo
   columns:
     "0": fecha
     "1": predicion
@@ -74,3 +75,4 @@ first_train: True
 optimize: True
 forecast_val: 1
 exp_time_cache: 8600000
+validation_date :  '2023-12-01'

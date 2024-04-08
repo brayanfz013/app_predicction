@@ -33,7 +33,8 @@ except ImportError as error:
 
 
 class HandleDBpsql(object):
-    """
+    """predict_column"]].clip(lower=0, inplace=True)
+2024-04-08 00:30:38,795 - predict - DEBUG - Enviando valor de las
     Libreria para realizar creacion de base de datso y conexiones a una base de datos usando SQLalquemy    
     """
 

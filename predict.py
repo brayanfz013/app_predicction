@@ -65,7 +65,8 @@ with open(CONFIG_FILE, "r", encoding="utf-8") as file:
 
 logger.debug("Archivo de configuraciones cargado")
 parametros = Parameters(**parameters)
-
+schema = schema = parametros.connection_data_source['postgresql']['options'].split(',')[
+    1]
 # =================================================================
 #             Cargar datos de la fuente de datos
 # =================================================================
@@ -210,16 +211,20 @@ data_ready_lp, scaler_data_lp = cleaner.clean(low_pass_data)
 #            Cargar modelo
 # =================================================================
 # Rutas de los parametros para predicciones
-save_dir = Path(SAVE_DIR).joinpath(parameters["filter_data"]["filter_1_feature"])
-models_metrics = save_dir.joinpath("train_metrics").with_suffix(".json").as_posix()
+save_dir = Path(SAVE_DIR).joinpath(
+    parameters["filter_data"]["filter_1_feature"])
+models_metrics = save_dir.joinpath(
+    "train_metrics").with_suffix(".json").as_posix()
 
 MODE_USED = select_best_model(models_metrics)
 
 scaler_name = save_dir.joinpath("scaler").with_suffix(".pkl").as_posix()
 scaler_lp_name = save_dir.joinpath("scaler_lp").with_suffix(".pkl").as_posix()
 last_pred = save_dir.joinpath("previus").with_suffix(".json").as_posix()
-model_train = save_dir.joinpath(f"model_{MODE_USED}").with_suffix(".pt").as_posix()
-parameters_model = save_dir.joinpath(f"parametros_{MODE_USED}").with_suffix(".json").as_posix()
+model_train = save_dir.joinpath(
+    f"model_{MODE_USED}").with_suffix(".pt").as_posix()
+parameters_model = save_dir.joinpath(
+    f"parametros_{MODE_USED}").with_suffix(".json").as_posix()
 
 modelo = ModelContext(model_name=MODE_USED,
                       data=data_ready,
@@ -241,8 +246,9 @@ model_trained = model_update_parameters.load(model_train)
 # Se carga el modelo , los datos de predicciones ya se cargaron previamente en ModelContext
 pred_series = modelo.predict(
     model=model_trained,
-    data=None,
-    horizont=parameters["forecast_val"]
+    data=None,  # data_ready,
+    horizont=parameters["forecast_val"],
+    past_cov=None  # data_ready_lp
 )
 
 # Invertir predicciones escaler de entrenamietno
@@ -289,8 +295,6 @@ create_table(SQLDataSourceFactory(**parameters))
 
 # Ingresar los datos a la base de datos
 set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
-
-
 # ===============================================================================================
 #                            METRICAS
 # ===============================================================================================
@@ -326,7 +330,7 @@ set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
 # }
 
 # fix_data_dict = {
-#     "table": "public.predicciones_metricas",
+#     "table": f"{schema}.predicciones_metricas",
 #     "columns": {str(index): key for index, key in enumerate(type_data_out.keys())},
 #     "order": "index",
 #     "where": "posicion > 1",
@@ -362,21 +366,24 @@ with open(CONFIG_FILE, "r", encoding="utf-8") as file:
 logger.debug("Archivo de configuraciones cargado")
 parametros = Parameters(**parameters)
 
-parameters["query_template_write"]["table"] = "public.datos_orignales_agrupados"
+parameters["query_template_write"]["table"] = "datos_originales_agrupados"
 parameters["query_template_write"]["columns"]["0"] = "fecha"
 parameters["query_template_write"]["columns"]["1"] = "real"
 parameters["query_template_write"]["columns"]["2"] = "code"
-parameters["type_data_out"] = {"fecha": "date", "real": "float", "code": "string"}
+parameters["type_data_out"] = {
+    "fecha": "date", "real": "float", "code": "string"}
 
 # Crear tabla para guardas la informacion
-logger.debug("Creando tabla agrupacion de datos reales semanales caso de ser necesario")
+logger.debug(
+    "Creando tabla agrupacion de datos reales semanales caso de ser necesario")
 create_table(SQLDataSourceFactory(**parameters))
 
-parameters["query_template"]["table"] = "public.datos_orignales_agrupados"
+parameters["query_template"]["table"] = "datos_originales_agrupados"
 parameters["query_template"]["columns"]["0"] = "fecha"
 parameters["query_template"]["columns"]["1"] = "real"
 parameters["query_template"]["columns"]["2"] = "code"
-parameters["type_data_out"] = {"fecha": "date", "real": "float", "code": "string"}
+parameters["type_data_out"] = {
+    "fecha": "date", "real": "float", "code": "string"}
 del parameters["query_template"]["columns"]["3"]
 data_last = get_data(SQLDataSourceFactory(**parameters))
 
@@ -389,7 +396,8 @@ if data_last.empty:
     set_data(SQLDataSourceFactory(**parameters), outlines_data)
 else:
     LAST_DATE = data_last.iloc[-1, 0]
-    outlines_data = outlines_data[outlines_data[date_col] > np.datetime64(LAST_DATE)]
+    outlines_data = outlines_data[outlines_data[date_col]
+                                  > np.datetime64(LAST_DATE)]
 
     # Ingresar los datos a la base de datos
     logger.debug("agruando informacion temporal para el modelo : %s", item)
@@ -417,7 +425,7 @@ type_data_out = {
 }
 
 fix_data_dict = {
-    "table": "public.datos_originales_metricas",
+    "table": "datos_originales_metricas",
     "columns": {str(index): key for index, key in enumerate(type_data_out.keys())},
     "order": "index",
     "where": "posicion > 1",
@@ -429,7 +437,7 @@ parameters["type_data_out"] = type_data_out
 create_table(SQLDataSourceFactory(**parameters))
 
 fix_data_dict = {
-    "table": "public.datos_originales_metricas",
+    "table": "datos_originales_metricas",
     "columns": {str(index): key for index, key in enumerate(type_data_out.keys())},
     "order": "index",
     "where": "index > 1",
@@ -460,12 +468,14 @@ if data_original_metricas.empty:
         quantile_q1=('quantity', lambda x: x.quantile(0.25)),
         quantile_q3=('quantity', lambda x: x.quantile(0.75)),
         quantile_q4=('quantity', lambda x: x.quantile(1)),
-        interquantile=('quantity', lambda x: x.quantile(0.75) - x.quantile(0.25)),
+        interquantile=('quantity', lambda x: x.quantile(
+            0.75) - x.quantile(0.25)),
         # desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
     ).reset_index()
 
     # Convertir año y mes a fecha inicial y final del mes
-    monthly_stats['init_date'] = pd.to_datetime(monthly_stats[['year', 'month']].assign(day=1))
+    monthly_stats['init_date'] = pd.to_datetime(
+        monthly_stats[['year', 'month']].assign(day=1))
     monthly_stats['end_date'] = pd.to_datetime(monthly_stats[['year', 'month']].assign(
         day=pd.DatetimeIndex(pd.to_datetime(monthly_stats['init_date'])).days_in_month))
 
@@ -516,12 +526,14 @@ else:
         quantile_q1=('quantity', lambda x: x.quantile(0.25)),
         quantile_q3=('quantity', lambda x: x.quantile(0.75)),
         quantile_q4=('quantity', lambda x: x.quantile(1)),
-        interquantile=('quantity', lambda x: x.quantile(0.75) - x.quantile(0.25)),
+        interquantile=('quantity', lambda x: x.quantile(
+            0.75) - x.quantile(0.25)),
         # desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
     ).reset_index()
 
     # Convertir año y mes a fecha inicial y final del mes
-    monthly_stats['init_date'] = pd.to_datetime(monthly_stats[['year', 'month']].assign(day=1))
+    monthly_stats['init_date'] = pd.to_datetime(
+        monthly_stats[['year', 'month']].assign(day=1))
     monthly_stats['end_date'] = pd.to_datetime(monthly_stats[['year', 'month']].assign(
         day=pd.DatetimeIndex(pd.to_datetime(monthly_stats['init_date'])).days_in_month))
 
