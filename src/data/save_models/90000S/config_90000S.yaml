@@ -1,0 +1,58 @@
+connection_data_source:
+  postgresql:
+    database: personal
+    host: localhost
+    password: postgres
+    port: 5434
+    user: postgres
+  redis:
+    db: 1
+    host: 127.0.0.1
+    port: 6379
+  sqlserver:
+    database: master
+    password: 0913PASSword!
+    server: 127.0.0.1
+    username: sa
+data_source:
+  cache: redis
+  input: API
+  output: postgres
+exp_time_cache: 8600000
+filter_data:
+  date_column: created_at
+  filter_1_column: product
+  filter_1_feature: 90000S
+  group_frequecy: ME
+  predict_column: quantity
+first_train: true
+forecast_val: 1
+logs_file: /home/temp_user/app_predicction/src/data/config/logging.conf
+optimize: true
+query_template:
+  columns:
+    '0': created_at
+    '1': product
+    '2': quantity
+    '3': customer
+  order: '"created_at"'
+  table: public.sales_history
+  where: ' "created_at" > ''2024-03-11'''
+query_template_write:
+  columns:
+    '0': fecha
+    '1': predicion
+    '2': product
+  order: null
+  table: public.predicciones_modelo
+  where: null
+scale: true
+type_data:
+  column0: date
+  column1: string
+  column2: integer
+  column3: string
+type_data_out:
+  fecha: date
+  predicion: float
+  product: string

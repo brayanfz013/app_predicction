@@ -75,4 +75,4 @@ first_train: True
 optimize: True
 forecast_val: 1
 exp_time_cache: 8600000
-validation_date :  '2023-12-01'
+validation_months : 5 #'2023-12-01'

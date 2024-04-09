@@ -151,7 +151,6 @@ update_dtype_columns = PrepareDtypeColumns(
     preprocess_function=replace,
     **parameters,
 )
-print(data)
 # Ejecucion de fabrica para aplicar y ordenar los tipos de datos y los valores
 cleaner = DataCleaner()
 cleaner.strategy = update_dtype_columns
@@ -211,23 +210,17 @@ low_pass_data = low_pass_data.to_frame()
 low_pass_data.rename(columns={"low_past": "quantity"}, inplace=True)
 data_ready_lp, scaler_data_lp = cleaner.clean(low_pass_data)
 
+validation_months = parametros.validation_months
 
-validation_date = parameters['validation_date']  # "2023-12-01"
-
-validation_date = datetime.strptime(validation_date, "%Y-%m-%d")
-forward = validation_date+relativedelta(month=1)
+last_month_data = data_ready_lp.pd_dataframe().tail(1).index.values[0]
+last_month_data = pd.Timestamp(last_month_data)
+backtrack_date = last_month_data - relativedelta(months=validation_months)
 
 data_prediction_cov, data_test_cov = data_ready_lp.split_after(
-    pd.Timestamp(validation_date))
+    pd.Timestamp(backtrack_date))
 
 data_prediction, data_test = data_ready.split_after(
-    pd.Timestamp(validation_date))
-
-last_date = data_ready.pd_dataframe().tail(1).index.values
-last_date_df = np.datetime_as_string(last_date[0]).split('T')[0]
-last_date_format = datetime.strptime(last_date_df, "%Y-%m-%d")
-# Numero de meses restantes para hacer el ciclo de validaciones
-leftover_monts = relativedelta(last_date_format, validation_date).months
+    pd.Timestamp(backtrack_date))
 
 
 # =================================================================
@@ -270,10 +263,11 @@ model_trained = model_update_parameters.load(model_train)
 # Variable que almacena ultimo valor de la serie de tiempo para luego
 # adjuntarle los valores de las predicciones, y poder graficar las predicciones
 data_prediction, data_test = data_ready.split_after(
-    pd.Timestamp(validation_date))
+    pd.Timestamp(backtrack_date))
 plot_time_series = data_prediction.tail(1)
-for i in range(leftover_monts):
-    forward = validation_date+relativedelta(months=i)
+
+for i in range(validation_months):
+    forward = backtrack_date+relativedelta(months=i)
 
     data_prediction_cov, data_test_cov = data_ready_lp.split_after(
         pd.Timestamp(forward))
