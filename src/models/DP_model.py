@@ -242,10 +242,10 @@ class ModelHyperparameters:
         # self.model_used_parameters['pl_trainer_kwargs']['callbacks'] = callback
 
         self.model_used_parameters["input_chunk_length"] = trial.suggest_int(
-            "input_chunk_length", 4, 12
+            "input_chunk_length", 4, 6
         )
         self.model_used_parameters["output_chunk_length"] = trial.suggest_int(
-            "output_chunk_length", 1, 4
+            "output_chunk_length", 1, 1
         )
         # self.model_used_parameters["batch_size"] = trial.suggest_int("batch_size", 1, 1024)
         self.model_used_parameters["optimizer_kwargs"]["lr"] = trial.suggest_float(
@@ -267,7 +267,7 @@ class ModelHyperparameters:
             self.model_used_parameters["dropout"] = trial.suggest_float(
                 "dropout", 0.0, 0.4)
             self.model_used_parameters["batch_size"] = trial.suggest_int(
-                "batch_size", 1, 1024)
+                "batch_size", 64, 510)
 
         elif self.model_name == "TCNModel":
             # Parmaetros de busqueda  TCNModel:
@@ -289,12 +289,12 @@ class ModelHyperparameters:
             self.model_used_parameters["n_rnn_layers"] = trial.suggest_int(
                 "n_rnn_layers", 1, 15)
             self.model_used_parameters["batch_size"] = trial.suggest_int(
-                "batch_size", 1, 1024)
+                "batch_size", 64, 510)
 
         elif self.model_name == "TransformerModel":
             # Parmaetros de busqueda  TransformerModel:
             self.model_used_parameters["batch_size"] = trial.suggest_int(
-                "batch_size", 1, 1024)
+                "batch_size", 64, 510)
             # self.model_used_parameters['d_model'] = trial.suggest_int("d_model", 4, 32)
             # self.model_used_parameters['nhead'] = trial.suggest_int("nhead", 4, 16)
             self.model_used_parameters["num_encoder_layers"] = trial.suggest_int(
@@ -317,12 +317,12 @@ class ModelHyperparameters:
                 "num_attention_heads", 1, 8
             )
             self.model_used_parameters["batch_size"] = trial.suggest_int(
-                "batch_size", 1, 1024)
+                "batch_size", 64, 510)
 
         elif self.model_name == "DLinealModel" or self.model_name == "NLinearModel":
             # Parmaetros de busqueda  DLinealModel o NLinearModel:
             self.model_used_parameters["batch_size"] = trial.suggest_int(
-                "batch_size", 1, 1024)
+                "batch_size", 64, 510)
 
         # =======================Entrenamiento del modelo=====================================
         model = self.build_fit_model(enable_callback=True)
@@ -338,10 +338,14 @@ class ModelHyperparameters:
 
         smapes = smape(self.val, preds, n_jobs=-1, verbose=True)
         smape_val = np.mean(smapes)
-        mapes = mape(self.val, preds, n_jobs=-1, verbose=True)
-        # r2_scores = r2_score(actual_series=self.val, pred_series=preds)
 
-        print(f"r2_score: {r2_score}")
+        print(self.val.pd_dataframe())
+        print(preds.pd_dataframe())
+
+        mapes = mape(self.val, preds, n_jobs=-1, verbose=True)
+        r2_scores = r2_score(actual_series=self.val, pred_series=preds)
+
+        print(f"r2_score: {r2_scores}")
         print(f"mape :{mapes}")
         print(f"smapes: {smapes}")
 
@@ -356,8 +360,6 @@ class ModelHyperparameters:
 
     def retrain(self):
         """metodo para reentrenar un modelo"""
-
-        # study = optuna.create_study(direction="maximize")
         study = optuna.create_study(
             sampler=optuna.samplers.QMCSampler(), direction="minimize"  # PartialFixedSampler
         )
@@ -368,7 +370,7 @@ class ModelHyperparameters:
         # optimizacion por numero de intentos
         study.optimize(
             self.optimize,
-            n_trials=10,
+            n_trials=5,
             # n_jobs=-1,
             callbacks=[self.print_callback],
         )

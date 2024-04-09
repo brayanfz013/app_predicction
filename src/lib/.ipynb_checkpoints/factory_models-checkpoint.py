@@ -194,8 +194,8 @@ class ModelContext(Model):
             "last_date_pred": pd.Timestamp(filter_data.tail(1).values[0]).strftime("%Y-%m-%d")
         }
         # Guardar la ultima prediccion
-        # self.handle_loader.save_dict_to_json(
-        #     last_train, self.save_path.as_posix(), "previus")
+        self.handle_loader.save_dict_to_json(
+            last_train, self.save_path.as_posix(), "previus")
 
         return pred_series
 
@@ -254,6 +254,10 @@ class ModelContext(Model):
             save_model_train = "model_" + self.tunne_parameter.model_name
             model.save(str(self.save_path.joinpath(
                 save_model_train).with_suffix(".pt")))
+
+    # def load_dirmodel(self):
+    #     """Cargar el listado de datos de archivos generados en el entrenamiento"""
+    #     return [child.as_posix() for child in self.save_path.iterdir()]
 
     def load(self):
         # """Cargar los parametros del modelo"""

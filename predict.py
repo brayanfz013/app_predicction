@@ -264,7 +264,7 @@ data_frame_predicciones[parameters["filter_data"]
                         ["predict_column"]].clip(lower=0, inplace=True)
 
 # ===============================================================================================
-#                        PREDICCIONES
+#                       PREDICCIOENS A DB PREDICCIONES
 # ===============================================================================================
 # TODO:
 """Esta parte tiene un ToDo importante: Tiene que ordenarse y optimizarce para se escalable
@@ -295,53 +295,6 @@ create_table(SQLDataSourceFactory(**parameters))
 
 # Ingresar los datos a la base de datos
 set_data(SQLDataSourceFactory(**parameters), data_frame_predicciones)
-# ===============================================================================================
-#                            METRICAS
-# ===============================================================================================
-# filter_columns = [
-#     column for column in parameters["filter_data"] if re.match(r"filter_\d+_column", column)
-# ]
-# filter_feature = [
-#     column for column in parameters["filter_data"] if re.match(r"filter_\d+_feature", column)
-# ]
-
-# value_product = []
-# for i in filter_feature:
-#     value_product.append(parameters["filter_data"][i])
-# fecha = parameters["query_template_write"]["columns"]["0"]
-# min_date = data_frame_predicciones[fecha].min()
-# max_data = data_frame_predicciones[fecha].max()
-# metric_columns_pred["init_date"] = data_frame_predicciones[fecha].min()
-# metric_columns_pred["end_date"] = data_frame_predicciones[fecha].max()
-# metric_columns_pred["product"] = "/".join(value_product)
-
-# type_data_out = {
-#     "rango": "float",
-#     "varianza": "float",
-#     "desviacion_estandar": "float",
-#     "coeficiente_varianza": "float",
-#     "quantile_q1": "float",
-#     "quantile_q3": "float",
-#     "interquantile": "float",
-#     "desviacion_media_absoluta": "float",
-#     "init_date": "date",
-#     "end_date": "date",
-#     "product": "string",
-# }
-
-# fix_data_dict = {
-#     "table": f"{schema}.predicciones_metricas",
-#     "columns": {str(index): key for index, key in enumerate(type_data_out.keys())},
-#     "order": "index",
-#     "where": "posicion > 1",
-# }
-
-# parameters["query_template_write"] = fix_data_dict
-# parameters["type_data_out"] = type_data_out
-
-# create_table(SQLDataSourceFactory(**parameters))
-# send_metrics = pd.DataFrame([metric_columns_pred])
-# set_data(SQLDataSourceFactory(**parameters), send_metrics)
 
 # ===============================================================================================
 #                             DATOS REALES MESES
@@ -357,8 +310,9 @@ date_col = parameters["filter_data"]["date_column"]
 data_col = parameters["filter_data"]["predict_column"]
 
 outlines_data.reset_index(inplace=True)
-outlines_data['low_past'] = filter_label
-outlines_data.rename({"low_past": filter_col}, axis="columns", inplace=True)
+outlines_data['code'] = filter_label
+outlines_data.rename({"low_past": 'filter_data'}, axis="columns", inplace=True)
+outlines_data = outlines_data.round(0)
 
 with open(CONFIG_FILE, "r", encoding="utf-8") as file:
     parameters = yaml.safe_load(file)
@@ -367,24 +321,27 @@ logger.debug("Archivo de configuraciones cargado")
 parametros = Parameters(**parameters)
 
 parameters["query_template_write"]["table"] = "datos_originales_agrupados"
-parameters["query_template_write"]["columns"]["0"] = "fecha"
-parameters["query_template_write"]["columns"]["1"] = "real"
-parameters["query_template_write"]["columns"]["2"] = "code"
+parameters["query_template_write"]["columns"]["0"] = "date"
+parameters["query_template_write"]["columns"]["1"] = "data"
+parameters["query_template_write"]["columns"]["2"] = "filter_data"
+parameters["query_template_write"]["columns"]["3"] = "code"
 parameters["type_data_out"] = {
-    "fecha": "date", "real": "float", "code": "string"}
+    "date": "date", "data": "float", "filter_data": "float", "code": "string"}
 
 # Crear tabla para guardas la informacion
 logger.debug(
     "Creando tabla agrupacion de datos reales semanales caso de ser necesario")
 create_table(SQLDataSourceFactory(**parameters))
 
+# Solicita datos anteriores para verificar la existencia de los mismos
 parameters["query_template"]["table"] = "datos_originales_agrupados"
-parameters["query_template"]["columns"]["0"] = "fecha"
-parameters["query_template"]["columns"]["1"] = "real"
-parameters["query_template"]["columns"]["2"] = "code"
+parameters["query_template"]["columns"]["0"] = "date"
+parameters["query_template"]["columns"]["1"] = "data"
+parameters["query_template"]["columns"]["2"] = "filter_data"
+parameters["query_template"]["columns"]["3"] = "code"
 parameters["type_data_out"] = {
-    "fecha": "date", "real": "float", "code": "string"}
-del parameters["query_template"]["columns"]["3"]
+    "date": "date", "data": "float", "filter_data": "float", "code": "string"}
+# del parameters["query_template"]["columns"]["3"]
 data_last = get_data(SQLDataSourceFactory(**parameters))
 
 
@@ -395,30 +352,32 @@ if data_last.empty:
     logger.debug("agruando informacion temporal para el modelo : %s", item)
     set_data(SQLDataSourceFactory(**parameters), outlines_data)
 else:
+    # obtiene el ultimo punto de las predicciones
     LAST_DATE = data_last.iloc[-1, 0]
+    # Filtra los datos a enviar en base a la ultima fecha
     outlines_data = outlines_data[outlines_data[date_col]
                                   > np.datetime64(LAST_DATE)]
 
     # Ingresar los datos a la base de datos
     logger.debug("agruando informacion temporal para el modelo : %s", item)
     set_data(SQLDataSourceFactory(**parameters), outlines_data)
-
 # ===============================================================================================
 #                            ORIGINAL  METRICAS DATA
 # ===============================================================================================
 logger.debug("Calculando metricas de datos reales")
+
 type_data_out = {
     "rango": "float",
     "mean": "float",
     # "varianza": "float",
-    # "desviacion_estandar": "float",
-    # "coeficiente_varianza": "float",
+    "desviacion_estandar": "float",
+    "coeficiente_varianza": "float",
     "quantile_q0": "float",
     "quantile_q1": "float",
     "quantile_q3": "float",
     "quantile_q4": "float",
     "interquantile": "float",
-    # "desviacion_media_absoluta": "float",
+    "desviacion_media_absoluta": "float",
     "init_date": "date",
     "end_date": "date",
     "product": "string",
@@ -447,117 +406,64 @@ parameters["query_template"] = fix_data_dict
 parameters["type_data_out"] = type_data_out
 data_original_metricas = get_data(SQLDataSourceFactory(**parameters))
 
+# Condicional para validar el tipo de dataframe que se requieres
 if data_original_metricas.empty:
-
     df = data_.dataframe
-    # Convertir la columna 'created_at' a tipo datetime
-    df['created_at'] = pd.to_datetime(df['created_at'])
-
-    # Agregar columnas de mes y año
-    df['month'] = df['created_at'].dt.month
-    df['year'] = df['created_at'].dt.year
-
-    # Calcular estadísticas por mes
-    monthly_stats = df.groupby(['year', 'month']).agg(
-        rango=('quantity', lambda x: x.max() - x.min()),
-        # varianza=('quantity', 'var'),
-        # desviacion_estandar=('quantity', 'std'),
-        # coeficiente_varianza=('quantity', lambda x: x.std() / x.mean()),
-        mean=('quantity', 'mean'),
-        quantile_q0=('quantity', lambda x: x.quantile(0)),
-        quantile_q1=('quantity', lambda x: x.quantile(0.25)),
-        quantile_q3=('quantity', lambda x: x.quantile(0.75)),
-        quantile_q4=('quantity', lambda x: x.quantile(1)),
-        interquantile=('quantity', lambda x: x.quantile(
-            0.75) - x.quantile(0.25)),
-        # desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
-    ).reset_index()
-
-    # Convertir año y mes a fecha inicial y final del mes
-    monthly_stats['init_date'] = pd.to_datetime(
-        monthly_stats[['year', 'month']].assign(day=1))
-    monthly_stats['end_date'] = pd.to_datetime(monthly_stats[['year', 'month']].assign(
-        day=pd.DatetimeIndex(pd.to_datetime(monthly_stats['init_date'])).days_in_month))
-
-    # Eliminar columnas de año y mes
-    monthly_stats.drop(columns=['year', 'month'], inplace=True)
-
-    # Agregar la columna 'product' al DataFrame resultante
-    monthly_stats['product'] = filter_label
-
-    # Reordenar las columnas según el tipo de datos
-    monthly_stats = monthly_stats[['rango',
-                                   'mean',
-                                   #    'varianza',
-                                   #    'desviacion_estandar',
-                                   #    'coeficiente_varianza',
-                                   'quantile_q0',
-                                   'quantile_q1',
-                                   'quantile_q3',
-                                   'quantile_q4',
-                                   'interquantile',
-                                   #    'desviacion_media_absoluta',
-                                   'init_date',
-                                   'end_date',
-                                   'product']]
-
-    set_data(SQLDataSourceFactory(**parameters), monthly_stats)
-
-
 else:
-
     df = data_.dataframe[data_.dataframe[date_col] > np.datetime64(LAST_DATE)]
 
-    # Convertir la columna 'created_at' a tipo datetime
-    df['created_at'] = pd.to_datetime(df['created_at'])
+# Convertir la columna date_col a tipo datetime
+df[date_col] = pd.to_datetime(df[date_col])
 
-    # Agregar columnas de mes y año
-    df['month'] = df['created_at'].dt.month
-    df['year'] = df['created_at'].dt.year
+# Agregar columnas de mes y año
+df['month'] = df[date_col].dt.month
+df['year'] = df[date_col].dt.year
 
-    # Calcular estadísticas por mes
-    monthly_stats = df.groupby(['year', 'month']).agg(
-        rango=('quantity', lambda x: x.max() - x.min()),
-        # varianza=('quantity', 'var'),
-        # desviacion_estandar=('quantity', 'std'),
-        # coeficiente_varianza=('quantity', lambda x: x.std() / x.mean()),
-        mean=('quantity', 'mean'),
-        quantile_q0=('quantity', lambda x: x.quantile(0)),
-        quantile_q1=('quantity', lambda x: x.quantile(0.25)),
-        quantile_q3=('quantity', lambda x: x.quantile(0.75)),
-        quantile_q4=('quantity', lambda x: x.quantile(1)),
-        interquantile=('quantity', lambda x: x.quantile(
-            0.75) - x.quantile(0.25)),
-        # desviacion_media_absoluta=('quantity', lambda x: (x - x.mean()).abs().mean())
-    ).reset_index()
+# Calcular estadísticas por mes
+monthly_stats = df.groupby(['year', 'month']).agg(
+    rango=('quantity', lambda x: x.max() - x.min()),
+    # varianza=('quantity', 'var'),
+    desviacion_estandar=('quantity', 'std'),
+    coeficiente_varianza=('quantity', lambda x: x.std() / x.mean()),
+    mean=('quantity', 'mean'),
+    quantile_q0=('quantity', lambda x: x.quantile(0)),
+    quantile_q1=('quantity', lambda x: x.quantile(0.25)),
+    quantile_q3=('quantity', lambda x: x.quantile(0.75)),
+    quantile_q4=('quantity', lambda x: x.quantile(1)),
+    interquantile=('quantity', lambda x: x.quantile(
+        0.75) - x.quantile(0.25)),
+    desviacion_media_absoluta=(
+        'quantity', lambda x: (x - x.mean()).abs().mean())
+).reset_index()
 
-    # Convertir año y mes a fecha inicial y final del mes
-    monthly_stats['init_date'] = pd.to_datetime(
-        monthly_stats[['year', 'month']].assign(day=1))
-    monthly_stats['end_date'] = pd.to_datetime(monthly_stats[['year', 'month']].assign(
-        day=pd.DatetimeIndex(pd.to_datetime(monthly_stats['init_date'])).days_in_month))
+# Convertir año y mes a fecha inicial y final del mes
+monthly_stats['init_date'] = pd.to_datetime(
+    monthly_stats[['year', 'month']].assign(day=1))
+monthly_stats['end_date'] = pd.to_datetime(monthly_stats[['year', 'month']].assign(
+    day=pd.DatetimeIndex(pd.to_datetime(monthly_stats['init_date'])).days_in_month))
 
-    # Eliminar columnas de año y mes
-    monthly_stats.drop(columns=['year', 'month'], inplace=True)
+# Eliminar columnas de año y mes
+monthly_stats.drop(columns=['year', 'month'], inplace=True)
 
-    # Agregar la columna 'product' al DataFrame resultante
-    monthly_stats['product'] = filter_label
+# Agregar la columna 'product' al DataFrame resultante
+monthly_stats['product'] = filter_label
 
-    # Reordenar las columnas según el tipo de datos
-    monthly_stats = monthly_stats[['rango',
-                                   'mean',
-                                   #    'varianza',
-                                   #    'desviacion_estandar',
-                                   #    'coeficiente_varianza',
-                                   'quantile_q0',
-                                   'quantile_q1',
-                                   'quantile_q3',
-                                   'quantile_q4',
-                                   'interquantile',
-                                   #    'desviacion_media_absoluta',
-                                   'init_date',
-                                   'end_date',
-                                   'product'
-                                   ]]
+# Reordenar las columnas según el tipo de datos
+monthly_stats = monthly_stats[['rango',
+                               'mean',
+                               # 'varianza',
+                               'desviacion_estandar',
+                               'coeficiente_varianza',
+                               'quantile_q0',
+                               'quantile_q1',
+                               'quantile_q3',
+                               'quantile_q4',
+                               'interquantile',
+                               'desviacion_media_absoluta',
+                               'init_date',
+                               'end_date',
+                               'product'
+                               ]]
 
-    set_data(SQLDataSourceFactory(**parameters), monthly_stats)
+monthly_stats = monthly_stats.round(2)
+set_data(SQLDataSourceFactory(**parameters), monthly_stats)

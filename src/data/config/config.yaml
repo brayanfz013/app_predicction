@@ -21,11 +21,11 @@ connection_data_source:
     port: 6379
     # password: 0913
 
-  sqlserver:
-    server: 127.0.0.1
-    database: master
-    username: sa
-    password: 0913PASSword!
+  # sqlserver:
+  #   server: 127.0.0.1
+  #   database: master
+  #   username: sa
+  #   password: 0913PASSword!
 
 query_template:
   table: public.sales_history
@@ -47,7 +47,7 @@ query_template_write:
   table: predicciones_modelo
   columns:
     "0": fecha
-    "1": predicion
+    "1": prediction
     # "2": real
     "2": product
     # "3": CUSTNMBR
@@ -56,7 +56,7 @@ query_template_write:
 
 type_data_out:
   fecha: date
-  predicion: float
+  prediction: float
   # column2: float
   product: string
   # column3: string
@@ -65,10 +65,10 @@ filter_data:
   date_column: created_at
   predict_column: quantity
   filter_1_column: product
-  filter_1_feature: 90000S
+  filter_1_feature: 90000S #"24307A"  #90000S
   # filter_2_column: CUSTNMBR
   # filter_2_feature: F00575
-  group_frequecy: ME
+  group_frequecy: M
 
 scale: True
 first_train: True

@@ -155,8 +155,8 @@ filter_data = data_.dataframe[filter_product].sort_values(
 # validate_data = filter_data.set_index(time_series_col)["2023-12-01":].reset_index()
 
 # # Datos de entrenamiento
-filter_data = filter_data.set_index(parameters["filter_data"]["date_column"])[
-    :"2023-11-30"].reset_index()
+# filter_data = filter_data.set_index(parameters["filter_data"]["date_column"])[
+#     :"2023-11-30"].reset_index()
 
 outliners = OutliersToIQRMean(**parameters)
 cleaner.strategy = outliners
@@ -173,7 +173,7 @@ outlines_data[filter_values] = 0.1
 fs = 1 / 24 / 3600  # 1 day in Hz (sampling frequency)
 
 nyquist = fs / 0.5  # 2 # 0.5 times the sampling frequency
-cutoff = 0.5  # 0.1 fraction of nyquist frequency, here  it is 5 days
+cutoff = 0.5  # 0.1 fraction of nyquist frequency, here  it
 # print("cutoff= ", 1 / cutoff * nyquist * 24 * 3600, " days")
 # cutoff=  4.999999999999999  days
 b, a = signal.butter(5, cutoff, btype="lowpass")  # low pass filter

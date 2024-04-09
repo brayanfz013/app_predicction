@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+# =============================================================================
+__author__ = "Brayan Felipe Zapata "
+__copyright__ = "Copyright 2007, The Cogent Project"
+__license__ = "GPL"
+__version__ = "1.0.0"
+__maintainer__ = "Brayan Felipe Zapata"
+__email__ = "bzapata@smgsoftware.com"
+__status__ = "Production"
+# =============================================================================
+"""Codigo para ejecutar un entrenamiento completo de una base de datos """
+# =============================================================================
 
 import os
 import re
@@ -29,15 +41,13 @@ from src.features.features_postgres import HandleDBpsql
 from src.models.args_data_model import Parameters
 from src.data.logs import LOGS_DIR
 
-path_folder = os.path.dirname(
-    '/home/bdebian/Documents/Projects/app_prediction/src')
+path_folder = os.path.dirname(__file__)
 folder_model = Path(path_folder).joinpath("scr/data/save_models")
 
 handler_load = LoadFiles()
 handler_redis = HandleRedis()
 data_source = HandleDBpsql()
-ruta_actual = os.path.dirname(
-    '/home/bdebian/Documents/Projects/app_prediction/src')
+ruta_actual = os.path.dirname(__file__)
 
 # =================================================================
 #             Configuracion Logger
@@ -141,7 +151,7 @@ update_dtype_columns = PrepareDtypeColumns(
     preprocess_function=replace,
     **parameters,
 )
-
+print(data)
 # Ejecucion de fabrica para aplicar y ordenar los tipos de datos y los valores
 cleaner = DataCleaner()
 cleaner.strategy = update_dtype_columns
