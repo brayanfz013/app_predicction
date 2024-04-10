@@ -114,6 +114,7 @@ class SQLPostgres(DataSource):
             "integer": "NUMERIC(15,3)",
             "float": "DECIMAL(12,3)",
             "string": "VARCHAR(50)",
+            "bool": "BOOLEAN"
         }
         # print(self.parametro)
         convert_value = {}

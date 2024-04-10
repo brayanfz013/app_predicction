@@ -12,15 +12,19 @@ __status__ = "Production"
 # =============================================================================
 import os
 import numpy as np
+import pandas as pd
 import yaml
 import logging
 from scipy import stats
 from scipy import signal
-
-from src.lib.class_load import LoadFiles
-from src.lib.factory_data import SQLDataSourceFactory, get_data
+from pathlib import Path
+from datetime import datetime
 from src.features.features_redis import HandleRedis
+from src.data.save_models import SAVE_DIR
+from src.lib.class_load import LoadFiles
+from src.lib.factory_data import SQLDataSourceFactory, get_data, create_table, set_data
 from src.lib.factory_models import ModelContext
+from src.lib.utils import select_best_model
 from src.lib.factory_prepare_data import (
     DataCleaner,
     DataModel,
@@ -127,7 +131,13 @@ replace = {
     object: lambda x: x.strip(),
 }
 # =================================================================
-
+status_train = {
+    "code": parameters['filter_data']['filter_1_feature'],
+    "model_select": "",
+    "data_time_gap": False,
+    "data_low_amount": False,
+    "data_abandoned": False,
+}
 update_dtype_columns = PrepareDtypeColumns(
     replace_dtypes=new_types,
     strategy_imputation=strategy,
@@ -140,6 +150,8 @@ cleaner = DataCleaner()
 cleaner.strategy = update_dtype_columns
 data_ = cleaner.clean(data)
 
+status_train['code'] = parameters['filter_data']['filter_1_feature']
+
 # Condicion de filtrado para informacion segun los valores
 filter_label: str = parameters["filter_data"]["filter_1_feature"]
 filter_col: str = parameters["filter_data"]["filter_1_column"]
@@ -147,21 +159,36 @@ filter_product = data_.dataframe[filter_col] == filter_label
 filter_data = data_.dataframe[filter_product].sort_values(
     by=parameters["filter_data"]["date_column"])
 
-# Seleccion de agrupacion de tiempo
-# parameters["filter_data"]["group_frequecy"] = "M"
-# parameters["filter_data"]["filter_1_feature"] = filter_label
+# Segmento de codigo para filtrado del datos obsoletos
+filte_date_col: str = parameters["filter_data"]["date_column"]
+filter_data['year'] = filter_data[filte_date_col].dt.year
+year = filter_data.groupby('year').size().to_frame()
+consecutive_year = year.reset_index()['year'].diff().to_frame()
+index_gap_year = consecutive_year[consecutive_year['year'] > 1]
 
-# # Datos de validacion
-# validate_data = filter_data.set_index(time_series_col)["2023-12-01":].reset_index()
+# Condicional para verificar que saltos de tiempo en anos
+if not index_gap_year.empty:
+    index_gap_year = index_gap_year.sort_values(
+        by='year', ascending=False).head(1).index.values[0]
+    status_train['data_time_gap'] = True
+    remove_year_before = year.reset_index()['year'].iloc[index_gap_year]
+    filter_data = filter_data[filter_data['year'] >= remove_year_before]
 
-# # Datos de entrenamiento
-# filter_data = filter_data.set_index(parameters["filter_data"]["date_column"])[
-#     :"2023-11-30"].reset_index()
+# Vericar si no hay ingesta de datos en el ultimo ano
+last_year_data = year.reset_index()['year'].values[-1]
+if (datetime.now().year - last_year_data) >= 2:
+    status_train['data_abandoned'] = True
+
 
 outliners = OutliersToIQRMean(**parameters)
 cleaner.strategy = outliners
 outlines_data = cleaner.clean(filter_data)
 # validate_outlines = cleaner.clean(validate_data)
+
+# Verificar la cantidad de datos para entrenamiento
+if outlines_data.shape[0] < 40:
+    status_train['data_low_amount'] = True
+
 
 # Filtrado de datos para eliminar valores negativos
 filter_values = outlines_data["quantity"] <= 0
@@ -203,27 +230,64 @@ data_ready_lp, scaler_data_lp = cleaner.clean(low_pass_data)
 metric_eval: dict = {}
 
 for selected_model in modelos_list_used:
-    MODE_USED = selected_model
-    print(f"Entrenando {selected_model}")
+    try:
+        MODE_USED = selected_model
+        print(f"Entrenando {selected_model}")
 
-    modelo = ModelContext(
-        model_name=MODE_USED,
-        data=data_ready,
-        split=80,
-        covarianze=data_ready_lp,
-        **parameters
-    )
+        modelo = ModelContext(
+            model_name=MODE_USED,
+            data=data_ready,
+            split=80,
+            covarianze=data_ready_lp,
+            **parameters
+        )
 
-    # Entrenar el modelo
-    model_trained = modelo.train()
+        # Entrenar el modelo
+        model_trained = modelo.train()
 
-    # Optimizar los parametros del modelo
-    if parameters["optimize"]:
-        print("Optimizando parametros del modelo")
-        model_trained = modelo.optimize()
+        # Optimizar los parametros del modelo
+        if parameters["optimize"]:
+            print("Optimizando parametros del modelo")
+            model_trained = modelo.optimize()
 
-    # Guargar los modelos entrenados
-    modelo.save(model_trained, scaler=scaler_data, scaler_name="scaler")
-    modelo.save(None, scaler=scaler_data_lp, scaler_name="scaler_lp")
+        # Guargar los modelos entrenados
+        modelo.save(model_trained, scaler=scaler_data, scaler_name="scaler")
+        modelo.save(None, scaler=scaler_data_lp, scaler_name="scaler_lp")
 
-    print("metodo finalizado")
+        print("metodo finalizado")
+    except Exception as dataerror:
+        status_train['data_low_amount'] = True
+
+# =================================================================
+#            Seleccionar el mejor modelo
+# =================================================================
+save_dir = Path(SAVE_DIR).joinpath(
+    parameters["filter_data"]["filter_1_feature"])
+models_metrics = save_dir.joinpath(
+    "train_metrics").with_suffix(".json").as_posix()
+
+MODE_USED = select_best_model(models_metrics)
+
+status_train['model_select'] = MODE_USED
+
+# =================================================================
+#            Enviar metricas a la DB
+# =================================================================
+
+parameters["query_template_write"]["table"] = "estados_entrenamientos"
+parameters["query_template_write"]["columns"]["0"] = "code"
+parameters["query_template_write"]["columns"]["1"] = "model_select"
+parameters["query_template_write"]["columns"]["2"] = "data_time_gap"
+parameters["query_template_write"]["columns"]["3"] = "data_low_amount"
+parameters["query_template_write"]["columns"]["4"] = "data_abandoned"
+parameters["type_data_out"] = {
+    "code": "string",
+    "model_select": "string",
+    "data_time_gap": "bool",
+    "data_low_amount": "bool",
+    "data_abandoned": "bool"
+}
+
+create_table(SQLDataSourceFactory(**parameters))
+set_data(SQLDataSourceFactory(**parameters),
+         pd.DataFrame(status_train, index=[0]))

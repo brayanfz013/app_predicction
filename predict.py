@@ -160,6 +160,20 @@ filter_product = data_.dataframe[filter_col] == filter_label
 filter_data = data_.dataframe[filter_product].sort_values(
     by=parameters["filter_data"]["date_column"])
 
+# Segmento de codigo para filtrado del datos obsoletos
+filte_date_col: str = parameters["filter_data"]["date_column"]
+filter_data['year'] = filter_data[filte_date_col].dt.year
+year = filter_data.groupby('year').size().to_frame()
+consecutive_year = year.reset_index()['year'].diff().to_frame()
+index_gap_year = consecutive_year[consecutive_year['year'] > 1]
+
+# Condicional para verificar que saltos de tiempo en anos
+if not index_gap_year.empty:
+    index_gap_year = index_gap_year.sort_values(
+        by='year', ascending=False).head(1).index.values[0]
+    remove_year_before = year.reset_index()['year'].iloc[index_gap_year]
+    filter_data = filter_data[filter_data['year'] >= remove_year_before]
+
 # Seleccion de agrupacion de tiempo
 # parameters["filter_data"]["group_frequecy"] = "M"
 # parameters["filter_data"]["filter_1_feature"] = filter_label
