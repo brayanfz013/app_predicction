@@ -65,7 +65,7 @@ filter_data:
   date_column: created_at
   predict_column: quantity
   filter_1_column: product
-  filter_1_feature: "13117F" #"24307A"  #90000S
+  filter_1_feature: "90000M" #"24307A"  #90000S
   # filter_2_column: CUSTNMBR
   # filter_2_feature: F00575
   group_frequecy: M

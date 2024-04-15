@@ -18,7 +18,7 @@ exp_time_cache: 8600000
 filter_data:
   date_column: created_at
   filter_1_column: product
-  filter_1_feature: 90000S
+  filter_1_feature: 90000M
   group_frequecy: M
   predict_column: quantity
 first_train: true

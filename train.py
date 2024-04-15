@@ -289,5 +289,8 @@ parameters["type_data_out"] = {
 }
 
 create_table(SQLDataSourceFactory(**parameters))
+
+status_train = pd.DataFrame(status_train, index=[0])
+print("Enviando metricas a la DB", status_train)
 set_data(SQLDataSourceFactory(**parameters),
-         pd.DataFrame(status_train, index=[0]))
+         status_train)

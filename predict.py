@@ -188,7 +188,7 @@ outliners = OutliersToIQRMean(**parameters)
 cleaner.strategy = outliners
 outlines_data = cleaner.clean(filter_data)
 # validate_outlines = cleaner.clean(validate_data)
-print(outlines_data)
+
 # Filtrado de datos para eliminar valores negativos
 filter_values = outlines_data["quantity"] <= 0
 outlines_data[filter_values] = 0.1
@@ -358,12 +358,17 @@ parameters["type_data_out"] = {
 # del parameters["query_template"]["columns"]["3"]
 data_last = get_data(SQLDataSourceFactory(**parameters))
 
+rename_dict = {int(key): val for key,
+               val in parameters['query_template']['columns'].items()}
+data_last = data_last.rename(columns=rename_dict)
+data_last = data_last[data_last['code'] == filter_label]
 
 # Condicional para verifical la ultima fecha de los datos almacenados
 # En caso de estar vacio rellena con el historial de los datos por meses
 if data_last.empty:
     # Ingresar los datos a la base de datos
-    logger.debug("agruando informacion temporal para el modelo : %s", item)
+    logger.debug(
+        "agruando informacion temporal para el modelo por datos vacios: %s", item)
     set_data(SQLDataSourceFactory(**parameters), outlines_data)
 else:
     # obtiene el ultimo punto de las predicciones
@@ -373,7 +378,8 @@ else:
                                   > np.datetime64(LAST_DATE)]
 
     # Ingresar los datos a la base de datos
-    logger.debug("agruando informacion temporal para el modelo : %s", item)
+    logger.debug(
+        "agruando informacion temporal para el modelo por datos restantes : %s", item)
     set_data(SQLDataSourceFactory(**parameters), outlines_data)
 # ===============================================================================================
 #                            ORIGINAL  METRICAS DATA
@@ -419,11 +425,16 @@ fix_data_dict = {
 parameters["query_template"] = fix_data_dict
 parameters["type_data_out"] = type_data_out
 data_original_metricas = get_data(SQLDataSourceFactory(**parameters))
-
+rename_dict = {int(key): val for key,
+               val in parameters['query_template']['columns'].items()}
+data_original_metricas = data_original_metricas.rename(columns=rename_dict)
+data_original_metricas = data_original_metricas[data_original_metricas['product'] == filter_label]
 # Condicional para validar el tipo de dataframe que se requieres
 if data_original_metricas.empty:
+    logger.debug("Datos de metricas vacios, adjuntado desde cero")
     df = data_.dataframe
 else:
+    logger.debug("Datos de metricas no vacios, adjuntado datos restantes")
     df = data_.dataframe[data_.dataframe[date_col] > np.datetime64(LAST_DATE)]
 
 # Convertir la columna date_col a tipo datetime
@@ -480,4 +491,5 @@ monthly_stats = monthly_stats[['rango',
                                ]]
 
 monthly_stats = monthly_stats.round(2)
+print(monthly_stats)
 set_data(SQLDataSourceFactory(**parameters), monthly_stats)

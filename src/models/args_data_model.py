@@ -19,11 +19,11 @@ def default_field(obj):
 modelos_list_used = [
     "BlockRNNModel",
     "NBeatsModel",
-    "TCNModel",
-    "TransformerModel",
-    "TFTModel",
-    "DLinealModel",
-    "NLinearModel",
+    # "TCNModel",
+    # "TransformerModel",
+    # "TFTModel",
+    # "DLinealModel",
+    # "NLinearModel",
 ]
 
 quantiles = [
